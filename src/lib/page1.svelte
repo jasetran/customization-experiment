@@ -1,7 +1,7 @@
 <script>
     let {
         scene = $bindable(),
-        name = $bindable(),
+        pid = $bindable(),
         condition = $bindable(),
     } = $props();
 
@@ -9,7 +9,9 @@
 </script>
 
 <div id="menu-page" style="top: 40%">
-    <h1>Welcome to Science Learning Activity!</h1>
+    <div id="text-box">
+        <h1>Welcome to Science Learning Activity!</h1>
+    </div>
 </div>
 <div id="menu-page">
     <input
@@ -17,13 +19,13 @@
         type="text"
         class:is-invalid={error.length}
         placeholder="Participant ID"
-        bind:value={name}
+        bind:value={pid}
     />
     <button
         id="start-button"
         type="button"
         onclick={() => {
-            if (name !== "") {
+            if (pid !== "") {
                 if (condition !== "customize") {
                     scene = 3;
                 } else {
@@ -37,7 +39,18 @@
 </div>
 
 <style>
+    #text-box {
+        border-style: solid;
+        border-radius: 10px;
+        border-width: 5px;
+        border-color: rgb(44, 110, 172);
+        background-color: rgb(180, 216, 255);
+        padding: 50px;
+    }
+
     #pid-entry-text {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         padding: 8px;
         font-size: 150%;
     }

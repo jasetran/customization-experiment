@@ -1,5 +1,5 @@
 <script>
-    let { scene = $bindable(), name = $bindable() } = $props();
+    let { scene = $bindable() } = $props();
 </script>
 
 <h1>THIS IS PAGE 3!!!! You should see the beginning of the experiment now.</h1>
@@ -8,7 +8,7 @@
         id="start-button"
         type="button"
         onclick={() => {
-            scene = scene - 1;
+            scene = 1;
         }}>Back</button
     >
 </div>
