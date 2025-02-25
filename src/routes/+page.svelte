@@ -1,35 +1,22 @@
 <script>
     // imports
+    import {
+        parameters,
+        randomizeOptions,
+        setBackground,
+    } from "../helperFunctions.js";
     import { page } from "$app/stores";
     import Page1 from "$lib/page1.svelte";
     import Page2 from "$lib/page2.svelte";
     import Page3 from "$lib/page3.svelte";
 
-    // RCT options (randomly assigns participants to condition)
-    const conditionOptions = ["text", "random", "customize"];
-
-    // function to randomly select an option
-    function choose(conditionOptions) {
-        var index = Math.floor(Math.random() * conditionOptions.length);
-        return conditionOptions[index];
-    }
-
     const url = $page.url;
     let condition = $state(
-        url.searchParams.get("condition") || choose(conditionOptions),
+        url.searchParams.get("condition") ||
+            randomizeOptions(parameters.conditions),
     );
     let scene = $state(1);
     let pid = $state(url.searchParams.get("pid") || "");
-
-    function setBackground(scene) {
-        if (scene === 1) {
-            return "./assets/bg/bg-chat.svg";
-        } else if (scene > 1 || scene < 3) {
-            return "./assets/bg/bg-customize.svg";
-        } else {
-            return "./assets/bg/bg-chat.svg";
-        }
-    }
 </script>
 
 <div id="screen-size" style="background-image: url({setBackground(scene)})">

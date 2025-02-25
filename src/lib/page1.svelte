@@ -32,7 +32,7 @@
                     scene++;
                 }
             } else {
-                error = "Poop";
+                error = "Please enter the participant ID";
             }
         }}>Start</button
     >
@@ -43,8 +43,8 @@
         border-style: solid;
         border-radius: 10px;
         border-width: 5px;
-        border-color: rgb(44, 110, 172);
-        background-color: rgb(180, 216, 255);
+        border-color: rgb(111, 158, 132);
+        background-color: rgb(191, 223, 205);
         padding: 50px;
     }
 

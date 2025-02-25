@@ -1,48 +1,51 @@
 <script>
-    let { scene = $bindable(), charName = $bindable() } = $props();
+    import { parameters, randomizeOptions } from "../helperFunctions.js";
 
-    const charNameOptions = [
-        "Noah",
-        "Melina",
-        "Leah",
-        "Eris",
-        "Eddie",
-        "Eris",
-        "Logan",
-        "Lincoln",
-        "Madelyn",
-        "Lillian",
-        "Lucian",
-        "Celeste",
-        "Criselle",
-        "Camden",
-        "Adrian",
-        "Pao",
-    ];
-
+    let { scene = $bindable() } = $props();
+    let charName = $state("Enter your character's name");
     let error = $state("");
 </script>
 
-<input
-    id="char-entry-text"
-    type="text"
-    class:is-invalid={error.length}
-    placeholder="Enter your character's name"
-    bind:value={charName}
-/>
-<button
-    id="back-button"
-    type="button"
-    style="top: 10%; left: 36%; font-size: 170%;"
-    onclick={() => (charName = shuffle(charNameOptions))}>Randomize</button
->
-<button
-    id="back-button"
-    type="button"
-    onclick={() => {
-        scene = scene - 1;
-    }}>Back</button
->
+<div>
+    <input
+        id="char-entry-text"
+        type="text"
+        class:is-invalid={error.length}
+        placeholder={charName}
+        bind:value={charName}
+    />
+    <button
+        id="std-button"
+        type="button"
+        style="top: 10%; left: 36%; font-size: 170%;"
+        onclick={() => {
+            charName = randomizeOptions(parameters.randomizationNames);
+        }}>Randomize</button
+    >
+    <button
+        id="std-button"
+        type="button"
+        onclick={() => {
+            scene = scene - 1;
+        }}>Back</button
+    >
+    <button
+        id="std-button"
+        type="button"
+        style="left: 92%"
+        onclick={() => {
+            if (charName !== "Enter your character's name" && charName !== "") {
+                scene = scene + 1;
+            } else {
+                error = "Please enter your character's name";
+            }
+        }}>Continue</button
+    >
+</div>
+
+<div id="menu-box">
+    <div id="options-icon"></div>
+</div>
 
 <style>
     #char-entry-text {
@@ -57,9 +60,9 @@
         font-size: 175%;
     }
 
-    #back-button {
+    #std-button {
         position: absolute;
-        top: 90%;
+        top: 92%;
         left: 5%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
@@ -67,5 +70,18 @@
             "Lucida Sans", Arial, sans-serif;
         font-size: 200%;
         padding: 10px;
+    }
+
+    #menu-box {
+        display: block;
+        position: relative;
+        padding: 30px 20px;
+        background-color: orange;
+    }
+
+    .is-invalid {
+        border-color: rgb(215, 83, 83);
+        background-color: rgb(215, 83, 83);
+        color: white;
     }
 </style>
