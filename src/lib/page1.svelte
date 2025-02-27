@@ -22,7 +22,7 @@
         bind:value={pid}
     />
     <button
-        id="start-button"
+        id="circle-button"
         type="button"
         onclick={() => {
             if (pid !== "") {
@@ -34,7 +34,13 @@
             } else {
                 error = "Please enter the participant ID";
             }
-        }}>Start</button
+        }}
+        ><img
+            src="/assets/buttons/confirm-button.png"
+            width="90"
+            height="90"
+            alt="confirm"
+        /></button
     >
 </div>
 
@@ -51,7 +57,11 @@
     #pid-entry-text {
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        padding: 8px;
+        margin-top: 35px;
+        border-color: rgb(94, 94, 94);
+        border-style: solid;
+        border-radius: 10px;
+        height: 50px;
         font-size: 150%;
     }
 
@@ -63,12 +73,10 @@
         display: flex;
     }
 
-    #start-button {
-        height: 47.5px;
-        margin-left: 20px;
-        padding-right: 20px;
-        padding-left: 20px;
-        font-size: 150%;
+    #circle-button {
+        margin-top: 20px;
+        border: 0;
+        background: transparent;
     }
 
     .is-invalid {
