@@ -1,10 +1,57 @@
 <script>
+    // imports
+    import Tabs from "../menu-tabs/customizationTabs.svelte";
+    import headTab from "../menu-tabs/headTab.svelte";
+    import hairTab from "../menu-tabs/hairTab.svelte";
+    import eyesTab from "../menu-tabs/eyesTab.svelte";
+    import noseTab from "../menu-tabs/noseTab.svelte";
+    import clothesTab from "../menu-tabs/clothesTab.svelte";
     import { parameters, randomizeOptions } from "../helperFunctions.js";
-    import { avatarOptions } from "../customizeOptions.js";
+
     let { scene = $bindable() } = $props();
+
+    // default character customization values
     let charName = $state("Enter your character's name");
     let charHead = $state("head-1.png");
+
+    // pre-defined error message
     let error = $state("");
+
+    // tab items
+    let menuItems = [
+        {
+            label: "head",
+            value: 1,
+            icon: "fluent-emoji-high-contrast:bust-in-silhouette",
+            component: headTab,
+        },
+        {
+            label: "hair",
+            value: 2,
+            icon: "fluent-emoji-high-contrast:hair-pick",
+            component: hairTab,
+        },
+        {
+            label: "eyes",
+            value: 3,
+            icon: "fluent-emoji-high-contrast:eyes",
+            component: eyesTab,
+        },
+        {
+            label: "nose",
+            value: 4,
+            icon: "fluent-emoji-high-contrast:nose",
+            component: noseTab,
+        },
+        {
+            label: "clothes",
+            value: 5,
+            icon: "fluent-emoji-high-contrast:t-shirt",
+            component: clothesTab,
+        },
+    ];
+
+    let activeItem = "head";
 </script>
 
 <div>
@@ -62,35 +109,38 @@
     >
 </div>
 
-<div id="menu-box" style="top: 20%; left: 12%;">
-    {#each avatarOptions.head as item}
-        <!-- svelte-ignore a11y_consider_explicit_label -->
-        <button
-            class="option"
-            class:is-active={item == charHead}
-            style="background-image: url('assets/char/{item}')"
-            onclick={() => {
-                charHead = item;
-            }}
-        ></button>
-    {/each}
+<div id="menu-box" style="top: 18%; left: 14%;">
+    <Tabs {menuItems} {activeItem}></Tabs>
 </div>
 
+.
 <div class="char-preview">
-    <div
-        class="head-preview"
-        style="background-image: url('assets/char/{charHead}')"
-    ></div>
+    <div class="char">
+        <div
+            class="char-head"
+            style="background-image: url('assets/char/head-1.png')"
+        ></div>
+    </div>
 </div>
 
 <style>
     .char-preview {
-        position: absolute;
-        left: 60%;
-        top: 20%;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
     }
 
-    .head-preview {
+    .char {
+        position: relative;
+        padding-right: 200px;
+        width: 350px;
+        height: 500px;
+    }
+
+    .char-head {
+        height: 100%;
         background-repeat: no-repeat;
     }
 
@@ -104,6 +154,9 @@
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
         font-size: 150%;
+        border-color: rgb(94, 94, 94);
+        border-style: solid;
+        border-radius: 10px;
     }
 
     #std-button {
@@ -121,8 +174,8 @@
     }
 
     #menu-box {
-        display: block;
         position: absolute;
+        display: block;
         padding: 30px 20px;
         background-color: rgb(255, 221, 158);
         border-color: rgb(255, 139, 14);
@@ -130,32 +183,14 @@
         border-width: 10px;
         border-radius: 15px;
         display: grid;
-        grid-template-columns: 125px 125px 125px 125px 125px;
+        grid-template-columns: 125px 125px 125px 125px;
         grid-gap: 10px;
         height: 400px;
-    }
-
-    .option {
-        border-radius: 20px;
-        border-style: solid;
-        border-width: 10px;
-        border-color: white;
-        padding: 30px;
-        background-color: white;
-        background-size: 80%;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        aspect-ratio: 1;
-        box-sizing: border-box;
     }
 
     .is-invalid {
         border-color: rgb(215, 83, 83);
         background-color: rgb(215, 83, 83);
         color: white;
-    }
-
-    .is-active {
-        border-color: rgb(255, 56, 56);
     }
 </style>
