@@ -34,7 +34,7 @@
         {
             label: "eyes",
             value: 3,
-            icon: "fluent-emoji-high-contrast:eyes",
+            icon: "emojione-monotone:eye",
             component: eyesTab,
         },
         {
@@ -46,7 +46,7 @@
         {
             label: "clothes",
             value: 5,
-            icon: "fluent-emoji-high-contrast:t-shirt",
+            icon: "emojione-monotone:t-shirt",
             component: clothesTab,
         },
     ];
@@ -65,7 +65,7 @@
     <button
         id="std-button"
         type="button"
-        style="top: 10%; left: 37%;"
+        style="top: 10%; left: 39%;"
         onclick={() => {
             charName = randomizeOptions(parameters.randomizationNames);
         }}
@@ -148,7 +148,7 @@
         position: absolute;
         width: 400px;
         top: 10%;
-        left: 16%;
+        left: 18%;
         transform: translateX(-50%) translateY(-50%);
         padding: 12px;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
