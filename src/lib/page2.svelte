@@ -120,7 +120,7 @@
     <div class="char">
         <div
             class="char-head"
-            style="background-image: url('assets/char/head-1.png')"
+            style="background-image: url('assets/char/{userState.charHead}')"
         ></div>
     </div>
 </div>
