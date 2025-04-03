@@ -1,16 +1,16 @@
 <script>
     import { avatarOptions } from "../customizeOptions.js";
-    let charHead = $state("head-1.png");
+    import { userState } from "../state.svelte.js";
 </script>
 
 {#each avatarOptions.head as item}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         class="option"
-        class:is-active={item == charHead}
+        class:is-active={item == userState.charHead}
         style="background-image: url('assets/char/{item}')"
         onclick={() => {
-            charHead = item;
+            userState.charHead = item;
         }}
     ></button>
 {/each}

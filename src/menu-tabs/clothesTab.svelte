@@ -1,6 +1,5 @@
 <script>
     import { avatarOptions } from "../customizeOptions.js";
-    let charClothes = $state("clothes-1.png");
 </script>
 
 {#each avatarOptions.clothes as item}

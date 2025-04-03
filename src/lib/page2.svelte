@@ -7,12 +7,9 @@
     import noseTab from "../menu-tabs/noseTab.svelte";
     import clothesTab from "../menu-tabs/clothesTab.svelte";
     import { parameters, randomizeOptions } from "../helperFunctions.js";
+    import { userState } from "../state.svelte.js";
 
     let { scene = $bindable() } = $props();
-
-    // default character customization values
-    let charName = $state("Enter your character's name");
-    let charHead = $state("head-1.png");
 
     // pre-defined error message
     let error = $state("");
@@ -59,15 +56,17 @@
         id="char-entry-text"
         type="text"
         class:is-invalid={error.length}
-        placeholder={charName}
-        bind:value={charName}
+        placeholder={userState.charName}
+        bind:value={userState.charName}
     />
     <button
         id="std-button"
         type="button"
         style="top: 10%; left: 39%;"
         onclick={() => {
-            charName = randomizeOptions(parameters.randomizationNames);
+            userState.charName = randomizeOptions(
+                parameters.randomizationNames,
+            );
         }}
         ><img
             src="/assets/buttons/randomize-button.png"
@@ -94,7 +93,10 @@
         type="button"
         style="left: 95%"
         onclick={() => {
-            if (charName !== "Enter your character's name" && charName !== "") {
+            if (
+                userState.charName !== "Enter your character's name" &&
+                userState.charName !== ""
+            ) {
                 scene = scene + 1;
             } else {
                 error = "Please enter your character's name";
