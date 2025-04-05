@@ -178,16 +178,6 @@
     #menu-box {
         position: absolute;
         display: block;
-        padding: 30px 20px;
-        background-color: rgb(255, 221, 158);
-        border-color: rgb(255, 139, 14);
-        border-style: solid;
-        border-width: 10px;
-        border-radius: 15px;
-        display: grid;
-        grid-template-columns: 125px 125px 125px 125px;
-        grid-gap: 10px;
-        height: 400px;
     }
 
     .is-invalid {

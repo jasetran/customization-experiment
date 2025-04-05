@@ -21,16 +21,31 @@
     </ul>
 </div>
 
-{#each menuItems as item}
-    {#if activeItem == item.label}
-        <svelte:component this={item.component} />
-    {/if}
-{/each}
+<div class="tabs-content">
+    {#each menuItems as item}
+        {#if activeItem == item.label}
+            <svelte:component this={item.component} />
+        {/if}
+    {/each}
+</div>
 
 <style>
     .tabs {
         position: absolute;
         right: 100%;
+    }
+
+    .tabs-content {
+        padding: 30px 20px;
+        background-color: rgb(255, 221, 158);
+        border-color: rgb(255, 139, 14);
+        border-style: solid;
+        border-width: 10px;
+        border-radius: 15px;
+        display: grid;
+        grid-template-columns: 125px 125px 125px 125px;
+        grid-gap: 10px;
+        height: 400px;
     }
 
     ul {
@@ -48,7 +63,7 @@
         border-color: transparent;
         border-style: solid;
         border-width: 10px;
-        border-radius: 15px;
+        border-radius: 15px 0 0 15px;
     }
 
     .active-icon {
