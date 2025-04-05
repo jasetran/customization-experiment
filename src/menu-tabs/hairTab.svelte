@@ -1,9 +1,13 @@
 <script>
-    import { avatarOptions } from "../customizeOptions.js";
-    let charHair = $state("hair-1.png");
+    let avatarOptions = [
+        "hair-1.png",
+        "hair-2.png",
+        "hair-3.png",
+        "hair-4.png",
+    ];
 </script>
 
-{#each avatarOptions.hair as item}
+{#each avatarOptions as item}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         class="option"

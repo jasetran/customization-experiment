@@ -1,14 +1,14 @@
 <script>
-    import { avatarOptions } from "../customizeOptions.js";
     import { userState } from "../state.svelte.js";
+    import head1 from "../head-1.svelte";
+    let avatarOptions = [head1];
 </script>
 
-{#each avatarOptions.head as item}
+{#each avatarOptions as item}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         class="option"
         class:is-active={item == userState.charHead}
-        style="background-image: url('assets/char/{item}')"
         onclick={() => {
             userState.charHead = item;
         }}

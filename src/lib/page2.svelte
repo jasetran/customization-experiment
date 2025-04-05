@@ -115,13 +115,9 @@
     <Tabs {menuItems} {activeItem}></Tabs>
 </div>
 
-.
 <div class="char-preview">
     <div class="char">
-        <div
-            class="char-head"
-            style="background-image: url('assets/char/{userState.charHead}')"
-        ></div>
+        <userState.charHead></userState.charHead>
     </div>
 </div>
 

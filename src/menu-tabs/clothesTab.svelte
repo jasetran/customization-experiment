@@ -1,8 +1,13 @@
 <script>
-    import { avatarOptions } from "../customizeOptions.js";
+    let avatarOptions = [
+        "clothes-1.png",
+        "clothes-2.png",
+        "clothes-3.png",
+        "clothes-4.png",
+    ];
 </script>
 
-{#each avatarOptions.clothes as item}
+{#each avatarOptions as item}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         class="option"
