@@ -1,58 +1,66 @@
 <script>
-    import { userState } from "../state.svelte.js";
+    import { userState } from "./state.svelte.js";
 </script>
 
 <svg
-    width="544"
-    height="858"
-    viewBox="0 0 544 858"
+    width="100%"
+    viewBox="0 0 923 1056"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
 >
-    <path
-        d="M482 239.5C482 371.772 374.548 494 242 494C109.452 494 2 371.772 2 239.5C2 107.228 109.452 0 242 0C374.548 0 482 107.228 482 239.5Z"
-        fill={userState.headColor}
-    />
-    <ellipse
-        cx="462.509"
-        cy="365.58"
-        rx="28.7345"
-        ry="36.2531"
-        transform="rotate(25.4054 462.509 365.58)"
-        fill={userState.headColor}
-    />
-    <ellipse
-        cx="497.722"
-        cy="296.687"
-        rx="45.3734"
-        ry="45.5256"
-        transform="rotate(35.4494 497.722 296.687)"
-        fill={userState.headColor}
-    />
-    <path
-        d="M429.021 389.735C425.879 391.611 422.077 388.628 423.148 385.128L453.714 285.284C454.536 282.598 457.796 281.574 460.006 283.307L519.092 329.661C521.301 331.395 521.084 334.806 518.673 336.245L429.021 389.735Z"
-        fill={userState.headColor}
-    />
-    <path
-        d="M517.5 333.5C494.816 345.834 487 367 485.5 372M492 355.5L488.5 369"
-        stroke={userState.headColor}
-        stroke-width="5"
-    />
-    <path
-        d="M517.913 334C509.598 334.605 480.231 357.689 482 382"
-        stroke={userState.headColor}
-        stroke-width="5"
-    />
-    <rect
-        x="208"
-        y="455"
-        width="67"
-        height="98"
-        rx="20"
-        fill={userState.headColor}
-    />
-    <path
-        d="M482 735.5C482 863.354 374.101 857 241 857C107.899 857 0 863.354 0 735.5C0 607.646 107.899 504 241 504C374.101 504 482 607.646 482 735.5Z"
-        fill={userState.headColor}
-    />
+    <g clip-path="url(#clip0_8_4)">
+        <rect
+            x="406"
+            y="654"
+            width="67"
+            height="98"
+            rx="20"
+            fill={userState.headColor}
+        />
+        <ellipse
+            cx="677.061"
+            cy="591.351"
+            rx="28.7345"
+            ry="36.2531"
+            transform="rotate(31.1562 677.061 591.351)"
+            fill={userState.headColor}
+        />
+        <ellipse
+            cx="719"
+            cy="526.332"
+            rx="45.3734"
+            ry="45.5256"
+            transform="rotate(41.2002 719 526.332)"
+            fill={userState.headColor}
+        />
+        <path
+            d="M641.321 612.029C638.006 613.58 634.523 610.231 635.939 606.856L676.355 510.577C677.442 507.987 680.789 507.295 682.814 509.241L736.958 561.282C738.982 563.228 738.425 566.601 735.881 567.791L641.321 612.029Z"
+            fill={userState.headColor}
+        />
+        <path
+            d="M734.989 564.942C711.184 574.941 701.286 595.217 699.293 600.042M707.413 584.276L702.578 597.358"
+            stroke={userState.headColor}
+            stroke-width="5"
+        />
+        <path
+            d="M735.35 565.481C727.017 565.25 695.485 585.275 694.808 609.641"
+            stroke={userState.headColor}
+            stroke-width="5"
+        />
+        <ellipse
+            cx="440.5"
+            cy="657"
+            rx="56.5"
+            ry="38"
+            fill={userState.headColor}
+        />
+        <path
+            d="M680 934.5C680 1062.35 572.101 1056 439 1056C305.899 1056 198 1062.35 198 934.5C198 806.646 305.899 703 439 703C572.101 703 680 806.646 680 934.5Z"
+            fill={userState.headColor}
+        />
+        <path
+            d="M680 438.5C703.221 613.783 586 692 440 692C265 692 211.291 617.004 210.5 438.5C209.899 302.89 296.487 197.728 440 199C572.548 199 680 306.228 680 438.5Z"
+            fill={userState.headColor}
+        />
+    </g>
 </svg>

@@ -1,5 +1,7 @@
 <script>
     import Icon from "@iconify/svelte";
+    import ColorPicker from "../color-picker.svelte";
+    import { userState } from "../state.svelte";
     export let menuItems = [];
     export let activeItem;
 
@@ -9,14 +11,15 @@
 <div class="tabs">
     <ul>
         {#each menuItems as item}
-            <div
+            <button
                 class="tab-btn"
                 class:active-icon={item.label === activeItem}
                 on:click={handleClick(item.label)}
+                on:keypress={handleClick(item.label)}
             >
-                <Icon icon={item.icon} style="color: white; font-size: 50px;"
+                <Icon icon={item.icon} style="color: white; font-size: 4rem;"
                 ></Icon>
-            </div>
+            </button>
         {/each}
     </ul>
 </div>
@@ -29,6 +32,8 @@
     {/each}
 </div>
 
+<ColorPicker bind:color={userState.headColor} />
+
 <style>
     .tabs {
         position: absolute;
@@ -36,16 +41,16 @@
     }
 
     .tabs-content {
-        padding: 30px 20px;
+        padding: 2.5rem 1.5rem;
         background-color: rgb(255, 221, 158);
         border-color: rgb(255, 139, 14);
         border-style: solid;
-        border-width: 10px;
-        border-radius: 15px;
+        border-width: 1rem;
+        border-radius: 1.5rem;
         display: grid;
-        grid-template-columns: 125px 125px 125px 125px;
-        grid-gap: 10px;
-        height: 400px;
+        grid-template-columns: 10rem 10rem 10rem 10rem;
+        grid-gap: 1rem;
+        height: 30rem;
     }
 
     ul {
@@ -53,17 +58,17 @@
     }
 
     .tab-btn {
+        display: flex;
         background-color: rgb(255, 139, 14);
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
         font-size: 200%;
-        margin-bottom: 8px;
-        padding-right: 45px;
+        margin-bottom: 0.8rem;
+        padding: 1rem;
+        padding-right: 2rem;
         cursor: pointer;
-        border-color: transparent;
-        border-style: solid;
-        border-width: 10px;
-        border-radius: 15px 0 0 15px;
+        border: 0;
+        border-radius: 1.5rem 0 0 1.5rem;
     }
 
     .active-icon {
