@@ -1,5 +1,5 @@
 <script>
-    let { scene = $bindable() } = $props();
+    let { scene = $bindable(), condition = $bindable() } = $props();
 </script>
 
 <h1>THIS IS PAGE 3!!!! You should see the beginning of the experiment now.</h1>
@@ -8,7 +8,10 @@
         id="std-button"
         type="button"
         onclick={() => {
-            scene = scene - 1;
+            if (condition !== "customize") {
+                scene = 1;
+            }
+            scene = 2;
         }}>Back</button
     >
 </div>

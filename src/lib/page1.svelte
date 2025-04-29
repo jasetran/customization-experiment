@@ -37,9 +37,8 @@
         }}
         ><img
             src="/assets/buttons/confirm-button.png"
-            width="90"
-            height="90"
             alt="confirm"
+            style="width: 100%"
         /></button
     >
 </div>
@@ -47,21 +46,21 @@
 <style>
     #text-box {
         border-style: solid;
-        border-radius: 10px;
-        border-width: 5px;
+        border-radius: 1em;
+        border-width: 0.4em;
         border-color: rgb(111, 158, 132);
         background-color: rgb(191, 223, 205);
-        padding: 50px;
+        padding: 3em;
     }
 
     #pid-entry-text {
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        margin-top: 35px;
+        margin-top: 0.25rem;
         border-color: rgb(94, 94, 94);
         border-style: solid;
-        border-radius: 10px;
-        height: 50px;
+        border-radius: 1rem;
+        height: 3rem;
         font-size: 150%;
     }
 
@@ -74,9 +73,10 @@
     }
 
     #circle-button {
-        margin-top: 20px;
+        width: 5rem;
         border: 0;
         background: transparent;
+        padding: 0;
     }
 
     .is-invalid {

@@ -1,36 +1,54 @@
 <script>
-    import { avatarOptions } from "../customizeOptions.js";
-    let charHair = $state("hair-1.png");
+    import { userState } from "../state.svelte.js";
+    import Hair1Front from "../hair-1-front.svelte";
+    import Hair1Back from "../hair-1-back.svelte";
+    // import Hair2 from "../hair-2.svelte";
+    let avatarOptions = [{ front: Hair1Front, back: Hair1Back }];
+    let HeadItem = userState.charHead;
 </script>
 
-{#each avatarOptions.hair as item}
+{#each avatarOptions as HairItem}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         class="option"
-        class:is-active={item == charHair}
-        style="background-image: url('assets/char/{item}')"
+        class:is-active={HairItem.front == userState.charHair.front}
         onclick={() => {
-            charHair = item;
+            userState.charHair = HairItem;
         }}
-    ></button>
+    >
+        <div style="display: flex; margin-bottom: -114.4%">
+            <HairItem.back></HairItem.back>
+        </div>
+        <div style="display: flex; margin-bottom: -114.4%">
+            <HeadItem></HeadItem>
+        </div>
+        <div>
+            <HairItem.front></HairItem.front>
+        </div>
+    </button>
 {/each}
 
 <style>
     .option {
-        border-radius: 20px;
-        border-style: solid;
-        border-width: 10px;
-        border-color: white;
-        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        border: 0;
+        border-radius: 2rem;
+        padding: 1rem;
         background-color: white;
         background-size: 80%;
         background-repeat: no-repeat;
         background-position: 50% 50%;
         aspect-ratio: 1;
         box-sizing: border-box;
+        overflow: hidden;
+        padding-top: 0rem;
     }
 
     .is-active {
-        border-color: rgb(255, 56, 56);
+        outline-style: solid;
+        outline-width: 1rem;
+        outline-color: rgb(255, 56, 56);
+        outline-offset: calc(-1rem + 2px);
     }
 </style>
