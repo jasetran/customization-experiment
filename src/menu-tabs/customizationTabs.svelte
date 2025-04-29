@@ -17,7 +17,7 @@
                 on:click={handleClick(item.label)}
                 on:keypress={handleClick(item.label)}
             >
-                <Icon icon={item.icon} style="color: white; font-size: 4rem;"
+                <Icon icon={item.icon} style="color: white; font-size: 3rem;"
                 ></Icon>
             </button>
         {/each}
@@ -32,7 +32,7 @@
     {/each}
 </div>
 
-<ColorPicker bind:color={userState.headColor} />
+<ColorPicker bind:color={userState.headColor}/>
 
 <style>
     .tabs {
@@ -50,7 +50,7 @@
         display: grid;
         grid-template-columns: 10rem 10rem 10rem 10rem;
         grid-gap: 1rem;
-        height: 30rem;
+        height: 22rem;
     }
 
     ul {
@@ -60,11 +60,8 @@
     .tab-btn {
         display: flex;
         background-color: rgb(255, 139, 14);
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
-        font-size: 200%;
         margin-bottom: 0.8rem;
-        padding: 1rem;
+        padding: 0.8rem;
         padding-right: 2rem;
         cursor: pointer;
         border: 0;

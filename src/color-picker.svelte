@@ -38,7 +38,7 @@
 </script>
 
 <div style="display: flex; padding: 1rem;">
-    <div style="display: flex; flex-direction: column; gap: 1rem">
+    <div style="display: flex; flex-direction: column; gap: 0.8rem">
         <!-- Hue/Saturation Picker -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -163,10 +163,11 @@
 
     .color-box {
         position: relative;
-        width: 20rem;
-        height: 2rem;
+        width: 25rem;
+        height: 1.8rem;
         cursor: crosshair;
         border-radius: 0.5rem;
+        margin-left: 5rem;
     }
 
     .hue-box {
@@ -195,7 +196,12 @@
     }
 
     .color {
-        width: 20px;
-        height: 20px;
+        width: 6rem;
+        height: 6rem;
+        margin-left: 2.5rem;
+        border-style: solid;
+        border-radius: 0.8rem;
+        border-width: 0.5rem;
+        border-color: white
     }
 </style>

@@ -68,14 +68,14 @@
     <button
         class="std-button"
         type="button"
-        style="top: 10%; left: 39%; "
+        style="top: 8%; left: 45%; "
         onclick={() => {
             userState.charName = randomizeOptions(
                 parameters.randomizationNames,
             );
         }}
         ><img
-            style="width: 14rem"
+            style="width: 10rem"
             src="/assets/buttons/randomize-button.png"
             alt="randomize"
         /></button
@@ -88,7 +88,7 @@
         }}
         ><img
             src="/assets/buttons/back-button.png"
-            style="width: 10rem"
+            style="width: 8rem"
             alt="backwards"
         /></button
     >
@@ -108,13 +108,13 @@
         }}
         ><img
             src="/assets/buttons/forward-button.png"
-            style="width: 10rem"
+            style="width: 8rem"
             alt="forwards"
         /></button
     >
 </div>
 
-<div id="menu-box" style="top: 18%; left: 14%;">
+<div id="menu-box" style="top: 15%; left: 14%;">
     <Tabs {menuItems} {activeItem}></Tabs>
 </div>
 
@@ -133,23 +133,23 @@
 <style>
     .char {
         position: absolute;
-        right: 8%;
-        top: 50%;
+        right: -3%;
+        top: 30%;
         transform: translateY(-50%);
-        width: 25rem;
+        width: 45rem;
         height: 30rem;
     }
 
     #char-entry-text {
         position: absolute;
-        width: 20rem;
-        top: 10%;
-        left: 18%;
+        width: 25rem;
+        top: 8%;
+        left: 25%;
         transform: translateX(-50%) translateY(-50%);
-        padding: 0.5rem;
+        padding: 0.8rem;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        font-size: 150%;
+        font-size: 175%;
         border-color: rgb(94, 94, 94);
         border-style: solid;
         border-radius: 0.5rem;
@@ -159,7 +159,7 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 90%;
+        top: 80%;
         left: 5%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
@@ -167,6 +167,7 @@
             "Lucida Sans", Arial, sans-serif;
         font-size: 150%;
         padding: 0.5rem;
+        z-index: 999;
     }
 
     #menu-box {
