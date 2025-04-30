@@ -2,7 +2,9 @@
     import { userState } from "../state.svelte.js";
     import Head1 from "../head-1.svelte";
     import Head2 from "../head-2.svelte";
-    let avatarOptions = [Head1, Head2];
+    import Head3 from "../head-3.svelte";
+    import Head4 from "../head-4.svelte";
+    let avatarOptions = [Head1, Head2, Head3, Head4];
 </script>
 
 {#each avatarOptions as HeadItem}

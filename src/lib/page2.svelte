@@ -159,7 +159,7 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 80%;
+        top: 76%;
         left: 5%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
