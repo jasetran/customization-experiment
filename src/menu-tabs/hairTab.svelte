@@ -1,8 +1,7 @@
 <script>
     import { userState } from "../state.svelte.js";
-    import Hair1Front from "../hair-1-front.svelte";
-    import Hair1Back from "../hair-1-back.svelte";
-    // import Hair2 from "../hair-2.svelte";
+    import Hair1Front from "../hairs/hair-1-front.svelte";
+    import Hair1Back from "../hairs/hair-1-back.svelte";
     let avatarOptions = [{ front: Hair1Front, back: Hair1Back }];
     let HeadItem = userState.charHead;
 </script>

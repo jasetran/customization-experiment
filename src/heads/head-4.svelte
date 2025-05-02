@@ -1,5 +1,5 @@
 <script>
-    import { userState } from "./state.svelte.js";
+    import { userState } from "../state.svelte.js";
 </script>
 
 <svg

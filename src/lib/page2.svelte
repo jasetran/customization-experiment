@@ -8,9 +8,9 @@
     import clothesTab from "../menu-tabs/clothesTab.svelte";
     import { parameters, randomizeOptions } from "../helperFunctions.js";
     import { userState } from "../state.svelte.js";
-    import Head1 from "../head-1.svelte";
-    import Hair1Front from "../hair-1-front.svelte";
-    import Hair1Back from "../hair-1-back.svelte";
+    import Head1 from "../heads/head-1.svelte";
+    import Hair1Front from "../hairs/hair-1-front.svelte";
+    import Hair1Back from "../hairs/hair-1-back.svelte";
 
     let { scene = $bindable() } = $props();
 
