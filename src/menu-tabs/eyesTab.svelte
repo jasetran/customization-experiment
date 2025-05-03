@@ -1,22 +1,21 @@
 <script>
-    let avatarOptions = [
-        "eyes-1.png",
-        "eyes-2.png",
-        "eyes-3.png",
-        "eyes-4.png",
-    ];
+    import { userState } from "../state.svelte.js";
+    import Eyes1 from "../eyes/eyes-1.svelte";
+    let avatarOptions = [Eyes1];
 </script>
 
-{#each avatarOptions as item}
+{#each avatarOptions as EyesItem}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
+        style="position: relative"
         class="option"
-        class:is-active={item == charEyes}
-        style="background-image: url('assets/char/{item}')"
+        class:is-active={EyesItem == userState.charEyes}
         onclick={() => {
-            charEyes = item;
+            userState.charEyes = EyesItem;
         }}
-    ></button>
+    >
+        <EyesItem></EyesItem>
+    </button>
 {/each}
 
 <style>

@@ -11,6 +11,9 @@
     import Head1 from "../heads/head-1.svelte";
     import Hair1Front from "../hairs/hair-1-front.svelte";
     import Hair1Back from "../hairs/hair-1-back.svelte";
+    import Eyes1 from "../eyes/eyes-1.svelte";
+    import Nose1 from "../noses/nose-1.svelte";
+    import MouthSmile from "../mouths/mouth-smile.svelte";
 
     let { scene = $bindable() } = $props();
 
@@ -19,6 +22,9 @@
 
     userState.charHead = Head1;
     userState.charHair = { front: Hair1Front, back: Hair1Back };
+    userState.charEyes = Eyes1;
+    userState.charNose = Nose1;
+    userState.charMouth = MouthSmile;
 
     // tab items
     let menuItems = [
@@ -26,35 +32,41 @@
             label: "head",
             value: 1,
             icon: "fluent-emoji-high-contrast:bust-in-silhouette",
+            color: "headColor",
             component: headTab,
         },
         {
             label: "hair",
             value: 2,
             icon: "fluent-emoji-high-contrast:hair-pick",
+            color: "hairColor",
             component: hairTab,
         },
         {
             label: "eyes",
             value: 3,
             icon: "emojione-monotone:eye",
+            color: "eyesColor",
             component: eyesTab,
         },
         {
             label: "nose",
             value: 4,
             icon: "fluent-emoji-high-contrast:nose",
+            color: undefined,
             component: noseTab,
         },
         {
             label: "clothes",
             value: 5,
             icon: "emojione-monotone:t-shirt",
+            color: undefined,
             component: clothesTab,
         },
     ];
 
     let activeItem = "head";
+    let activeColor = "headColor";
 </script>
 
 <div>
@@ -115,7 +127,7 @@
 </div>
 
 <div id="menu-box" style="top: 15%; left: 14%;">
-    <Tabs {menuItems} {activeItem}></Tabs>
+    <Tabs {menuItems} {activeItem} {activeColor}></Tabs>
 </div>
 
 <div class="char">
@@ -125,7 +137,16 @@
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHead></userState.charHead>
     </div>
-    <div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charNose></userState.charNose>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charMouth></userState.charMouth>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charEyes></userState.charEyes>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHair.front></userState.charHair.front>
     </div>
 </div>

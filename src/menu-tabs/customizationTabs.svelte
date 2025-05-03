@@ -1,11 +1,15 @@
 <script>
     import Icon from "@iconify/svelte";
+    import { userState } from "../state.svelte.js";
     import ColorPicker from "../color-picker.svelte";
-    import { userState } from "../state.svelte";
     export let menuItems = [];
     export let activeItem;
+    export let activeColor;
 
-    const handleClick = (tabValue) => () => (activeItem = tabValue);
+    const handleClick = (tabValue, colorValue) => () => {
+        activeItem = tabValue;
+        activeColor = colorValue;
+    };
 </script>
 
 <div class="tabs">
@@ -14,8 +18,8 @@
             <button
                 class="tab-btn"
                 class:active-icon={item.label === activeItem}
-                on:click={handleClick(item.label)}
-                on:keypress={handleClick(item.label)}
+                on:click={handleClick(item.label, item.color)}
+                on:keypress={handleClick(item.label, item.color)}
             >
                 <Icon icon={item.icon} style="color: white; font-size: 3rem;"
                 ></Icon>
@@ -32,7 +36,7 @@
     {/each}
 </div>
 
-<ColorPicker bind:color={userState.headColor}/>
+<ColorPicker bind:color={userState[activeColor]} />
 
 <style>
     .tabs {

@@ -4,7 +4,9 @@
     import Head2 from "../heads/head-2.svelte";
     import Head3 from "../heads/head-3.svelte";
     import Head4 from "../heads/head-4.svelte";
-    let avatarOptions = [Head1, Head2, Head3, Head4];
+    import Head5 from "../heads/head-5.svelte";
+    import Head6 from "../heads/head-6.svelte";
+    let avatarOptions = [Head1, Head2, Head3, Head4, Head5, Head6];
 </script>
 
 {#each avatarOptions as HeadItem}

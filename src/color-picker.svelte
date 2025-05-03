@@ -202,6 +202,6 @@
         border-style: solid;
         border-radius: 0.8rem;
         border-width: 0.5rem;
-        border-color: white
+        border-color: white;
     }
 </style>
