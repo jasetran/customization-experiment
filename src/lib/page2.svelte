@@ -80,14 +80,14 @@
     <button
         class="std-button"
         type="button"
-        style="top: 8%; left: 45%; "
+        style="top: 10%; left: 48%; "
         onclick={() => {
             userState.charName = randomizeOptions(
                 parameters.randomizationNames,
             );
         }}
         ><img
-            style="width: 10rem"
+            style="width: 11rem"
             src="/assets/buttons/randomize-button.png"
             alt="randomize"
         /></button
@@ -100,14 +100,14 @@
         }}
         ><img
             src="/assets/buttons/back-button.png"
-            style="width: 8rem"
+            style="width: 10rem"
             alt="backwards"
         /></button
     >
     <button
         class="std-button"
         type="button"
-        style="left: 95%"
+        style="left: 92%"
         onclick={() => {
             if (
                 userState.charName !== "Enter your character's name" &&
@@ -120,13 +120,13 @@
         }}
         ><img
             src="/assets/buttons/forward-button.png"
-            style="width: 8rem"
+            style="width: 10rem"
             alt="forwards"
         /></button
     >
 </div>
 
-<div id="menu-box" style="top: 15%; left: 14%;">
+<div id="menu-box" style="top: 18%; left: 14%;">
     <Tabs {menuItems} {activeItem} {activeColor}></Tabs>
 </div>
 
@@ -154,23 +154,23 @@
 <style>
     .char {
         position: absolute;
-        right: -3%;
-        top: 30%;
+        left: 56%;
+        top: 35%;
         transform: translateY(-50%);
-        width: 45rem;
+        width: 50rem;
         height: 30rem;
     }
 
     #char-entry-text {
         position: absolute;
-        width: 25rem;
-        top: 8%;
+        width: 30rem;
+        top: 10%;
         left: 25%;
         transform: translateX(-50%) translateY(-50%);
         padding: 0.8rem;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        font-size: 175%;
+        font-size: 200%;
         border-color: rgb(94, 94, 94);
         border-style: solid;
         border-radius: 0.5rem;
@@ -180,8 +180,8 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 76%;
-        left: 5%;
+        top: 95%;
+        left: 8%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",

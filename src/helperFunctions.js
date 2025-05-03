@@ -32,7 +32,9 @@ export function randomizeOptions(conditionOptions) {
 
 // function to dynamically set the background
 export function setBackground(scene) {
-    if (scene === 1) {
+    if (scene === 0) {
+        return undefined;
+    } else if (scene === 1) {
         return "./assets/bg/bg-chat.svg";
     } else if (scene === 2) {
         return "./assets/bg/bg-customize.svg";

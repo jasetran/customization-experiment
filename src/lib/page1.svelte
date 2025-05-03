@@ -8,9 +8,11 @@
     let error = $state("");
 </script>
 
-<div id="menu-page" style="top: 40%">
+<div id="menu-page" style="top: 50%">
     <div id="text-box">
-        <h1>Welcome to Science Learning Activity!</h1>
+        <h1 style="font-size: 2.2rem;">
+            Welcome to Science Learning Activity!
+        </h1>
     </div>
 </div>
 <div id="menu-page">
@@ -56,27 +58,28 @@
     #pid-entry-text {
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        margin-top: 0.25rem;
+        margin-top: 0.7rem;
         border-color: rgb(94, 94, 94);
         border-style: solid;
         border-radius: 1rem;
-        height: 3rem;
-        font-size: 150%;
+        height: 4rem;
+        font-size: 170%;
     }
 
     #menu-page {
         position: absolute;
-        top: 60%;
+        top: 70%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
     }
 
     #circle-button {
-        width: 5rem;
+        width: 6rem;
         border: 0;
         background: transparent;
         padding: 0;
+        margin-left: 1rem;
     }
 
     .is-invalid {

@@ -27,7 +27,7 @@
     .option {
         border: 0;
         border-radius: 2rem;
-        padding: 2rem;
+        padding: 0.1rem;
         background-color: white;
         background-size: 80%;
         background-repeat: no-repeat;

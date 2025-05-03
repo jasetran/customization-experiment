@@ -21,7 +21,7 @@
                 on:click={handleClick(item.label, item.color)}
                 on:keypress={handleClick(item.label, item.color)}
             >
-                <Icon icon={item.icon} style="color: white; font-size: 3rem;"
+                <Icon icon={item.icon} style="color: white; font-size: 4rem;"
                 ></Icon>
             </button>
         {/each}
@@ -54,7 +54,8 @@
         display: grid;
         grid-template-columns: 10rem 10rem 10rem 10rem;
         grid-gap: 1rem;
-        height: 22rem;
+        height: 28rem;
+        margin-bottom: 1.8rem;
     }
 
     ul {
