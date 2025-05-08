@@ -9,7 +9,9 @@
     import Page0 from "$lib/fullscreenPage.svelte";
     import Page1 from "$lib/page1.svelte";
     import Page2 from "$lib/page2.svelte";
-    import Page3 from "$lib/page3.svelte";
+    import CustomizedChat from "$lib/customizedChat.svelte";
+    import RandomizedChat from "$lib/randomizedChat.svelte";
+    import TextChat from "$lib/textChat.svelte";
 
     const url = $page.url;
     let condition = $state(
@@ -28,8 +30,12 @@
             <Page1 bind:scene bind:pid bind:condition></Page1>
         {:else if scene === 2 && condition === "customize"}
             <Page2 bind:scene></Page2>
-        {:else if scene === 3}
-            <Page3 bind:scene></Page3>
+        {:else if scene === 3 && condition === "customize"}
+            <CustomizedChat bind:scene></CustomizedChat>
+        {:else if scene === 3 && condition === "random"}
+            <RandomizedChat bind:scene></RandomizedChat>
+        {:else if scene === 3 && condition === "text"}
+            <TextChat bind:scene></TextChat>
         {/if}
     </div>
 </div>
