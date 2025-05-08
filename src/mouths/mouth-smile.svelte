@@ -5,9 +5,10 @@
     xmlns="http://www.w3.org/2000/svg"
 >
     <path
-        d="M377.5 628.5C429.382 637.718 452.206 626.373 478.525 597"
+        d="M383 626.578C420.202 638.611 452.873 630.123 475 606"
         stroke="black"
         stroke-width="6"
         stroke-linecap="round"
+        stroke-linejoin="round"
     />
 </svg>

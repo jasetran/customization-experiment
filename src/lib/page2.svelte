@@ -14,6 +14,7 @@
     import Eyes1 from "../eyes/eyes-1.svelte";
     import Nose1 from "../noses/nose-1.svelte";
     import MouthSmile from "../mouths/mouth-smile.svelte";
+    import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
 
     let { scene = $bindable() } = $props();
 
@@ -25,6 +26,7 @@
     userState.charEyes = Eyes1;
     userState.charNose = Nose1;
     userState.charMouth = MouthSmile;
+    userState.charEyebrows = EyebrowsNeutral;
 
     // tab items
     let menuItems = [
@@ -145,6 +147,9 @@
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charEyes></userState.charEyes>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charEyebrows></userState.charEyebrows>
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHair.front></userState.charHair.front>

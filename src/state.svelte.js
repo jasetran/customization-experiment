@@ -8,6 +8,7 @@ export const userState = $state({
     eyesColor: "#17110f",
     charNose: undefined,
     charMouth: undefined,
+    charEyebrows: undefined,
     charClothes: "clothes-1.png",
 });
 
