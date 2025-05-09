@@ -2,15 +2,17 @@
     let { scene = $bindable(), condition = $bindable() } = $props();
 </script>
 
-<h1>This is the page for the randomized condition chat.</h1>
-<div id="button-entry">
-    <button
-        id="std-button"
-        type="button"
-        onclick={() => {
-            scene = 1;
-        }}>Back</button
-    >
+<div class="background-blur">
+    <h1>This is the page for the randomized condition chat.</h1>
+    <div id="button-entry">
+        <button
+            id="std-button"
+            type="button"
+            onclick={() => {
+                scene = 1;
+            }}>Back</button
+        >
+    </div>
 </div>
 
 <style>

@@ -1,29 +1,39 @@
 <script>
     let { scene = $bindable(), condition = $bindable() } = $props();
+    import { userState } from "../state.svelte.js";
 </script>
 
-<h1>This is the page for the customized condition chat.</h1>
-<div id="button-entry">
-    <button
-        id="std-button"
-        type="button"
-        onclick={() => {
-            scene = 2;
-        }}>Back</button
-    >
+<div id="char-chat">
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charHair.back></userState.charHair.back>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charHead></userState.charHead>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charNose></userState.charNose>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charMouth></userState.charMouth>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charEyes></userState.charEyes>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charEyebrows></userState.charEyebrows>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charHair.front></userState.charHair.front>
+    </div>
 </div>
 
 <style>
-    #button-entry {
+    #char-chat {
         position: absolute;
-        top: 70%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        display: flex;
-    }
-
-    #std-button {
-        height: 47.5px;
-        margin-left: 20px;
+        left: 22%;
+        top: 15%;
+        transform: translateY(-50%);
+        width: 60rem;
+        height: 30rem;
     }
 </style>

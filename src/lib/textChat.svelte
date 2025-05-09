@@ -2,7 +2,7 @@
     let { scene = $bindable(), condition = $bindable() } = $props();
 </script>
 
-<h1>This is the page for text-based chat.</h1>
+<h1>This is the page for text-based condition chat.</h1>
 <div id="button-entry">
     <button
         id="std-button"
