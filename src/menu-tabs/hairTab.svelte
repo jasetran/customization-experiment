@@ -4,9 +4,12 @@
     import Hair1Back from "../hairs/hair-1-back.svelte";
     import Hair2Front from "../hairs/hair-2-front.svelte";
     import Hair2Back from "../hairs/hair-2-back.svelte";
+    import Hair3Front from "../hairs/hair-3-front.svelte";
+    import Hair3Back from "../hairs/hair-3-back.svelte";
     let avatarOptions = [
         { front: Hair1Front, back: Hair1Back },
         { front: Hair2Front, back: Hair2Back },
+        { front: Hair3Front, back: Hair3Back },
     ];
     let HeadItem = userState.charHead;
 </script>
