@@ -1,7 +1,8 @@
 <script>
     import { userState } from "../state.svelte.js";
     import Nose1 from "../noses/nose-1.svelte";
-    let avatarOptions = [Nose1];
+    import Nose2 from "../noses/nose-2.svelte";
+    let avatarOptions = [Nose1, Nose2];
 </script>
 
 {#each avatarOptions as NoseItem}
@@ -11,7 +12,7 @@
         class="option"
         class:is-active={NoseItem == userState.charNose}
         onclick={() => {
-            userState.charNoses = NoseItem;
+            userState.charNose = NoseItem;
         }}
     >
         <NoseItem></NoseItem>

@@ -1,7 +1,10 @@
 <script>
     import { userState } from "../state.svelte.js";
     import Clothes1 from "../clothes/clothes-1.svelte";
-    let avatarOptions = [Clothes1];
+    import Clothes2 from "../clothes/clothes-2.svelte";
+    import Clothes3 from "../clothes/clothes-3.svelte";
+    import Clothes4 from "../clothes/clothes-4.svelte";
+    let avatarOptions = [Clothes1, Clothes2, Clothes3, Clothes4];
 </script>
 
 {#each avatarOptions as ClothesItem}
