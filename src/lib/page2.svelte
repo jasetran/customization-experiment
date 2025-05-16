@@ -15,6 +15,7 @@
     import Nose1 from "../noses/nose-1.svelte";
     import MouthSmile from "../mouths/mouth-smile.svelte";
     import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
+    import Clothes1 from "../clothes/clothes-1.svelte";
 
     let { scene = $bindable() } = $props();
 
@@ -27,6 +28,7 @@
     userState.charNose = Nose1;
     userState.charMouth = MouthSmile;
     userState.charEyebrows = EyebrowsNeutral;
+    userState.charClothes = Clothes1;
 
     // tab items
     let menuItems = [
@@ -62,7 +64,7 @@
             label: "clothes",
             value: 5,
             icon: "emojione-monotone:t-shirt",
-            color: undefined,
+            color: "clothesColor",
             component: clothesTab,
         },
     ];
@@ -153,6 +155,9 @@
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHair.front></userState.charHair.front>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charClothes></userState.charClothes>
     </div>
 </div>
 
