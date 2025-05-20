@@ -25,6 +25,9 @@
     <div style="display: flex; margin-bottom: -114.4%;">
         <userState.charHair.front></userState.charHair.front>
     </div>
+    <div style="display: flex; margin-bottom: -114.4%;">
+        <userState.charClothes></userState.charClothes>
+    </div>
 </div>
 
 <style>
