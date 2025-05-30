@@ -6,10 +6,19 @@
     import Hair2Back from "../hairs/hair-2-back.svelte";
     import Hair3Front from "../hairs/hair-3-front.svelte";
     import Hair3Back from "../hairs/hair-3-back.svelte";
+    import Hair4Front from "../hairs/hair-4-front.svelte";
+    import Hair4Back from "../hairs/hair-4-back.svelte";
+    import Hair5Front from "../hairs/hair-5-front.svelte";
+    import Hair5Back from "../hairs/hair-5-back.svelte";
+    import Hair6Front from "../hairs/hair-6-front.svelte";
+    import Hair6Back from "../hairs/hair-6-back.svelte";
     let avatarOptions = [
         { front: Hair1Front, back: Hair1Back },
         { front: Hair2Front, back: Hair2Back },
         { front: Hair3Front, back: Hair3Back },
+        { front: Hair4Front, back: Hair4Back },
+        { front: Hair5Front, back: Hair5Back },
+        { front: Hair6Front, back: Hair6Back },
     ];
     let HeadItem = userState.charHead;
 </script>
