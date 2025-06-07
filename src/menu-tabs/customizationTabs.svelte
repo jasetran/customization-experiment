@@ -50,12 +50,15 @@
         border-color: rgb(255, 139, 14);
         border-style: solid;
         border-width: 1rem;
-        border-radius: 1.5rem;
+        border-radius: 1rem;
         display: grid;
         grid-template-columns: 10rem 10rem 10rem 10rem;
+        grid-auto-rows: min-content;
         grid-gap: 1rem;
         height: 28rem;
+        max-height: 28rem;
         margin-bottom: 1.8rem;
+        overflow: scroll;
     }
 
     ul {

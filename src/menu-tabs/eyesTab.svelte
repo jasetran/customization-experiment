@@ -2,6 +2,7 @@
     import { userState } from "../state.svelte.js";
     import Eyes1 from "../eyes/eyes-1.svelte";
     import Eyes2 from "../eyes/eyes-2.svelte";
+
     let avatarOptions = [Eyes1, Eyes2];
 </script>
 

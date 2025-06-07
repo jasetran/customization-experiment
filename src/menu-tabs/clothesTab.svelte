@@ -1,10 +1,17 @@
 <script>
     import { userState } from "../state.svelte.js";
-    import Clothes1 from "../clothes/clothes-1.svelte";
-    import Clothes2 from "../clothes/clothes-2.svelte";
-    import Clothes3 from "../clothes/clothes-3.svelte";
-    import Clothes4 from "../clothes/clothes-4.svelte";
-    let avatarOptions = [Clothes1, Clothes2, Clothes3, Clothes4];
+
+    const modules = import.meta.glob("../clothes/clothes-*.svelte", {
+        eager: true,
+    });
+
+    const avatarOptions = [];
+
+    for (let i = 1; i <= 4; i++) {
+        const path = `../clothes/clothes-${i}.svelte`;
+
+        avatarOptions.push(modules[path]?.default);
+    }
 </script>
 
 {#each avatarOptions as ClothesItem}

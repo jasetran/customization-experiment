@@ -154,10 +154,10 @@
         <userState.charEyebrows></userState.charEyebrows>
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
-        <userState.charHair.front></userState.charHair.front>
+        <userState.charClothes></userState.charClothes>
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
-        <userState.charClothes></userState.charClothes>
+        <userState.charHair.front></userState.charHair.front>
     </div>
 </div>
 
