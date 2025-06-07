@@ -7,7 +7,7 @@
 
     const avatarOptions = [];
 
-    for (let i = 1; i <= 15; i++) {
+    for (let i = 1; i <= 16; i++) {
         const frontPath = `../hairs/hair-${i}-front.svelte`;
         const backPath = `../hairs/hair-${i}-back.svelte`;
 

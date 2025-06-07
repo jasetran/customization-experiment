@@ -1,9 +1,17 @@
 <script>
     import { userState } from "../state.svelte.js";
-    import Eyes1 from "../eyes/eyes-1.svelte";
-    import Eyes2 from "../eyes/eyes-2.svelte";
 
-    let avatarOptions = [Eyes1, Eyes2];
+    const modules = import.meta.glob("../eyes/eyes-*.svelte", {
+        eager: true,
+    });
+
+    const avatarOptions = [];
+
+    for (let i = 1; i <= 3; i++) {
+        const path = `../eyes/eyes-${i}.svelte`;
+
+        avatarOptions.push(modules[path]?.default);
+    }
 </script>
 
 {#each avatarOptions as EyesItem}

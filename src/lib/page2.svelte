@@ -11,7 +11,7 @@
     import Head1 from "../heads/head-1.svelte";
     import Hair1Front from "../hairs/hair-1-front.svelte";
     import Hair1Back from "../hairs/hair-1-back.svelte";
-    import Eyes1 from "../eyes/eyes-1.svelte";
+    import Eyes1 from "../eyes/eyes-2.svelte";
     import Nose1 from "../noses/nose-1.svelte";
     import MouthSmile from "../mouths/mouth-smile.svelte";
     import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
