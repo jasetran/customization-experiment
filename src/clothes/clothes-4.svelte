@@ -26,7 +26,7 @@
         <g mask="url(#mask0_2012_48)">
             <rect
                 x="111"
-                y="703"
+                y="683"
                 width="656"
                 height="507"
                 fill={userState.clothesColor}

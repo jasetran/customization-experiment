@@ -1,23 +1,17 @@
 <script>
     import { userState } from "../state.svelte.js";
-    import Head1 from "../heads/head-1.svelte";
-    import Head2 from "../heads/head-2.svelte";
-    import Head3 from "../heads/head-3.svelte";
-    import Head4 from "../heads/head-4.svelte";
-    import Head5 from "../heads/head-5.svelte";
-    import Head6 from "../heads/head-6.svelte";
-    import Head7 from "../heads/head-7.svelte";
-    import Head8 from "../heads/head-8.svelte";
-    let avatarOptions = [
-        Head1,
-        Head2,
-        Head3,
-        Head4,
-        Head5,
-        Head6,
-        Head7,
-        Head8,
-    ];
+
+    const modules = import.meta.glob("../heads/head-*.svelte", {
+        eager: true,
+    });
+
+    const avatarOptions = [];
+
+    for (let i = 1; i <= 8; i++) {
+        const path = `../heads/head-${i}.svelte`;
+
+        avatarOptions.push(modules[path]?.default);
+    }
 </script>
 
 {#each avatarOptions as HeadItem}

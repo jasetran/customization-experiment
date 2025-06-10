@@ -1,9 +1,9 @@
 <script>
     export let color;
 
-    let hue = 0; // 0 - 360
-    let saturation = 100; // 0 - 100
-    let lightness = 50; // 0 - 100
+    let hue = 22; // 0 - 360
+    let saturation = 82; // 0 - 100
+    let lightness = 60; // 0 - 100
 
     function hslToHex(h, s, l) {
         s /= 100;

@@ -7,7 +7,7 @@
 
     const avatarOptions = [];
 
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 6; i++) {
         const path = `../eyes/eyes-${i}.svelte`;
 
         avatarOptions.push(modules[path]?.default);
@@ -24,26 +24,40 @@
             userState.charEyes = EyesItem;
         }}
     >
-        <EyesItem></EyesItem>
+        <div class="eye-option">
+            <EyesItem></EyesItem>
+        </div>
     </button>
 {/each}
 
 <style>
     .option {
-        border-radius: 20px;
-        border-style: solid;
-        border-width: 10px;
-        border-color: white;
-        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        border: 0;
+        border-radius: 2rem;
+        padding: 1rem;
         background-color: white;
         background-size: 80%;
         background-repeat: no-repeat;
         background-position: 50% 50%;
         aspect-ratio: 1;
         box-sizing: border-box;
+        overflow: hidden;
+        padding-top: 0rem;
+    }
+
+    .eye-option {
+        display: flex;
+        width: 20rem;
+        margin-top: -68%;
+        margin-left: -63%;
     }
 
     .is-active {
-        border-color: rgb(255, 56, 56);
+        outline-style: solid;
+        outline-width: 1rem;
+        outline-color: rgb(255, 56, 56);
+        outline-offset: calc(-1rem + 2px);
     }
 </style>
