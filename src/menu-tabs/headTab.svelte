@@ -5,9 +5,20 @@
         eager: true,
     });
 
+    // extract the numbers from module paths and finding the maximum
+    // so i don't have to hard code it
+    const moduleNumbers = Object.keys(modules)
+        .map((path) => {
+            const match = path.match(/head-(\d+)\.svelte$/);
+            return match ? parseInt(match[1], 10) : 0;
+        })
+        .filter((num) => num > 0);
+
+    const maxNumber = Math.max(...moduleNumbers);
+
     const avatarOptions = [];
 
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= maxNumber; i++) {
         const path = `../heads/head-${i}.svelte`;
 
         avatarOptions.push(modules[path]?.default);
