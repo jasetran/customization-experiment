@@ -21,7 +21,9 @@
                 on:click={handleClick(item.label, item.color)}
                 on:keypress={handleClick(item.label, item.color)}
             >
-                <Icon icon={item.icon} style="color: white; font-size: 4rem;"
+                <Icon
+                    icon={item.icon}
+                    style="color: white; font-size: 3.5rem; font-weight: bold;"
                 ></Icon>
             </button>
         {/each}
@@ -57,7 +59,7 @@
         grid-gap: 1rem;
         height: 28rem;
         max-height: 28rem;
-        margin-bottom: 1.8rem;
+        margin-bottom: 0.5rem;
         overflow: scroll;
     }
 
@@ -68,9 +70,9 @@
     .tab-btn {
         display: flex;
         background-color: rgb(255, 139, 14);
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.4rem;
         padding: 0.8rem;
-        padding-right: 2rem;
+        padding-right: 2.8rem;
         cursor: pointer;
         border: 0;
         border-radius: 1.5rem 0 0 1.5rem;

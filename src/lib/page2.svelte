@@ -6,6 +6,7 @@
     import eyesTab from "../menu-tabs/eyesTab.svelte";
     import noseTab from "../menu-tabs/noseTab.svelte";
     import clothesTab from "../menu-tabs/clothesTab.svelte";
+    import accessoryTab from "../menu-tabs/accessoryTab.svelte";
     import { parameters, randomizeOptions } from "../helperFunctions.js";
     import { userState } from "../state.svelte.js";
     import Head1 from "../heads/head-1.svelte";
@@ -16,6 +17,7 @@
     import MouthSmile from "../mouths/mouth-smile.svelte";
     import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
     import Clothes1 from "../clothes/clothes-1.svelte";
+    import Accessory2 from "../accessories/accessory-2.svelte";
 
     let { scene = $bindable() } = $props();
 
@@ -29,6 +31,7 @@
     userState.charMouth = MouthSmile;
     userState.charEyebrows = EyebrowsNeutral;
     userState.charClothes = Clothes1;
+    userState.charAccessories = Accessory2;
 
     // tab items
     let menuItems = [
@@ -66,6 +69,13 @@
             icon: "emojione-monotone:t-shirt",
             color: "clothesColor",
             component: clothesTab,
+        },
+        {
+            label: "accessory",
+            value: 6,
+            icon: "emojione-monotone:glasses",
+            color: "accessoriesColor",
+            component: accessoryTab,
         },
     ];
 
@@ -158,6 +168,9 @@
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHair.front></userState.charHair.front>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charAccessories></userState.charAccessories>
     </div>
 </div>
 

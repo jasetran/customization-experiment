@@ -11,5 +11,7 @@ export const userState = $state({
     charEyebrows: undefined,
     charClothes: undefined,
     clothesColor: "#338dab",
+    charAccessories: undefined,
+    accessoriesColor: "#69371b",
 });
 
