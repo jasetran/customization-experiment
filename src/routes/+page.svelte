@@ -22,7 +22,7 @@
     let pid = $state(url.searchParams.get("pid") || "");
 </script>
 
-<div id="screen-size" style="background-image: url({setBackground(scene)})">
+<div id="screen-size" style="background-image: url({setBackground(scene)}">
     <div id="screen">
         {#if scene === 0}
             <Page0 bind:scene></Page0>
@@ -46,6 +46,7 @@
     }
 
     #screen-size {
+        z-index: 1;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
         width: 100%;

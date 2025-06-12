@@ -37,8 +37,8 @@ export function setBackground(scene) {
     } else if (scene === 1) {
         return "./assets/bg/bg-intro.svg";
     } else if (scene === 2) {
-        return "./assets/bg/bg-customize.svg";
+        return "./assets/bg/bg-customize.svg); --blur-amount: blur(2px);";
     } else {
-        return "./assets/bg/bg-chat.svg";
+        return "./assets/bg/bg-chat.svg); --blur-amount: blur(2px);";
     }
 }

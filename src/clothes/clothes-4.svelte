@@ -25,64 +25,64 @@
         </mask>
         <g mask="url(#mask0_2012_48)">
             <rect
-                x="111"
+                x="115"
                 y="683"
                 width="656"
                 height="507"
                 fill={userState.clothesColor}
             />
             <line
-                x1="32"
+                x1="36"
                 y1="743"
-                x2="846"
+                x2="850"
                 y2="743"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="793"
-                x2="846"
+                x2="850"
                 y2="793"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="843"
-                x2="846"
+                x2="850"
                 y2="843"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="1043"
-                x2="846"
+                x2="850"
                 y2="1043"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="893"
-                x2="846"
+                x2="850"
                 y2="893"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="943"
-                x2="846"
+                x2="850"
                 y2="943"
                 stroke="black"
                 stroke-width="10"
             />
             <line
-                x1="32"
+                x1="36"
                 y1="993"
-                x2="846"
+                x2="850"
                 y2="993"
                 stroke="black"
                 stroke-width="10"
