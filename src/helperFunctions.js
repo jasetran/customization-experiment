@@ -21,7 +21,17 @@ export const parameters = {
         "Dylan",
         "Ethan",
         "Amy",
+        "Natalie",
+        "Henry",
+        "An",
+        "Anya",
     ],
+}
+
+
+
+export const randomizedAvatarOptions = {
+
 }
 
 // function to randomly select an option

@@ -8,7 +8,7 @@
     let mediaRecorder;
     let audioChunks = [];
     let stream;
-    let countdown = $state(15);
+    let countdown = $state(10);
     let countdownInterval;
 
     async function startRecording() {
@@ -42,12 +42,12 @@
             // starting countdown for interaction
             startCountdown();
 
-            // auto-stop after 15 seconds TO DO: Maybe too short for kids? Ask Kunlei
+            // auto-stop after 10 seconds TO DO: Kunlei said 8 seconds so maybe change it to 8
             setTimeout(() => {
                 if (isRecording) {
                     stopRecording();
                 }
-            }, 15000);
+            }, 10000);
         } catch (error) {
             console.error("Error accessing microphone:", error);
             alert("Could not access microphone. Please check permissions.");
@@ -55,7 +55,7 @@
     }
 
     function startCountdown() {
-        countdown = 15;
+        countdown = 10;
         countdownInterval = setInterval(() => {
             countdown--;
             if (countdown <= 0) {
@@ -92,6 +92,9 @@
 <div id="char-chat">
     <div style="display: flex; margin-bottom: -114.4%;">
         <userState.charHair.back></userState.charHair.back>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charArms></userState.charArms>
     </div>
     <div style="display: flex; margin-bottom: -114.4%;">
         <userState.charHead></userState.charHead>

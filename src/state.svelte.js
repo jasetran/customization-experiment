@@ -9,6 +9,7 @@ export const userState = $state({
     charNose: undefined,
     charMouth: undefined,
     charEyebrows: undefined,
+    charArms: undefined,
     charClothes: undefined,
     clothesColor: "#338dab",
     charAccessories: undefined,

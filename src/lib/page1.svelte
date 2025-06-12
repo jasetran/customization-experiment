@@ -11,7 +11,7 @@
 <div id="menu-page" style="top: 50%">
     <div id="text-box">
         <h1 style="font-size: 2.2rem;">
-            Welcome to Science Learning Activity!
+            Welcome to AI Friend Learning Activity!
         </h1>
     </div>
 </div>

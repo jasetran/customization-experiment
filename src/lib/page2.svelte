@@ -16,6 +16,7 @@
     import Nose1 from "../noses/nose-1.svelte";
     import MouthSmile from "../mouths/mouth-smile.svelte";
     import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
+    import ArmsNeutralShort from "../arms/arms-neutral-short.svelte";
     import Clothes1 from "../clothes/clothes-1.svelte";
     import Accessory2 from "../accessories/accessory-2.svelte";
 
@@ -30,6 +31,7 @@
     userState.charNose = Nose1;
     userState.charMouth = MouthSmile;
     userState.charEyebrows = EyebrowsNeutral;
+    userState.charArms = ArmsNeutralShort;
     userState.charClothes = Clothes1;
     userState.charAccessories = Accessory2;
 
@@ -147,6 +149,9 @@
 <div class="char">
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHair.back></userState.charHair.back>
+    </div>
+    <div style="display: flex; margin-bottom: -114.4%">
+        <userState.charArms></userState.charArms>
     </div>
     <div style="display: flex; margin-bottom: -114.4%">
         <userState.charHead></userState.charHead>
