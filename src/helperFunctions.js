@@ -1,8 +1,14 @@
 
 // set parameters for web app
+// function to randomly select an option
+export function randomizeOptions(conditionOptions) {
+    var index = Math.floor(Math.random() * conditionOptions.length);
+    return conditionOptions[index];
+}
+
 export const parameters = {
     conditions: ["text", "random", "customize"],
-    randomizationNames: [
+    randomNames: [
         "Noah",
         "Melina",
         "Leah",
@@ -26,18 +32,6 @@ export const parameters = {
         "An",
         "Anya",
     ],
-}
-
-
-
-export const randomizedAvatarOptions = {
-
-}
-
-// function to randomly select an option
-export function randomizeOptions(conditionOptions) {
-    var index = Math.floor(Math.random() * conditionOptions.length);
-    return conditionOptions[index];
 }
 
 // function to dynamically set the background

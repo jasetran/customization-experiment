@@ -1,47 +1,37 @@
 <script>
     import { userState } from "../state.svelte.js";
+    import avatarComponents from "$lib/avatarComponents.ts";
 
-    const modules = import.meta.glob("../clothes/clothes-*.svelte", {
-        eager: true,
-    });
-
-    // extract the numbers from module paths and finding the maximum
-    // so i don't have to hard code it
-    const moduleNumbers = Object.keys(modules)
-        .map((path) => {
-            const match = path.match(/clothes-(\d+)\.svelte$/);
-            return match ? parseInt(match[1], 10) : 0;
-        })
-        .filter((num) => num > 0);
-
-    const maxNumber = Math.max(...moduleNumbers);
-
-    const avatarOptions = [];
-
-    for (let i = 1; i <= maxNumber; i++) {
-        const path = `../clothes/clothes-${i}.svelte`;
-
-        avatarOptions.push(modules[path]?.default);
-    }
-
+    let avatarOptions = [];
     let HeadItem = userState.charHead;
+
+    $: avatarOptions = Object.values(avatarComponents?.clothes ?? {});
+
+    function selectClothes(ClothesItems) {
+        // changing the clothes userState
+        userState.charClothes = ClothesItems.component;
+
+        const sleeveType = ClothesItems.sleeveType;
+        const armsKey = `arms-neutral-${sleeveType}`;
+        const armsComponent = avatarComponents.arms[armsKey];
+        // changing the arms userState based on clothes
+        userState.charArms = armsComponent;
+    }
 </script>
 
-{#each avatarOptions as ClothesItem}
+{#each avatarOptions as ClothesItems}
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
         style="position: relative"
         class="option"
-        class:is-active={ClothesItem == userState.charClothes}
-        onclick={() => {
-            userState.charClothes = ClothesItem;
-        }}
+        class:is-active={ClothesItems.component == userState.charClothes}
+        onclick={() => selectClothes(ClothesItems)}
     >
         <div class="head-option">
             <HeadItem></HeadItem>
         </div>
         <div class="clothes-option">
-            <ClothesItem></ClothesItem>
+            <ClothesItems.component></ClothesItems.component>
         </div>
     </button>
 {/each}

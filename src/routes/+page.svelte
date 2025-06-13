@@ -7,8 +7,8 @@
     } from "../helperFunctions.js";
     import { page } from "$app/stores";
     import Page0 from "$lib/fullscreenPage.svelte";
-    import Page1 from "$lib/page1.svelte";
-    import Page2 from "$lib/page2.svelte";
+    import Page1 from "$lib/introductionPage.svelte";
+    import Page2 from "$lib/customizedScreen.svelte";
     import CustomizedChat from "$lib/customizedChat.svelte";
     import RandomizedChat from "$lib/randomizedChat.svelte";
     import TextChat from "$lib/textChat.svelte";

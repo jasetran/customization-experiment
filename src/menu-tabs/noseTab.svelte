@@ -1,28 +1,10 @@
 <script>
     import { userState } from "../state.svelte.js";
+    import avatarComponents from "$lib/avatarComponents.ts";
 
-    const modules = import.meta.glob("../noses/nose-*.svelte", {
-        eager: true,
-    });
+    let avatarOptions = [];
 
-    // extract the numbers from module paths and finding the maximum
-    // so i don't have to hard code it
-    const moduleNumbers = Object.keys(modules)
-        .map((path) => {
-            const match = path.match(/nose-(\d+)\.svelte$/);
-            return match ? parseInt(match[1], 10) : 0;
-        })
-        .filter((num) => num > 0);
-
-    const maxNumber = Math.max(...moduleNumbers);
-
-    const avatarOptions = [];
-
-    for (let i = 1; i <= maxNumber; i++) {
-        const path = `../noses/nose-${i}.svelte`;
-
-        avatarOptions.push(modules[path]?.default);
-    }
+    $: avatarOptions = Object.values(avatarComponents.noses ?? []);
 </script>
 
 {#each avatarOptions as NoseItem}

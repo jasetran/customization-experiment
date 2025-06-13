@@ -98,9 +98,7 @@
         type="button"
         style="top: 10%; left: 48%; "
         onclick={() => {
-            userState.charName = randomizeOptions(
-                parameters.randomizationNames,
-            );
+            userState.charName = randomizeOptions(parameters.randomNames);
         }}
         ><img
             style="width: 11rem"
@@ -182,7 +180,7 @@
 <style>
     .char {
         position: absolute;
-        left: 56%;
+        left: 58%;
         top: 35%;
         transform: translateY(-50%);
         width: 50rem;
@@ -208,7 +206,7 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 95%;
+        top: 92%;
         left: 8%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;

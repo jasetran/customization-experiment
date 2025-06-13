@@ -14,5 +14,6 @@ export const userState = $state({
     clothesColor: "#338dab",
     charAccessories: undefined,
     accessoriesColor: "#69371b",
+    emotion: "neutral",
 });
 

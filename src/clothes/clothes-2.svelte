@@ -1,3 +1,7 @@
+<script context="module">
+    export const sleeveType = "short";
+</script>
+
 <script>
     import { userState } from "../state.svelte.js";
 </script>
