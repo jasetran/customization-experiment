@@ -3,6 +3,38 @@
     import { userState } from "../state.svelte.js";
     import { onMount } from "svelte";
     import { randomizeOptions } from "../helperFunctions.js";
+    import avatarComponents from "./avatarComponents.ts";
+
+    console.log("hair random:", randomizeOptions(avatarComponents.hairs));
+    // randomizing avatar for this condition:
+    function randomizeAvatar() {
+        userState.charName = randomizeOptions([
+            "Billy",
+            "Dylan",
+            "Sam",
+            "Alex",
+            "Wren",
+            "Robin",
+        ]);
+        userState.charHead = randomizeOptions(avatarComponents.heads);
+        userState.headColor = "#c28155";
+        userState.charHair = randomizeOptions(avatarComponents.hairs);
+        userState.hairColor = "#2e1a12";
+        userState.charEyes = randomizeOptions(avatarComponents.eyes);
+        userState.eyesColor = "#17110f";
+        userState.charMouth = randomizeOptions(avatarComponents.mouths);
+        userState.charNose = randomizeOptions(avatarComponents.noses);
+        userState.charEyebrows = avatarComponents.eyebrows["eyebrows-neutral"];
+        userState.charArms = avatarComponents.arms["arms-neutral-short"];
+        userState.charClothes = randomizeOptions(
+            Object.values(avatarComponents.clothes).map((c) => c.component),
+        ); // TO DO: Change for sleeve type
+        userState.clothesColor = "#338dab";
+        userState.charAccessories = randomizeOptions(
+            avatarComponents.accessories,
+        );
+        userState.accessoriesColor = "#69371b";
+    }
 
     // audio recording for chat
     let isRecording = $state(false);
@@ -75,6 +107,7 @@
 
     // immediately begin recording when the component starts
     onMount(() => {
+        randomizeAvatar();
         startRecording();
 
         return () => {

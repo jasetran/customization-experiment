@@ -48,7 +48,6 @@ for (const path in modules) {
                     sleeveType: mod.sleeveType ?? "long", // fallback
                 },
             };
-            console.log(avatarComponents.clothes);
             break;
 
         case 'eyebrows':

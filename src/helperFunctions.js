@@ -1,9 +1,19 @@
 
 // set parameters for web app
 // function to randomly select an option
-export function randomizeOptions(conditionOptions) {
-    var index = Math.floor(Math.random() * conditionOptions.length);
-    return conditionOptions[index];
+export function randomizeOptions(options) {
+    if (!options) return null;
+
+    if (Array.isArray(options)) {
+        return options[Math.floor(Math.random() * options.length)];
+    }
+
+    if (typeof options === "object") {
+        const values = Object.values(options);
+        return values[Math.floor(Math.random() * values.length)];
+    }
+
+    return null;
 }
 
 export const parameters = {
