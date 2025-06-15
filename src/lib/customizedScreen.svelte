@@ -90,7 +90,7 @@
         id="char-entry-text"
         type="text"
         class:is-invalid={error.length}
-        placeholder={userState.charName}
+        placeholder="Enter your character name"
         bind:value={userState.charName}
     />
     <button

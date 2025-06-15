@@ -1,4 +1,3 @@
-
 // set parameters for web app
 // function to randomly select an option
 export function randomizeOptions(options) {
@@ -42,31 +41,30 @@ export const parameters = {
         "An",
         "Anya",
     ],
-}
+};
 
 // function to dynamically set the background
 export function setBackground(scene) {
     if (scene === 0) {
         return undefined;
     } else if (scene === 1) {
-        return "./assets/bg/bg-intro.svg";
+        return "--background-image: url(./assets/bg/bg-intro.svg)";
     } else if (scene === 2) {
-        return "./assets/bg/bg-customize.svg); --blur-amount: blur(2px);";
+        return "--background-image: url(./assets/bg/bg-customize.svg); --blur-amount: 0.1rem;";
     } else {
-        return "./assets/bg/bg-chat.svg); --blur-amount: blur(2px);";
+        return "--background-image: url(./assets/bg/bg-chat.svg); --blur-amount: 0.1rem;";
     }
 }
 
-// function to randomize the avatar 
+// function to randomize the avatar
 export function randomizeAvatar(userState, avatarComponents) {
-
     // options for different colors of the assets
     const nameOptions = ["Billy", "Dylan", "Sam", "Alex", "Wren", "Robin"];
-    const skinTones = ["#f9dcc4", "#f0c49d", "#dba67b", "#c28868", "#a16642", "#7f4a2b", "#59311d"];
-    const hairColors = ["#2e1a12", "#4b2e1f", "#d4a373", "#f6e7c1", "#a7a7a7", "#000000", "#893e66", "#d62828"];
-    const eyeColors = ["#17110f", "#3e2f25", "#5b8e7d", "#567d99", "#7b9e89", "#a482bf"];
-    const clothesColors = ["#338dab", "#db5461", "#fab95b", "#6f8f72", "#9e6c9e", "#f3f3f3", "#000000"];
-    const accessoriesColors = ["#69371b", "#c6c6c6", "#d4af37", "#1e6091", "#b5838d", "#222222"];
+    const skinTones = [ "#f9dcc4", "#f0c49d", "#dba67b", "#c28868", "#a16642", "#7f4a2b", "#59311d" ]; // prettier-ignore
+    const hairColors = [ "#2e1a12", "#4b2e1f", "#d4a373", "#f6e7c1", "#a7a7a7", "#000000", "#893e66", "#d62828" ]; // prettier-ignore
+    const eyeColors = [ "#17110f", "#3e2f25", "#5b8e7d", "#567d99", "#7b9e89", "#a482bf" ]; // prettier-ignore
+    const clothesColors = [ "#338dab", "#db5461", "#fab95b", "#6f8f72", "#9e6c9e", "#f3f3f3", "#000000" ]; // prettier-ignore
+    const accessoriesColors = [ "#69371b", "#c6c6c6", "#d4af37", "#1e6091", "#b5838d", "#222222" ]; // prettier-ignore
 
     // name randomization
     userState.charName = randomizeOptions(nameOptions);
@@ -115,4 +113,3 @@ export function setExpression(userState, avatarComponents) {
     }
 
 }
-

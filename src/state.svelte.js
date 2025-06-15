@@ -1,5 +1,5 @@
 export const userState = $state({
-    charName: "Enter your character's name",
+    charName: undefined,
     charHead: undefined,
     headColor: "#c28155",
     charHair: { front: undefined, back: undefined },
