@@ -15,5 +15,5 @@ export const userState = $state({
     charAccessories: undefined,
     accessoriesColor: "#69371b",
     emotion: "neutral",
+    conversation_items: [],
 });
-
