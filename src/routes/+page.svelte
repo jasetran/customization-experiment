@@ -22,21 +22,23 @@
     let pid = $state(url.searchParams.get("pid") || "");
 </script>
 
-<div id="screen-size" style="background-image: url({setBackground(scene)}">
-    <div id="screen">
-        {#if scene === 0}
-            <Page0 bind:scene></Page0>
-        {:else if scene === 1}
-            <Page1 bind:scene bind:pid bind:condition></Page1>
-        {:else if scene === 2 && condition === "customize"}
-            <Page2 bind:scene></Page2>
-        {:else if scene === 3 && condition === "customize"}
-            <CustomizedChat bind:scene></CustomizedChat>
-        {:else if scene === 3 && condition === "random"}
-            <RandomizedChat bind:scene></RandomizedChat>
-        {:else if scene === 3 && condition === "text"}
-            <TextChat bind:scene></TextChat>
-        {/if}
+<div id="screen-size" style={setBackground(scene)}>
+    <div id="screen-blur">
+        <div id="screen">
+            {#if scene === 0}
+                <Page0 bind:scene></Page0>
+            {:else if scene === 1}
+                <Page1 bind:scene bind:pid bind:condition></Page1>
+            {:else if scene === 2 && condition === "customize"}
+                <Page2 bind:scene></Page2>
+            {:else if scene === 3 && condition === "customize"}
+                <CustomizedChat bind:scene></CustomizedChat>
+            {:else if scene === 3 && condition === "random"}
+                <RandomizedChat bind:scene></RandomizedChat>
+            {:else if scene === 3 && condition === "text"}
+                <TextChat bind:scene></TextChat>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -54,12 +56,23 @@
         display: flex;
         overflow: hidden;
         background-size: cover;
+        background-image: var(--background-image);
+        --blur-amount: 0px;
+        --background-image: white;
+    }
+
+    #screen-blur {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        backdrop-filter: blur(var(--blur-amount));
     }
 
     #screen {
         position: relative;
         margin: auto;
         width: 100%;
+        max-height: 100vh;
         aspect-ratio: 16 / 9;
     }
 </style>
