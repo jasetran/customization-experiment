@@ -3,29 +3,36 @@
     import { userState } from "../state.svelte.js";
     import { onMount } from "svelte";
 
+    // video recording for chat sequence
     let isRecording = $state(false);
-    let audioUrl = $state("");
+    let videoUrl = $state("");
     let mediaRecorder;
-    let audioChunks = [];
+    let recordedChunks = [];
     let stream;
     let countdown = $state(10);
     let countdownInterval;
 
     async function startRecording() {
         try {
-            // request microphone access
-            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: true,
+            });
 
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
+            mediaRecorder = new MediaRecorder(stream, {
+                mimeType: "video/mp4",
+            });
+            recordedChunks = [];
 
             mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
+                recordedChunks.push(event.data);
             };
 
             mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                audioUrl = URL.createObjectURL(audioBlob);
+                const recordedBlob = new Blob(recordedChunks, {
+                    type: "video/mp4",
+                });
+                videoUrl = URL.createObjectURL(recordedBlob);
 
                 // stop all tracks to release microphone
                 stream.getTracks().forEach((track) => track.stop());
@@ -50,7 +57,9 @@
             }, 10000);
         } catch (error) {
             console.error("Error accessing microphone:", error);
-            alert("Could not access microphone. Please check permissions.");
+            alert(
+                "Could not access microphone or camera. Please check permissions.",
+            );
         }
     }
 
@@ -71,16 +80,17 @@
         }
     }
 
-    // immediately begin recording when the component starts
+    // immediately randomize the avatar and begin recording when the component starts
     onMount(() => {
+        // begin recording
         startRecording();
 
         return () => {
             if (stream) {
                 stream.getTracks().forEach((track) => track.stop());
             }
-            if (audioUrl) {
-                URL.revokeObjectURL(audioUrl);
+            if (videoUrl) {
+                URL.revokeObjectURL(videoUrl);
             }
             if (countdownInterval) {
                 clearInterval(countdownInterval);
@@ -122,27 +132,31 @@
     </div>
 </div>
 
-<div class="audio-recorder">
+<div class="video-recorder">
     <div class="controls">
         {#if isRecording}
             <div class="recording-status">
                 <span class="pulse">👂 Listening... </span>
                 {countdown}s remaining
             </div>
-        {:else if audioUrl}
+        {:else if videoUrl}
             <div class="complete-status">
                 <div class="playback">
-                    <audio controls src={audioUrl}></audio>
+                    <!-- svelte-ignore a11y_media_has_caption -->
+                    <video controls src={videoUrl} width="150" height="100"
+                    ></video>
                 </div>
             </div>
         {:else}
-            <div class="initializing">🎤 Checking microphone...</div>
+            <div class="initializing">
+                📷 🎤 Checking camera & microphone...
+            </div>
         {/if}
     </div>
 </div>
 
 <style>
-    .audio-recorder {
+    .video-recorder {
         position: relative;
         top: 90%;
         left: 5%;

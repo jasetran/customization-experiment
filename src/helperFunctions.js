@@ -109,3 +109,10 @@ export function randomizeAvatar(userState, avatarComponents) {
     userState.accessoriesColor = randomizeOptions(accessoriesColors);
 }
 
+// function to change the avatar's facial expression in the embodied conditions
+export function setExpression(userState, avatarComponents) {
+    if (userState.emotion == "neutral") {
+    }
+
+}
+
