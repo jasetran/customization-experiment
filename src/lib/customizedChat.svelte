@@ -4,7 +4,7 @@
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
-    let items = $state<RealtimeItem[]>();
+    let items = $state<RealtimeItem[]>([]);
 </script>
 
 <div id="char-chat">
