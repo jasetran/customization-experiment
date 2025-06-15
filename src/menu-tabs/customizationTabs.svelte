@@ -60,7 +60,7 @@
         height: 28rem;
         max-height: 28rem;
         margin-bottom: 0.5rem;
-        overflow: scroll;
+        overflow-y: scroll;
     }
 
     ul {

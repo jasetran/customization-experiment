@@ -11,7 +11,6 @@
     import Page2 from "$lib/customizedScreen.svelte";
     import CustomizedChat from "$lib/customizedChat.svelte";
     import RandomizedChat from "$lib/randomizedChat.svelte";
-    import TextChat from "$lib/textChat.svelte";
 
     const url = $page.url;
     let condition = $state(
@@ -22,27 +21,27 @@
     let pid = $state(url.searchParams.get("pid") || "");
 </script>
 
-<div id="screen-size" style="background-image: url({setBackground(scene)}">
-    <div id="screen">
-        {#if scene === 0}
-            <Page0 bind:scene></Page0>
-        {:else if scene === 1}
-            <Page1 bind:scene bind:pid bind:condition></Page1>
-        {:else if scene === 2 && condition === "customize"}
-            <Page2 bind:scene></Page2>
-        {:else if scene === 3 && condition === "customize"}
-            <CustomizedChat bind:scene></CustomizedChat>
-        {:else if scene === 3 && condition === "random"}
-            <RandomizedChat bind:scene></RandomizedChat>
-        {:else if scene === 3 && condition === "text"}
-            <TextChat bind:scene></TextChat>
-        {/if}
+<div id="screen-size" style={setBackground(scene)}>
+    <div id="screen-blur">
+        <div id="screen">
+            {#if scene === 0}
+                <Page0 bind:scene></Page0>
+            {:else if scene === 1}
+                <Page1 bind:scene bind:pid bind:condition></Page1>
+            {:else if scene === 2 && condition === "customize"}
+                <Page2 bind:scene></Page2>
+            {:else if scene === 3 && condition === "customize"}
+                <CustomizedChat bind:scene></CustomizedChat>
+            {:else if scene === 3 && condition === "random"}
+                <RandomizedChat bind:scene></RandomizedChat>
+            {/if}
+        </div>
     </div>
 </div>
 
 <style>
     :global(:root) {
-        font-size: calc(1vw);
+        font-size: calc(min(1vw, 1.77vh));
     }
 
     #screen-size {
@@ -54,12 +53,22 @@
         display: flex;
         overflow: hidden;
         background-size: cover;
+        background-image: var(--background-image);
+        --blur-amount: 0px;
+        --background-image: white;
+    }
+
+    #screen-blur {
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        backdrop-filter: blur(var(--blur-amount));
     }
 
     #screen {
         position: relative;
         margin: auto;
-        width: 100%;
+        width: min(100vw, 177vh);
         aspect-ratio: 16 / 9;
     }
 </style>
