@@ -11,10 +11,13 @@
         // changing the clothes userState
         userState.charClothes = ClothesItems.component;
 
+        // saving the sleeve type
         const sleeveType = ClothesItems.sleeveType;
+        userState.charSleeves = sleeveType;
+
+        // changing the arms userState based on clothes
         const armsKey = `arms-neutral-${sleeveType}`;
         const armsComponent = avatarComponents.arms[armsKey];
-        // changing the arms userState based on clothes
         userState.charArms = armsComponent;
     }
 </script>

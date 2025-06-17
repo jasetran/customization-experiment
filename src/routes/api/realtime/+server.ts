@@ -1,9 +1,9 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
+import { OPENAI_API_KEY } from '$env/static/private';
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
-        const { OPENAI_API_KEY } = process.env;
 
         if (!OPENAI_API_KEY) {
             return json(

@@ -180,7 +180,7 @@
         border-width: 1rem;
         font-weight: bold;
         padding: 1rem 8rem 1rem 8rem;
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     .pulse {

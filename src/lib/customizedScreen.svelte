@@ -123,10 +123,7 @@
         type="button"
         style="left: 92%"
         onclick={() => {
-            if (
-                userState.charName !== "Enter your character's name" &&
-                userState.charName !== ""
-            ) {
+            if (userState.charName !== undefined) {
                 scene = scene + 1;
             } else {
                 error = "Please enter your character's name";
@@ -208,7 +205,7 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 92%;
+        top: 53rem;
         left: 8%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
