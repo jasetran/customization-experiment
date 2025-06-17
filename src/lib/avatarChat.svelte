@@ -1,10 +1,16 @@
 <script lang="ts">
     let { scene = $bindable(), condition = $bindable() } = $props();
     import { userState } from "../state.svelte.js";
+    import { randomizeAvatar } from "../helperFunctions.js";
+    import avatarComponents from "./avatarComponents.ts";
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
     let items = $state<RealtimeItem[]>([]);
+
+    if (condition === "random") {
+        randomizeAvatar(userState, avatarComponents);
+    }
 </script>
 
 <div id="char-chat">
@@ -74,7 +80,7 @@
         bottom: 1rem;
         overflow: hidden;
         padding: 0rem 2rem 2rem 2rem;
-        background: rgba(98, 98, 98, 0.5);
+        background: rgba(98, 98, 98, 0.7);
         border-radius: 2rem;
         display: flex;
         flex-direction: column;
@@ -123,7 +129,7 @@
     }
 
     .message.user .message-content {
-        background: #0a487d;
+        background: #003f77;
         color: white;
         border-bottom-right-radius: 0.25rem;
     }

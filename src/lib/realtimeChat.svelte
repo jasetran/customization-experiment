@@ -355,7 +355,7 @@
     }
 
     .assistant-status.listening {
-        background: linear-gradient(135deg, #003d72 0%, #00d5e0 100%);
+        background: linear-gradient(135deg, #006f64 0%, #00cf94 100%);
         padding: 0.8rem 3rem;
         margin-left: 6rem;
     }
