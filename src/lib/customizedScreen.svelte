@@ -18,7 +18,7 @@
     import EyebrowsNeutral from "../eyebrows/eyebrows-neutral.svelte";
     import ArmsNeutralShort from "../arms/arms-neutral-short.svelte";
     import Clothes1 from "../clothes/clothes-1.svelte";
-    import Accessory2 from "../accessories/accessory-2.svelte";
+    import Accessory1 from "../accessories/accessory-1.svelte";
 
     let { scene = $bindable() } = $props();
 
@@ -33,7 +33,7 @@
     userState.charEyebrows = EyebrowsNeutral;
     userState.charArms = ArmsNeutralShort;
     userState.charClothes = Clothes1;
-    userState.charAccessories = Accessory2;
+    userState.charAccessories = Accessory1;
 
     // tab items
     let menuItems = [

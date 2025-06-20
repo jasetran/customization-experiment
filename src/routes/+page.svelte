@@ -9,6 +9,7 @@
     import Page0 from "$lib/fullscreenPage.svelte";
     import Page1 from "$lib/introductionPage.svelte";
     import Page2 from "$lib/customizedScreen.svelte";
+    import LearningVideo from "$lib/learningVideo.svelte";
     import AvatarChat from "$lib/avatarChat.svelte";
     import TextChat from "$lib/textChat.svelte";
 
@@ -30,9 +31,11 @@
                 <Page1 bind:scene bind:pid bind:condition></Page1>
             {:else if scene === 2 && condition === "customize"}
                 <Page2 bind:scene></Page2>
-            {:else if scene === 3 && condition !== "text"}
+            {:else if scene === 3}
+                <LearningVideo bind:scene></LearningVideo>
+            {:else if scene === 4 && condition !== "text"}
                 <AvatarChat bind:scene bind:condition></AvatarChat>
-            {:else if scene === 3 && condition === "text"}
+            {:else if scene === 4 && condition === "text"}
                 <TextChat bind:scene bind:condition></TextChat>
             {/if}
         </div>
