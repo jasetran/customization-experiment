@@ -1,5 +1,6 @@
 <script>
     export let color;
+    export let shadowsColor;
 
     let hue = 22; // 0 - 360
     let saturation = 82; // 0 - 100
@@ -25,6 +26,9 @@
 
     $: hex = hslToHex(hue, saturation, lightness);
     $: color = `hsl(${hue}deg ${saturation}% ${lightness}%)`;
+
+    // creating shadows color with higher saturation and lower lightness for the clothes
+    $: shadowsColor = `hsl(${hue}deg ${Math.min(100, saturation * 1.3)}% ${Math.max(0, lightness * 0.7)}%)`;
 
     let hueEl;
     let saturationEl;

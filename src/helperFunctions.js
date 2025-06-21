@@ -117,56 +117,90 @@ export function setBackground(scene) {
     }
 }
 
-// function to randomize the avatar
-export function randomizeAvatar(userState, avatarComponents) {
-    // options for different colors of the assets
-    const nameOptions = ["Billy", "Dylan", "Sam", "Alex", "Wren", "Robin"];
-    const skinTones = ["#f9dcc4", "#f0c49d", "#dba67b", "#c28868", "#a16642", "#7f4a2b", "#59311d"]; // prettier-ignore
-    const hairColors = ["#2e1a12", "#4b2e1f", "#d4a373", "#f6e7c1", "#a7a7a7", "#000000", "#893e66", "#d62828"]; // prettier-ignore
-    const eyeColors = ["#17110f", "#3e2f25", "#5b8e7d", "#567d99", "#7b9e89", "#a482bf"]; // prettier-ignore
-    const clothesColors = ["#338dab", "#db5461", "#fab95b", "#6f8f72", "#9e6c9e", "#f3f3f3", "#000000"]; // prettier-ignore
-    const accessoriesColors = ["#69371b", "#c6c6c6", "#d4af37", "#1e6091", "#b5838d", "#222222"]; // prettier-ignore
+// define preset avatar combinations for the randomization condition
+export const avatarPresets = [
+    {
+        name: "Miles",
+        skinTone: "#4f2409",
+        head: "head-4",
+        hair: "hair-22",
+        hairColor: "#170701",
+        eyes: "eyes-1",
+        eyeColor: "#17110f",
+        nose: "nose-2",
+        clothes: "clothes-16",
+        clothesColor: "#338dab",
+        accessory: "accessory-1",
+        accessoriesColor: "#69371b",
+        description: "Dark skin, short black coiled hair, dark brown eyes"
+    },
+    {
+        name: "Becca",
+        skinTone: "#db8f51",
+        head: "head-1",
+        hair: "hair-12",
+        hairColor: "#f0b160",
+        eyes: "eyes-2",
+        eyeColor: "#3d3a3a",
+        nose: "nose-1",
+        clothes: "clothes-19",
+        clothesColor: "#607d6b",
+        accessory: "accessory-4",
+        accessoriesColor: "#4d2b0f",
+        description: "Tanned skin, long blonde hair, gray eyes"
+    },
+    {
+        name: "Percy",
+        skinTone: "#e8be9b",
+        head: "head-5",
+        hair: "hair-23",
+        hairColor: "#0f0f0f",
+        eyes: "eyes-1",
+        eyeColor: "#053317",
+        nose: "nose-9",
+        clothes: "clothes-17",
+        clothesColor: "#1f395c",
+        clothesShadow: "#091c36",
+        accessory: "accessory-3",
+        accessoriesColor: "#995823",
+        description: "Fair skin, short black hair, green eyes, freckles"
+    },
+];
 
-    // name randomization
-    userState.charName = randomizeOptions(nameOptions);
+export function randomizedDefinedAvatar(userState, avatarComponents, avatarPresets) {
 
-    // head randomization
-    userState.charHead = randomizeOptions(avatarComponents.heads);
-    userState.headColor = randomizeOptions(skinTones);
+    // randomly select a predefined character
+    const selectedPreset = randomizeOptions(avatarPresets);
 
-    // hair randomization
-    userState.charHair = randomizeOptions(avatarComponents.hairs);
-    userState.hairColor = randomizeOptions(hairColors);
+    // apply the preset colors and name to the avatar
+    userState.charName = selectedPreset.name;
+    userState.headColor = selectedPreset.skinTone;
+    userState.hairColor = selectedPreset.hairColor;
+    userState.eyesColor = selectedPreset.eyeColor;
+    userState.clothesColor = selectedPreset.clothesColor;
+    userState.accessoriesColor = selectedPreset.accessoriesColor;
 
-    // eyes randomization
-    userState.charEyes = randomizeOptions(avatarComponents.eyes);
-    userState.eyesColor = randomizeOptions(eyeColors);
+    // assigning the actual character components
+    userState.charHead = avatarComponents.heads[selectedPreset.head];
+    userState.charHair = avatarComponents.hairs[selectedPreset.hair];
+    userState.charEyes = avatarComponents.eyes[selectedPreset.eyes];
+    userState.charNose = avatarComponents.noses[selectedPreset.nose];
+    userState.charAccessories = avatarComponents.accessories[selectedPreset.accessory];
 
-    // mouth randomization
-    userState.charMouth = randomizeOptions(avatarComponents.mouths);
-
-    // nose randomization
-    userState.charNose = randomizeOptions(avatarComponents.noses);
-
-    // eyebrows default
+    // default mouth & eyebrpows
+    userState.charMouth = avatarComponents.mouths["mouth-smile"];
     userState.charEyebrows = avatarComponents.eyebrows["eyebrows-neutral"];
 
-    // clothes randomization
-    const clothesEntries = Object.values(avatarComponents.clothes);
-    const selectedClothes = randomizeOptions(clothesEntries);
+    // assigning the clothes & appropriate sleeve
+    const selectedClothes = avatarComponents.clothes[selectedPreset.clothes];
 
     userState.charClothes = selectedClothes.component;
-    userState.clothesColor = randomizeOptions(clothesColors);
 
-    // selection the appropriate sleeve and arm for the clothes
+    // selecting the appropriate sleeve and arm for the clothes
     const sleeveType = selectedClothes.sleeveType ?? "long";
     const armsKey = `arms-neutral-${sleeveType}`;
     userState.charSleeves = sleeveType;
     userState.charArms = avatarComponents.arms[armsKey];
-
-    // accessory randomization
-    userState.charAccessories = randomizeOptions(avatarComponents.accessories);
-    userState.accessoriesColor = randomizeOptions(accessoriesColors);
 }
 
 // function to change the avatar's facial expression in the embodied conditions
