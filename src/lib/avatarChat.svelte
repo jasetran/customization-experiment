@@ -1,7 +1,11 @@
 <script lang="ts">
     let { scene = $bindable(), condition = $bindable() } = $props();
     import { userState } from "../state.svelte.js";
-    import { randomizeAvatar, systemPrompts } from "../helperFunctions.js";
+    import {
+        randomizedDefinedAvatar,
+        avatarPresets,
+        systemPrompts,
+    } from "../helperFunctions.js";
     import avatarComponents from "./avatarComponents.ts";
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
@@ -25,12 +29,8 @@
     }
 
     if (condition === "random") {
-        randomizeAvatar(userState, avatarComponents);
+        randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
     }
-
-    $effect(() => {
-        console.log("this is items data:", items);
-    });
 </script>
 
 <div id="char-chat">

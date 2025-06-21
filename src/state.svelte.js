@@ -15,6 +15,7 @@ export const userState = $state({
     charClothes: undefined,
     charSleeves: undefined,
     clothesColor: "#338dab",
+    clothesShadow: "#105166",
     charAccessories: undefined,
     accessoriesColor: "#69371b",
     // experiment session data

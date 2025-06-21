@@ -42,6 +42,7 @@
             value: 1,
             icon: "fluent-emoji-high-contrast:bust-in-silhouette",
             color: "headColor",
+            shadowColor: undefined,
             component: headTab,
         },
         {
@@ -49,6 +50,7 @@
             value: 2,
             icon: "fluent-emoji-high-contrast:hair-pick",
             color: "hairColor",
+            shadowColor: undefined,
             component: hairTab,
         },
         {
@@ -56,6 +58,7 @@
             value: 3,
             icon: "emojione-monotone:eye",
             color: "eyesColor",
+            shadowColor: undefined,
             component: eyesTab,
         },
         {
@@ -63,6 +66,7 @@
             value: 4,
             icon: "fluent-emoji-high-contrast:nose",
             color: undefined,
+            shadowColor: undefined,
             component: noseTab,
         },
         {
@@ -70,6 +74,7 @@
             value: 5,
             icon: "emojione-monotone:t-shirt",
             color: "clothesColor",
+            shadowColor: "clothesShadow",
             component: clothesTab,
         },
         {
@@ -77,6 +82,7 @@
             value: 6,
             icon: "emojione-monotone:glasses",
             color: "accessoriesColor",
+            shadowColor: undefined,
             component: accessoryTab,
         },
     ];

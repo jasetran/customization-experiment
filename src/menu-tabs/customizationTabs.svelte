@@ -5,10 +5,12 @@
     export let menuItems = [];
     export let activeItem;
     export let activeColor;
+    export let activeShadow;
 
-    const handleClick = (tabValue, colorValue) => () => {
+    const handleClick = (tabValue, colorValue, shadowValue) => () => {
         activeItem = tabValue;
         activeColor = colorValue;
+        activeShadow = shadowValue;
     };
 </script>
 
@@ -18,8 +20,12 @@
             <button
                 class="tab-btn"
                 class:active-icon={item.label === activeItem}
-                on:click={handleClick(item.label, item.color)}
-                on:keypress={handleClick(item.label, item.color)}
+                on:click={handleClick(item.label, item.color, item.shadowColor)}
+                on:keypress={handleClick(
+                    item.label,
+                    item.color,
+                    item.shadowColor,
+                )}
             >
                 <Icon
                     icon={item.icon}
@@ -38,7 +44,10 @@
     {/each}
 </div>
 
-<ColorPicker bind:color={userState[activeColor]} />
+<ColorPicker
+    bind:color={userState[activeColor]}
+    bind:shadowsColor={userState[activeShadow]}
+/>
 
 <style>
     .tabs {
