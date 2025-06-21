@@ -27,6 +27,10 @@
     if (condition === "random") {
         randomizeAvatar(userState, avatarComponents);
     }
+
+    $effect(() => {
+        console.log("this is items data:", items);
+    });
 </script>
 
 <div id="char-chat">

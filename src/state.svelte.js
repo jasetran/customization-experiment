@@ -1,4 +1,6 @@
 export const userState = $state({
+    pid: undefined,
+    condition: undefined,
     charName: undefined,
     charHead: undefined,
     headColor: "#c28155",
@@ -15,6 +17,11 @@ export const userState = $state({
     clothesColor: "#338dab",
     charAccessories: undefined,
     accessoriesColor: "#69371b",
-    conversation_items: [],
-    conversation_recordings: [],
+    // experiment session data
+    interactionSession: {
+        practice_recording: [],
+        practice_log: [],
+        discussion_recording: [],
+        discussion_log: [],
+    },
 });

@@ -38,6 +38,17 @@
     let microphoneTrack: MediaStreamTrack | null = null;
     let audioSender: RTCRtpSender | null = null;
 
+    // Audio context and gain node for controlling audio to OpenAI
+    let audioContext: AudioContext | null = null;
+    let gainNode: GainNode | null = null;
+    let microphoneSource: MediaStreamAudioSourceNode | null = null;
+    let processedAudioStream: MediaStream | null = null;
+
+    // Audio mixing for recording both user and assistant
+    let assistantAudioSource: MediaStreamAudioSourceNode | null = null;
+    let mixerDestination: MediaStreamDestination | null = null;
+    let mixedAudioStream: MediaStream | null = null;
+
     // recording related variables
     let mediaRecorder: MediaRecorder | null = null;
     let recordedChunks: Blob[] = [];
@@ -56,7 +67,7 @@
             // stop any ongoing recording
             if (isRecording) {
                 stopRecording();
-                downloadRecording();
+                saveDataToUserState();
             }
 
             onConversationEnd(conversationEnded);
@@ -70,11 +81,11 @@
         try {
             // Get video stream from camera
             videoStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 640, height: 360 },
-                audio: false, // We'll use the existing microphone track
+                video: { width: 320, height: 180 },
+                audio: false, // We'll use the mixed audio stream
             });
 
-            // Create combined stream with video and audio
+            // Create combined stream with video and mixed audio
             combinedStream = new MediaStream();
 
             // add video track
@@ -82,15 +93,59 @@
                 combinedStream!.addTrack(track);
             });
 
-            // add audio track (the same one used for WebRTC)
-            if (microphoneTrack) {
-                combinedStream.addTrack(microphoneTrack);
+            // add mixed audio track (user + assistant) for recording
+            if (mixedAudioStream) {
+                const mixedAudioTrack = mixedAudioStream.getAudioTracks()[0];
+                combinedStream.addTrack(mixedAudioTrack);
             }
 
             console.log("Recording setup complete");
         } catch (error) {
             console.error("Failed to setup recording:", error);
             onError("Failed to setup video recording");
+        }
+    }
+
+    async function setupAudioProcessing() {
+        try {
+            // Create audio context
+            audioContext = new AudioContext();
+
+            // Get microphone stream
+            const micStream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+            });
+            microphoneTrack = micStream.getTracks()[0];
+
+            // Create audio source from microphone
+            microphoneSource = audioContext.createMediaStreamSource(micStream);
+
+            // Create gain node to control volume to OpenAI
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 1; // Start with full volume
+
+            // Connect microphone to gain node
+            microphoneSource.connect(gainNode);
+
+            // Create destination for processed audio (to OpenAI)
+            const openAIDestination =
+                audioContext.createMediaStreamDestination();
+            gainNode.connect(openAIDestination);
+            processedAudioStream = openAIDestination.stream;
+
+            // Create mixer destination for recording (user + assistant)
+            mixerDestination = audioContext.createMediaStreamDestination();
+
+            // Connect microphone directly to mixer (always full volume for recording)
+            microphoneSource.connect(mixerDestination);
+
+            // Get the mixed audio stream for recording
+            mixedAudioStream = mixerDestination.stream;
+
+            console.log("Audio processing setup complete");
+        } catch (error) {
+            console.error("Failed to setup audio processing:", error);
+            onError("Failed to setup audio processing");
         }
     }
 
@@ -111,7 +166,7 @@
 
             mediaRecorder.onstop = () => {
                 if (recordedChunks.length > 0) {
-                    downloadRecording();
+                    saveDataToUserState();
                 }
             };
 
@@ -132,30 +187,40 @@
         }
     }
 
-    function downloadRecording() {
+    function saveDataToUserState() {
         if (recordedChunks.length === 0) return;
 
         const blob = new Blob(recordedChunks, { type: "video/webm" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-
-        recordingCount++;
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        a.href = url;
-        a.download = `${userState.pid}-${interactionPhase}-${timestamp}.webm`;
+        const filename = `${userState.pid}-${interactionPhase}-${timestamp}.webm`;
 
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        const recording = {
+            filename: filename,
+            blob: blob,
+            timestamp: timestamp,
+            size: blob.size,
+        };
 
-        URL.revokeObjectURL(url);
+        // Add the recording to the appropriate phase array
+        if (interactionPhase === "practice") {
+            userState.interactionSession.practice_recording.push(recording);
+        } else if (interactionPhase === "discussion") {
+            userState.interactionSession.discussion_recording.push(recording);
+        }
         recordedChunks = [];
-    }
 
+        console.log("Recording saved");
+    }
     // setting up the OpenAI conversational session
 
     async function startRealtimeSession() {
         try {
+            // Setup audio processing first
+            await setupAudioProcessing();
+
+            // Setup recording after we have the microphone track
+            await setupRecording();
+
             // Get a session token for OpenAI Realtime API
             const tokenResponse = await fetch("/api/realtime", {
                 method: "POST",
@@ -177,28 +242,31 @@
             // Create a peer connection
             const pc = new RTCPeerConnection();
 
-            // Set up to play remote audio from the model
+            // Set up to play remote audio from the model AND capture it for recording
             audioElement = document.createElement("audio");
             audioElement.autoplay = true;
             pc.ontrack = (e) => {
                 if (audioElement) {
                     audioElement.srcObject = e.streams[0];
+
+                    // Also capture the assistant's audio for recording
+                    if (audioContext && mixerDestination) {
+                        assistantAudioSource =
+                            audioContext.createMediaStreamSource(e.streams[0]);
+                        assistantAudioSource.connect(mixerDestination);
+                        console.log("Assistant audio connected to mixer");
+                    }
                 }
             };
 
-            const ms = await navigator.mediaDevices.getUserMedia({
-                audio: true,
-            });
-            microphoneTrack = ms.getTracks()[0];
+            // Add the PROCESSED audio stream to peer connection (not the original)
+            if (processedAudioStream) {
+                const processedTrack = processedAudioStream.getAudioTracks()[0];
+                audioSender = pc.addTrack(processedTrack);
+            }
 
-            // setup recording after we have the microphone track
-            await setupRecording();
-
-            // adding microphone to peer connection
-            audioSender = pc.addTrack(microphoneTrack);
-
-            // initially disable the microphone track
-            microphoneTrack.enabled = false;
+            // initially mute the processed audio going to OpenAI
+            muteMicrophoneToOpenAI();
 
             // set up data channel for sending and receiving events
             const dc = pc.createDataChannel("oai-events");
@@ -293,8 +361,6 @@
                         item.content[event.content_index] = event.part;
                     }
                     case "conversation.item.created": {
-                        console.log("TEXT:", event.item.content.text);
-                        console.log("event:", event);
                         const item = {
                             id: event.item.id,
                             content: event.item.content,
@@ -304,25 +370,25 @@
                         // this prevents the user from cutting off the agent
                         if (item.role === "assistant") {
                             isAssistantSpeaking = true;
-                            disableMicrophone();
+                            muteMicrophoneToOpenAI();
                         }
                         break;
                     }
                     case "output_audio_buffer.stopped": {
                         if (endTriggerFound) {
                             // waiting for the audio buffer before ending conversation
-                            disableMicrophone();
+                            muteMicrophoneToOpenAI();
                             endConversation();
                         }
 
                         isAssistantSpeaking = false;
-                        enableMicrophone(); // re-enable the microphone once agent is done talking
+                        unmuteMicrophoneToOpenAI(); // re-enable the microphone once agent is done talking
                         break;
                     }
                     case "error":
                         onError(event.error?.message || "Unknown error");
                         isAssistantSpeaking = false;
-                        enableMicrophone();
+                        unmuteMicrophoneToOpenAI();
                         if (isRecording) {
                             stopRecording();
                         }
@@ -354,19 +420,19 @@
         }
     }
 
-    // enabling the microphone input
-    function enableMicrophone() {
-        if (microphoneTrack) {
-            microphoneTrack.enabled = true;
-            console.log("Microphone enabled");
+    // enabling the microphone input to OpenAI (using gain node)
+    function unmuteMicrophoneToOpenAI() {
+        if (gainNode) {
+            gainNode.gain.setValueAtTime(1, audioContext!.currentTime);
+            console.log("Microphone unmuted to OpenAI");
         }
     }
 
-    // disabling the microphone input
-    function disableMicrophone() {
-        if (microphoneTrack) {
-            microphoneTrack.enabled = false;
-            console.log("Microphone disabled");
+    // disabling the microphone input to OpenAI (using gain node)
+    function muteMicrophoneToOpenAI() {
+        if (gainNode) {
+            gainNode.gain.setValueAtTime(0, audioContext!.currentTime);
+            console.log("Microphone muted to OpenAI");
         }
     }
 
@@ -410,6 +476,12 @@
             microphoneTrack.stop();
             microphoneTrack = null;
         }
+
+        if (audioContext && audioContext.state !== "closed") {
+            audioContext.close();
+            audioContext = null;
+        }
+
         if (dataChannel) {
             dataChannel.close();
         }
@@ -432,12 +504,26 @@
             videoStream = null;
         }
 
+        if (processedAudioStream) {
+            processedAudioStream.getTracks().forEach((track) => track.stop());
+            processedAudioStream = null;
+        }
+
+        if (mixedAudioStream) {
+            mixedAudioStream.getTracks().forEach((track) => track.stop());
+            mixedAudioStream = null;
+        }
+
         isRecording = false;
         isConnected = false;
         isAssistantSpeaking = false;
         dataChannel = null;
         peerConnection = null;
         audioSender = null;
+        gainNode = null;
+        microphoneSource = null;
+        assistantAudioSource = null;
+        mixerDestination = null;
 
         if (audioElement) {
             audioElement.srcObject = null;

@@ -31,6 +31,7 @@
         onclick={() => {
             if (pid !== "") {
                 userState.pid = pid;
+                userState.condition = condition;
                 if (condition !== "customize") {
                     scene = 3;
                 } else {
