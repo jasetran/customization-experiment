@@ -1,4 +1,6 @@
 <script>
+    import { userState } from "../state.svelte";
+
     let {
         scene = $bindable(),
         pid = $bindable(),
@@ -28,6 +30,7 @@
         type="button"
         onclick={() => {
             if (pid !== "") {
+                userState.pid = pid;
                 if (condition !== "customize") {
                     scene = 3;
                 } else {

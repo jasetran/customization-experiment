@@ -1,12 +1,35 @@
 <script lang="ts">
     let { scene = $bindable(), condition = $bindable() } = $props();
+    import { systemPrompts } from "../helperFunctions.js";
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
+    let endConversation = $state(false);
     let items = $state<RealtimeItem[]>([]);
+    let systemPrompt = $derived(
+        scene == 3 ? systemPrompts["practice"] : systemPrompts["discussion"],
+    );
+    let endTrigger = $derived(
+        scene == 3
+            ? "watch a fun video about water and ice"
+            : "thank you for talking to me",
+    );
+
+    function handleConversationEnd(conversationEnded) {
+        if (conversationEnded) {
+            setTimeout(() => {
+                scene++;
+            }, 2000);
+        }
+    }
 </script>
 
-<RealtimeChat bind:items>
+<RealtimeChat
+    bind:items
+    onConversationEnd={handleConversationEnd}
+    {systemPrompt}
+    {endTrigger}
+>
     <div class="chat-messages">
         {#each items.filter((item) => !item.content.some((part) => part.type === "input_text")) as item (item.id)}
             <div class="message {item.role}">
