@@ -12,7 +12,7 @@
 
     let items = $state<RealtimeItem[]>([]);
     let systemPrompt = $derived(
-        scene == 3
+        scene == 4
             ? systemPrompts.practice.replace(
                   "[CHARACTER_NAME]",
                   userState.charName || "Jasmine",
@@ -24,7 +24,7 @@
     );
 
     let endTrigger = $derived(
-        scene == 3
+        scene == 4
             ? "watch a fun video about water and ice"
             : "thank you for talking to me",
     );

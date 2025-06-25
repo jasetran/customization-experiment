@@ -12,7 +12,6 @@
     <Fullscreen let:onRequest>
         <!-- svelte-ignore event_directive_deprecated -->
         <button
-            class="fullscreen-btn"
             on:click={() => {
                 onRequest();
                 scene++;
@@ -33,7 +32,7 @@
         text-align: center;
     }
 
-    .fullscreen-btn {
+    button {
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
         font-size: 2.5rem;
@@ -43,5 +42,9 @@
         border-width: 0.4rem;
         border-radius: 0.5rem;
         border-color: rgb(26, 104, 168);
+    }
+
+    button:hover {
+        background: rgb(26, 104, 168);
     }
 </style>

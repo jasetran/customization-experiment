@@ -107,11 +107,11 @@ export function randomizeOptions(options) {
 
 // function to dynamically set the background
 export function setBackground(scene) {
-    if (scene === 0) {
+    if (scene < 2) {
         return undefined;
-    } else if (scene === 1) {
-        return "--background-image: url(./assets/bg/bg-intro.svg)";
     } else if (scene === 2) {
+        return "--background-image: url(./assets/bg/bg-intro.svg)";
+    } else if (scene === 3) {
         return "--background-image: url(./assets/bg/bg-customize.svg); --blur-amount: 0.3rem;";
     } else {
         return "--background-image: url(./assets/bg/bg-chat.svg); --blur-amount: 0.3rem;";

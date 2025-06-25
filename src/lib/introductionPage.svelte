@@ -33,7 +33,7 @@
                 userState.pid = pid;
                 userState.condition = condition;
                 if (condition !== "customize") {
-                    scene = 3;
+                    scene = 4;
                 } else {
                     scene++;
                 }

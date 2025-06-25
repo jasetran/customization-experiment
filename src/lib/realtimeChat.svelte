@@ -27,10 +27,10 @@
     // conversational agent related variables
     let conversationEnded = $state(false);
     let isConnected = $state(false);
-    let isAssistantSpeaking = $state(false);
+    let isAssistantSpeaking = $state(false); // variables related to the conversational flow
     let endTriggerFound = $state(false);
     let loadingVideo = $state(false);
-    let currentEmotion = $state("neutral");
+    let currentEmotion = $state("neutral"); // log what current emotion is
     let processedEmotions = new Set<string>(); // track which items have already had their emotions processed
     let peerConnection: RTCPeerConnection | null = null;
     let dataChannel: RTCDataChannel | null = null;
@@ -201,7 +201,7 @@
             size: blob.size,
         };
 
-        // Add the recording to the appropriate phase array
+        // add the recording to the appropriate phase array
         if (interactionPhase === "practice") {
             userState.interactionSession.practice_recording.push(recording);
         } else if (interactionPhase === "discussion") {
@@ -215,13 +215,13 @@
 
     async function startRealtimeSession() {
         try {
-            // Setup audio processing first
+            // setup audio processing first
             await setupAudioProcessing();
 
-            // Setup recording after we have the microphone track
+            // setup recording after we have the microphone track
             await setupRecording();
 
-            // Get a session token for OpenAI Realtime API
+            // get a session token for OpenAI Realtime API
             const tokenResponse = await fetch("/api/realtime", {
                 method: "POST",
                 headers: {
@@ -316,14 +316,14 @@
                             (part.transcript ?? "") + event.delta;
                         part.transcript = newTranscript;
 
-                        // If this is an assistant response, check for emotion immediately
+                        // check for emotion immediately from assistant response
                         if (
                             item.role === "assistant" &&
                             !processedEmotions.has(item.id)
                         ) {
                             const detectedEmotion =
                                 analyzeEmotion(newTranscript);
-                            // Only trigger if we found an explicit emotion tag or have enough content
+                            // only trigger if we found an explicit emotion tag or have enough content
                             const hasEmotionTag =
                                 /\[(neutral|unsure|thoughtful|happy|greeting|surprised|excited)\]/i.test(
                                     newTranscript,

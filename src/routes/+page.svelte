@@ -7,8 +7,9 @@
     } from "../helperFunctions.js";
     import { page } from "$app/stores";
     import Page0 from "$lib/fullscreenPage.svelte";
-    import Page1 from "$lib/introductionPage.svelte";
-    import Page2 from "$lib/customizedScreen.svelte";
+    import Page1 from "$lib/permissionsPage.svelte";
+    import Page2 from "$lib/introductionPage.svelte";
+    import Page3 from "$lib/customizedScreen.svelte";
     import LearningVideo from "$lib/learningVideo.svelte";
     import AvatarChat from "$lib/avatarChat.svelte";
     import TextChat from "$lib/textChat.svelte";
@@ -28,18 +29,20 @@
             {#if scene === 0}
                 <Page0 bind:scene></Page0>
             {:else if scene === 1}
-                <Page1 bind:scene bind:pid bind:condition></Page1>
-            {:else if scene === 2 && condition === "customize"}
-                <Page2 bind:scene></Page2>
-            {:else if scene === 3 && condition !== "text"}
+                <Page1 bind:scene></Page1>
+            {:else if scene === 2}
+                <Page2 bind:scene bind:pid bind:condition></Page2>
+            {:else if scene === 3 && condition === "customize"}
+                <Page3 bind:scene></Page3>
+            {:else if scene === 4 && condition !== "text"}
                 <AvatarChat bind:scene bind:condition></AvatarChat>
-            {:else if scene === 3 && condition === "text"}
+            {:else if scene === 4 && condition === "text"}
                 <TextChat bind:scene bind:condition></TextChat>
-            {:else if scene === 4}
+            {:else if scene === 5}
                 <LearningVideo bind:scene></LearningVideo>
-            {:else if scene === 5 && condition !== "text"}
+            {:else if scene === 6 && condition !== "text"}
                 <AvatarChat bind:scene bind:condition></AvatarChat>
-            {:else if scene === 5 && condition === "text"}
+            {:else if scene === 6 && condition === "text"}
                 <TextChat bind:scene bind:condition></TextChat>
             {/if}
         </div>
