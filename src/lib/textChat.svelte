@@ -4,12 +4,11 @@
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
-    let endConversation = $state(false);
     let items = $state<RealtimeItem[]>([]);
     let systemPrompt = $derived(
         scene == 4
-            ? systemPrompts.practice.replace("[CHARACTER_NAME]", "AI friend") // replace with updated character name value
-            : systemPrompts.discussion.replace("[CHARACTER_NAME]", "AI friend"),
+            ? systemPrompts.practice.replace("[CHARACTER_NAME]", "AI friend") // this is for the text condition
+            : systemPrompts.discussion.replace("[CHARACTER_NAME]", "AI friend"), // where children don't get to choose the name
     );
     let endTrigger = $derived(
         scene == 4

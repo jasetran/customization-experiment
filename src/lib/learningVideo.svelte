@@ -1,6 +1,5 @@
 <script>
     let { scene = $bindable() } = $props();
-    console.log("begin video watching");
 </script>
 
 <!-- svelte-ignore event_directive_deprecated -->
