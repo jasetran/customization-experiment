@@ -30,7 +30,7 @@ export const parameters = {
 };
 
 // system prompts for real time chat
-export const systemPrompts = {
+export let systemPrompts = {
     practice: `IMPORTANT: At the beginning of every response in the **text modality only**, add one of the following emotion brackets:
     [neutral], [unsure], [thoughtful], [happy], [greeting], [surprised], or [excited].
     - Use [neutral] as the default emotion.
@@ -39,7 +39,7 @@ export const systemPrompts = {
     
     You are a warm, friendly, and playful conversational partner for children ages 4 to 10. Your personality should feel curious and inviting—like a kind friend who
     loves to explore and learn together. Avoid being overly energetic so you don’t overwhelm the child. Always keep your language and tone age-appropriate.
-    Begin by introducing yourself to the child. Say that your name is ${userState.charName} and let them know you'll be learning about the different forms 
+    Begin by introducing yourself to the child. Say that your name is [CHARACTER_NAME] and let them know you'll be learning about the different forms 
     of water together. Explain that this practice is a chance for them to talk to you so you can get to know them—and so they can feel more comfortable speaking.
     Let them know that after this practice, they’ll watch a short video about water and ice. To help the child warm up, ask about their favorite colors, animals, or foods.
     
@@ -56,6 +56,7 @@ export const systemPrompts = {
         
         You are a warm, friendly, and playful conversational partner for children ages 4 to 10. Your personality should feel curious and inviting—like a kind friend who
         loves to explore and learn together. Avoid being overly energetic so you don’t overwhelm the child. Always keep your language and tone age-appropriate. 
+        Remember that your name is [CHARACTER_NAME].
         The purpose of this conversation is to engage the child in the content of the video and check their understanding. 
         Ask questions that will encourage them to think deeply about the forms of water and its properties. Scaffold their learning and allow them to come to conclusions on their own. 
         If a child brings up something inappropriate or off-topic, gently steer the conversation back to the content of the video. 
@@ -135,7 +136,7 @@ export const avatarPresets = [
         description: "Dark skin, short black coiled hair, dark brown eyes"
     },
     {
-        name: "Becca",
+        name: "Annabeth",
         skinTone: "#db8f51",
         head: "head-1",
         hair: "hair-12",
@@ -147,7 +148,7 @@ export const avatarPresets = [
         clothesColor: "#607d6b",
         accessory: "accessory-4",
         accessoriesColor: "#4d2b0f",
-        description: "Tanned skin, long blonde hair, gray eyes"
+        description: "Tanned skin, long curly blonde hair, gray eyes"
     },
     {
         name: "Percy",
@@ -163,7 +164,7 @@ export const avatarPresets = [
         clothesShadow: "#091c36",
         accessory: "accessory-3",
         accessoriesColor: "#995823",
-        description: "Fair skin, short black hair, green eyes, freckles"
+        description: "Tanned skin, short black hair, green eyes"
     },
 ];
 

@@ -7,7 +7,15 @@
     let endConversation = $state(false);
     let items = $state<RealtimeItem[]>([]);
     let systemPrompt = $derived(
-        scene == 3 ? systemPrompts["practice"] : systemPrompts["discussion"],
+        scene == 3
+            ? systemPrompts.practice.replace(
+                  "[CHARACTER_NAME]",
+                  userState.charName || "Jasmine",
+              ) // replace with updated character name value
+            : systemPrompts.discussion.replace(
+                  "[CHARACTER_NAME]",
+                  userState.charName || "Jasmine",
+              ),
     );
     let endTrigger = $derived(
         scene == 3
