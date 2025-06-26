@@ -2,7 +2,7 @@
     import { onMount, onDestroy } from "svelte";
     import type { RealtimeItem } from "../types.js";
     import { userState } from "../state.svelte.js";
-    import avatarComponents from "./avatarComponents.ts";
+    import avatarComponents from "./avatarComponents.js";
     import {
         setEmotion,
         analyzeEmotion,
@@ -54,23 +54,18 @@
     let recordedChunks: Blob[] = [];
     let videoStream: MediaStream | null = null;
     let combinedStream: MediaStream | null = null;
-    let isRecording = $state(false);
-    let recordingCount = 0;
 
     // Exposed methods for parent components
-    export function endConversation() {
-        // end the conversation
+    export async function endConversation() {
         if (!conversationEnded) {
             conversationEnded = true;
             loadingVideo = true;
 
-            // stop any ongoing recording
-            if (isRecording) {
-                stopRecording();
-                saveDataToUserState();
-            }
+            stopRecording();
+            await new Promise((resolve) => (mediaRecorder.onstop = resolve));
 
-            onConversationEnd(conversationEnded);
+            console.log("endConversation", recordedChunks);
+            onConversationEnd(conversationEnded, [...recordedChunks]);
             stopSession();
         }
     }
@@ -150,28 +145,22 @@
     }
 
     function startRecording() {
-        if (!combinedStream || isRecording) return;
+        if (!combinedStream) return;
 
         try {
-            recordedChunks = [];
             mediaRecorder = new MediaRecorder(combinedStream, {
                 mimeType: "video/mp4;codecs=vp9,opus",
             });
 
             mediaRecorder.ondataavailable = (event) => {
+                console.log("ondataavailable");
                 if (event.data.size > 0) {
+                    console.log("push");
                     recordedChunks.push(event.data);
                 }
             };
 
-            mediaRecorder.onstop = () => {
-                if (recordedChunks.length > 0) {
-                    saveDataToUserState();
-                }
-            };
-
             mediaRecorder.start();
-            isRecording = true;
             console.log("Recording started");
         } catch (error) {
             console.error("Failed to start recording:", error);
@@ -180,36 +169,8 @@
     }
 
     function stopRecording() {
-        if (mediaRecorder && isRecording) {
-            mediaRecorder.stop();
-            isRecording = false;
-            console.log("Recording stopped");
-        }
-    }
-
-    function saveDataToUserState() {
-        if (recordedChunks.length === 0) return;
-
-        const blob = new Blob(recordedChunks, { type: "video/webm" });
-        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const filename = `${userState.pid}-${interactionPhase}-${timestamp}.webm`;
-
-        const recording = {
-            filename: filename,
-            blob: blob,
-            timestamp: timestamp,
-            size: blob.size,
-        };
-
-        // add the recording to the appropriate phase array
-        if (interactionPhase === "practice") {
-            userState.interactionSession.practice_recording.push(recording);
-        } else if (interactionPhase === "discussion") {
-            userState.interactionSession.discussion_recording.push(recording);
-        }
-        recordedChunks = [];
-
-        console.log("Recording saved");
+        mediaRecorder.stop();
+        console.log("Recording stopped");
     }
     // setting up the OpenAI conversational session
 
@@ -389,9 +350,6 @@
                         onError(event.error?.message || "Unknown error");
                         isAssistantSpeaking = false;
                         unmuteMicrophoneToOpenAI();
-                        if (isRecording) {
-                            stopRecording();
-                        }
                         break;
                 }
             });
@@ -495,10 +453,6 @@
             peerConnection.close();
         }
 
-        if (isRecording) {
-            stopRecording();
-        }
-
         if (videoStream) {
             videoStream.getTracks().forEach((track) => track.stop());
             videoStream = null;
@@ -514,7 +468,6 @@
             mixedAudioStream = null;
         }
 
-        isRecording = false;
         isConnected = false;
         isAssistantSpeaking = false;
         dataChannel = null;

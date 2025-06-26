@@ -6,7 +6,7 @@
         avatarPresets,
         systemPrompts,
     } from "../helperFunctions.js";
-    import avatarComponents from "./avatarComponents.ts";
+    import avatarComponents from "./avatarComponents.js";
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
@@ -29,12 +29,44 @@
             : "thank you for talking to me",
     );
 
-    function handleConversationEnd(conversationEnded) {
+    function handleConversationEnd(conversationEnded, recordedChunks) {
+        saveDataToUserState(recordedChunks);
         if (conversationEnded) {
             setTimeout(() => {
                 scene++;
             }, 2000);
         }
+    }
+
+    function saveDataToUserState(recordedChunks: Blob[]) {
+        if (recordedChunks.length === 0) return;
+
+        const interactionPhase = scene == 4 ? "practice" : "discussion";
+        const blob = new Blob(recordedChunks, { type: "video/webm" });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `${userState.pid}-${interactionPhase}-${timestamp}.webm`;
+
+        const recording = {
+            filename: filename,
+            blob: blob,
+            timestamp: timestamp,
+            size: blob.size,
+        };
+
+        // add the recording to the appropriate phase array
+        if (interactionPhase === "practice") {
+            userState.interactionSession.practice_recording.push(recording);
+            userState.interactionSession.practice_log = JSON.parse(
+                JSON.stringify(items),
+            );
+        } else if (interactionPhase === "discussion") {
+            userState.interactionSession.discussion_recording.push(recording);
+            userState.interactionSession.discussion_log = JSON.parse(
+                JSON.stringify(items),
+            );
+        }
+        recordedChunks = [];
+        console.log("Recording saved");
     }
 
     if (condition === "random") {

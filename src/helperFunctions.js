@@ -133,7 +133,7 @@ export const avatarPresets = [
         clothesColor: "#338dab",
         accessory: "accessory-1",
         accessoriesColor: "#69371b",
-        description: "Dark skin, short black coiled hair, dark brown eyes"
+        description: "Dark skin, short black coiled hair, dark brown eyes",
     },
     {
         name: "Annabeth",
@@ -148,7 +148,7 @@ export const avatarPresets = [
         clothesColor: "#607d6b",
         accessory: "accessory-4",
         accessoriesColor: "#4d2b0f",
-        description: "Tanned skin, long curly blonde hair, gray eyes"
+        description: "Tanned skin, long curly blonde hair, gray eyes",
     },
     {
         name: "Percy",
@@ -164,12 +164,15 @@ export const avatarPresets = [
         clothesShadow: "#091c36",
         accessory: "accessory-3",
         accessoriesColor: "#995823",
-        description: "Tanned skin, short black hair, green eyes"
+        description: "Tanned skin, short black hair, green eyes",
     },
 ];
 
-export function randomizedDefinedAvatar(userState, avatarComponents, avatarPresets) {
-
+export function randomizedDefinedAvatar(
+    userState,
+    avatarComponents,
+    avatarPresets,
+) {
     // randomly select a predefined character
     const selectedPreset = randomizeOptions(avatarPresets);
 
@@ -186,7 +189,8 @@ export function randomizedDefinedAvatar(userState, avatarComponents, avatarPrese
     userState.charHair = avatarComponents.hairs[selectedPreset.hair];
     userState.charEyes = avatarComponents.eyes[selectedPreset.eyes];
     userState.charNose = avatarComponents.noses[selectedPreset.nose];
-    userState.charAccessories = avatarComponents.accessories[selectedPreset.accessory];
+    userState.charAccessories =
+        avatarComponents.accessories[selectedPreset.accessory];
 
     // default mouth & eyebrpows
     userState.charMouth = avatarComponents.mouths["mouth-smile"];
@@ -214,7 +218,8 @@ export function setEmotion(emotion, userState, avatarComponents) {
         userState.charMouth = avatarComponents.mouths["mouth-smile"];
     } else if (emotion == "unsure") {
         const armsKey = `arms-shrug-${sleeveType}`;
-        userState.charEyebrows = avatarComponents.eyebrows["eyebrows-thoughtful"];
+        userState.charEyebrows =
+            avatarComponents.eyebrows["eyebrows-thoughtful"];
         userState.charArms = avatarComponents.arms[armsKey];
         userState.charMouth = avatarComponents.mouths["mouth-unsure"];
     } else if (emotion == "thoughtful") {
@@ -254,7 +259,9 @@ export function analyzeEmotion(text) {
     const lowerText = text.toLowerCase();
 
     // Check for bracketed emotion tags
-    const bracketMatch = lowerText.match(/\[(neutral|unsure|thoughtful|happy|greeting|surprised|excited)\]/);
+    const bracketMatch = lowerText.match(
+        /\[(neutral|unsure|thoughtful|happy|greeting|surprised|excited)\]/,
+    );
 
     if (bracketMatch) {
         console.log("emotion assignment found:", bracketMatch);
@@ -262,7 +269,11 @@ export function analyzeEmotion(text) {
     }
 
     // Fallback rules (only if no bracketed tags exist)
-    if (lowerText.includes("oh no") || lowerText.includes("oops") || lowerText.includes("unsure")) {
+    if (
+        lowerText.includes("oh no") ||
+        lowerText.includes("oops") ||
+        lowerText.includes("unsure")
+    ) {
         return "unsure";
     }
 
@@ -331,5 +342,5 @@ export function analyzeEmotion(text) {
 
 // function to clean text (remove emotion tags for display)
 export function cleanText(text) {
-    return text.replace(/\[.*?\]/g, '').trim();
+    return text.replace(/\[.*?\]/g, "").trim();
 }
