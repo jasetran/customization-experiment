@@ -100,7 +100,7 @@
         bind:value={userState.charName}
     />
     <button
-        class="std-button"
+        class="randomize-button"
         type="button"
         style="top: 10%; left: 48%; "
         onclick={() => {
@@ -115,19 +115,20 @@
     <button
         class="std-button"
         type="button"
+        style="left: 3%; bottom: 3%"
         onclick={() => {
             scene = scene - 1;
         }}
         ><img
             src="/assets/buttons/back-button.png"
-            style="width: 10rem"
+            style="width: 9rem"
             alt="backwards"
         /></button
     >
     <button
         class="std-button"
         type="button"
-        style="left: 92%"
+        style="right: 3%; bottom: 3%"
         onclick={() => {
             if (userState.charName !== undefined) {
                 scene = scene + 1;
@@ -137,7 +138,7 @@
         }}
         ><img
             src="/assets/buttons/forward-button.png"
-            style="width: 10rem"
+            style="width: 9rem"
             alt="forwards"
         /></button
     >
@@ -207,7 +208,7 @@
         border-radius: 0.5rem;
     }
 
-    .std-button {
+    .randomize-button {
         position: absolute;
         border: 0;
         background: transparent;
@@ -219,6 +220,16 @@
             "Lucida Sans", Arial, sans-serif;
         font-size: 150%;
         padding: 0.5rem;
+        z-index: 999;
+    }
+
+    .std-button {
+        position: absolute;
+        border: 0;
+        background: transparent;
+        display: flex;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         z-index: 999;
     }
 
