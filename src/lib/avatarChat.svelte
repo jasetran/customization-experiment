@@ -143,7 +143,7 @@
         top: 18%;
         left: 2%;
         right: 50%;
-        bottom: 2%;
+        bottom: 4%;
         overflow: hidden;
         padding: 0rem 2rem 2rem 2rem;
         background: rgba(98, 98, 98, 0.7);

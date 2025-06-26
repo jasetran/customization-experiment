@@ -187,8 +187,8 @@
         left: 58%;
         top: 35%;
         transform: translateY(-50%);
-        width: 50rem;
-        height: 30rem;
+        width: 51rem;
+        height: 31rem;
         user-select: none;
         pointer-events: none;
     }
