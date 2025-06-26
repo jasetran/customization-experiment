@@ -1,10 +1,9 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { OPENAI_API_KEY } from '$env/static/private';
+import { OPENAI_API_KEY } from "$env/static/private";
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
-
         if (!OPENAI_API_KEY) {
             return json(
                 { error: "OpenAI API key not configured" },
@@ -26,10 +25,15 @@ export const POST: RequestHandler = async ({ request }) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    model: "gpt-4o-realtime-preview-2024-12-17",
+                    model: "gpt-4o-realtime-preview-2025-06-03",
                     voice: "verse",
                     instructions: systemPrompt,
                     input_audio_transcription: { model: "whisper-1" },
+                    turn_detection: {
+                        type: "server_vad",
+                        interrupt_response: false,
+                        silence_duration_ms: 5000,
+                    },
                 }),
             },
         );
@@ -82,4 +86,3 @@ export const OPTIONS: RequestHandler = async () => {
         },
     });
 };
-

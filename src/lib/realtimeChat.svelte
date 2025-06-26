@@ -238,7 +238,7 @@
             await pc.setLocalDescription(offer);
 
             const baseUrl = "https://api.openai.com/v1/realtime";
-            const model = "gpt-4o-mini-realtime-preview-2024-12-17";
+            const model = "gpt-4o-realtime-preview-2025-06-03";
             const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
                 method: "POST",
                 body: offer.sdp,
@@ -320,6 +320,7 @@
                     case "response.content_part.added": {
                         const item = items.find((item) => item.id === event.item_id)!; // prettier-ignore
                         item.content[event.content_index] = event.part;
+                        break;
                     }
                     case "conversation.item.created": {
                         const item = {
