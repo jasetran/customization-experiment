@@ -1,6 +1,5 @@
 <script>
     // imports
-    import { onMount } from "svelte";
     import {
         parameters,
         randomizeOptions,
@@ -21,7 +20,7 @@
             randomizeOptions(parameters.conditions),
     );
     let scene = $state(0);
-    let pid = $state(url.searchParams.get("pid") || "");
+    let pid = $state(url.searchParams.get("pid") || undefined);
 </script>
 
 <div id="screen-size" style={setBackground(scene)}>

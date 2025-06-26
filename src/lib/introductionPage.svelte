@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import { userState } from "../state.svelte";
 
     let {
@@ -8,6 +9,12 @@
     } = $props();
 
     let error = $state("");
+
+    onMount(() => {
+        if (pid !== undefined) {
+            scene++;
+        }
+    });
 </script>
 
 <div id="menu-page" style="top: 50%">
@@ -29,7 +36,7 @@
         id="circle-button"
         type="button"
         onclick={() => {
-            if (pid !== "") {
+            if (pid !== undefined) {
                 userState.pid = pid;
                 userState.condition = condition;
                 if (condition !== "customize") {

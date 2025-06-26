@@ -14,7 +14,7 @@
         <button
             on:click={() => {
                 onRequest();
-                scene = 2;
+                scene = 1;
             }}
         >
             Enter Fullscreen
