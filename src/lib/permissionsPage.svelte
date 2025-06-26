@@ -87,10 +87,43 @@
         errorMessage = "";
 
         try {
-            mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 640, height: 480 },
-                audio: true,
-            });
+            // Check if getUserMedia is available
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia
+            ) {
+                // Fallback for older browsers/Safari
+                const getUserMedia =
+                    navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia;
+
+                if (!getUserMedia) {
+                    throw new Error(
+                        "getUserMedia is not supported in this browser. Please use HTTPS or try a different browser.",
+                    );
+                }
+
+                // Use callback-based API and promisify it
+                mediaStream = await new Promise((resolve, reject) => {
+                    getUserMedia.call(
+                        navigator,
+                        {
+                            video: { width: 640, height: 480 },
+                            audio: true,
+                        },
+                        resolve,
+                        reject,
+                    );
+                });
+            } else {
+                // Use modern API
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 640, height: 480 },
+                    audio: true,
+                });
+            }
 
             permissionStatus = "granted";
         } catch (err) {
@@ -103,6 +136,12 @@
                 errorMessage = "No microphone or camera found on this device.";
             } else if (err.name === "NotSupportedError") {
                 errorMessage = "Your browser does not support media access.";
+            } else if (
+                err.message &&
+                err.message.includes("getUserMedia is not supported")
+            ) {
+                errorMessage =
+                    "Media access requires HTTPS. Please access this page over a secure connection.";
             } else {
                 errorMessage = `Error accessing media devices: ${err.message}`;
             }

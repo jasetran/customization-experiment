@@ -1,5 +1,6 @@
 <script>
     // imports
+    import { onMount } from "svelte";
     import {
         parameters,
         randomizeOptions,
@@ -58,7 +59,7 @@
         z-index: 1;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
-        width: 100%;
+        width: 100vw;
         height: 100vh;
         display: flex;
         overflow: hidden;
@@ -66,19 +67,19 @@
         background-image: var(--background-image);
         --blur-amount: 0px;
         --background-image: white;
+        touch-action: none;
     }
 
     #screen-blur {
         display: flex;
         width: 100%;
-        height: 100vh;
+        height: 100%; /* Add this back */
         backdrop-filter: blur(var(--blur-amount));
     }
 
     #screen {
         position: relative;
-        margin: auto;
-        width: min(100vw, 177vh);
+        width: 100%;
         aspect-ratio: 16 / 9;
     }
 </style>

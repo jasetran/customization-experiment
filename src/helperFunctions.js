@@ -112,9 +112,9 @@ export function setBackground(scene) {
     } else if (scene === 2) {
         return "--background-image: url(./assets/bg/bg-intro.svg)";
     } else if (scene === 3) {
-        return "--background-image: url(./assets/bg/bg-customize.svg); --blur-amount: 0.3rem;";
+        return "--background-image: url(./assets/bg/bg-customize.svg); --blur-amount: 0.5rem;";
     } else {
-        return "--background-image: url(./assets/bg/bg-chat.svg); --blur-amount: 0.3rem;";
+        return "--background-image: url(./assets/bg/bg-chat.svg); --blur-amount: 0.5rem;";
     }
 }
 

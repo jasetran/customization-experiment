@@ -70,15 +70,70 @@
         }
     }
 
+    // Helper function to check if getUserMedia is available
+    function checkMediaDevicesSupport() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            // Fallback for older browsers or restricted environments
+            if (
+                navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia
+            ) {
+                console.warn("Using legacy getUserMedia API");
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    // Enhanced getUserMedia with fallbacks
+    async function getMediaStream(
+        constraints: MediaStreamConstraints,
+    ): Promise<MediaStream> {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            return await navigator.mediaDevices.getUserMedia(constraints);
+        }
+
+        // Fallback for older browsers
+        const legacyGetUserMedia =
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
+
+        if (legacyGetUserMedia) {
+            return new Promise((resolve, reject) => {
+                legacyGetUserMedia.call(
+                    navigator,
+                    constraints,
+                    resolve,
+                    reject,
+                );
+            });
+        }
+
+        throw new Error("getUserMedia is not supported on this device");
+    }
+
     // functions for recording video and audio
 
     async function setupRecording() {
         try {
-            // Get video stream from camera
-            videoStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 320, height: 180 },
+            if (!checkMediaDevicesSupport()) {
+                throw new Error("Media devices not supported on this device");
+            }
+
+            // Get video stream from camera with iPad-friendly constraints
+            const videoConstraints = {
+                video: {
+                    width: { ideal: 320, max: 640 },
+                    height: { ideal: 180, max: 480 },
+                    facingMode: "user",
+                },
                 audio: false, // We'll use the mixed audio stream
-            });
+            };
+
+            videoStream = await getMediaStream(videoConstraints);
 
             // Create combined stream with video and mixed audio
             combinedStream = new MediaStream();
@@ -97,19 +152,41 @@
             console.log("Recording setup complete");
         } catch (error) {
             console.error("Failed to setup recording:", error);
-            onError("Failed to setup video recording");
+            onError(`Failed to setup video recording: ${error.message}`);
         }
     }
 
     async function setupAudioProcessing() {
         try {
-            // Create audio context
-            audioContext = new AudioContext();
+            if (!checkMediaDevicesSupport()) {
+                throw new Error("Media devices not supported on this device");
+            }
 
-            // Get microphone stream
-            const micStream = await navigator.mediaDevices.getUserMedia({
-                audio: true,
-            });
+            // Create audio context with iPad compatibility
+            const AudioContextClass =
+                window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) {
+                throw new Error("Web Audio API not supported");
+            }
+
+            audioContext = new AudioContextClass();
+
+            // Resume audio context if it's suspended (required on iOS)
+            if (audioContext.state === "suspended") {
+                await audioContext.resume();
+            }
+
+            // Get microphone stream with iPad-friendly constraints
+            const audioConstraints = {
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                    sampleRate: 44100,
+                },
+            };
+
+            const micStream = await getMediaStream(audioConstraints);
             microphoneTrack = micStream.getTracks()[0];
 
             // Create audio source from microphone
@@ -140,7 +217,7 @@
             console.log("Audio processing setup complete");
         } catch (error) {
             console.error("Failed to setup audio processing:", error);
-            onError("Failed to setup audio processing");
+            onError(`Failed to setup audio processing: ${error.message}`);
         }
     }
 
@@ -148,9 +225,32 @@
         if (!combinedStream) return;
 
         try {
-            mediaRecorder = new MediaRecorder(combinedStream, {
-                mimeType: "video/mp4;codecs=vp9,opus",
-            });
+            // Use iPad-compatible MIME types
+            let mimeType = "video/mp4;codecs=vp9,opus";
+
+            // Fallback MIME types for better iPad compatibility
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                const fallbackTypes = [
+                    "video/mp4;codecs=h264,aac",
+                    "video/mp4;codecs=avc1,mp4a",
+                    "video/mp4",
+                    "video/webm;codecs=vp8,opus",
+                    "video/webm",
+                ];
+
+                mimeType =
+                    fallbackTypes.find((type) =>
+                        MediaRecorder.isTypeSupported(type),
+                    ) || "";
+
+                if (!mimeType) {
+                    console.warn("No supported MIME type found, using default");
+                    mimeType = "";
+                }
+            }
+
+            const options = mimeType ? { mimeType } : {};
+            mediaRecorder = new MediaRecorder(combinedStream, options);
 
             mediaRecorder.ondataavailable = (event) => {
                 console.log("ondataavailable");
@@ -161,16 +261,21 @@
             };
 
             mediaRecorder.start();
-            console.log("Recording started");
+            console.log(
+                "Recording started with MIME type:",
+                mimeType || "default",
+            );
         } catch (error) {
             console.error("Failed to start recording:", error);
-            onError("Failed to start recording");
+            onError(`Failed to start recording: ${error.message}`);
         }
     }
 
     function stopRecording() {
-        mediaRecorder.stop();
-        console.log("Recording stopped");
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+            console.log("Recording stopped");
+        }
     }
     // setting up the OpenAI conversational session
 
@@ -375,22 +480,22 @@
             });
         } catch (error) {
             console.error("Failed to start realtime session:", error);
-            onError("Failed to start conversation");
+            onError(`Failed to start conversation: ${error.message}`);
         }
     }
 
     // enabling the microphone input to OpenAI (using gain node)
     function unmuteMicrophoneToOpenAI() {
-        if (gainNode) {
-            gainNode.gain.setValueAtTime(1, audioContext!.currentTime);
+        if (gainNode && audioContext) {
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
             console.log("Microphone unmuted to OpenAI");
         }
     }
 
     // disabling the microphone input to OpenAI (using gain node)
     function muteMicrophoneToOpenAI() {
-        if (gainNode) {
-            gainNode.gain.setValueAtTime(0, audioContext!.currentTime);
+        if (gainNode && audioContext) {
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
             console.log("Microphone muted to OpenAI");
         }
     }
@@ -518,8 +623,8 @@
 <style>
     .assistant-status {
         display: block;
-        margin-top: 1rem;
-        margin-left: 4rem;
+        margin-top: 6rem;
+        margin-left: 6rem;
         max-width: 30rem;
         text-align: center;
         font-size: 2rem;

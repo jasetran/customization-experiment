@@ -131,8 +131,8 @@
 <style>
     #char-chat {
         position: absolute;
-        left: 46%;
-        top: 15%;
+        left: 50%;
+        top: 18%;
         transform: translateY(-50%);
         width: 60rem;
         height: 30rem;
@@ -140,10 +140,10 @@
 
     .chat-messages {
         position: absolute;
-        top: 6rem;
-        left: 2rem;
-        right: 54rem;
-        bottom: 1rem;
+        top: 18%;
+        left: 2%;
+        right: 50%;
+        bottom: 2%;
         overflow: hidden;
         padding: 0rem 2rem 2rem 2rem;
         background: rgba(98, 98, 98, 0.7);

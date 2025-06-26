@@ -39,6 +39,12 @@
         const x = event.clientX - rect.left;
         return x / rect.width;
     }
+
+    function getTouchWidth(el, touch) {
+        const rect = el.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        return x / rect.width;
+    }
 </script>
 
 <div style="display: flex; padding: 1rem;">
@@ -56,6 +62,16 @@
                 if (event.buttons === 1) {
                     hue = Math.min(360, 360 * getClickWidth(hueEl, event));
                 }
+            }}
+            on:touchstart={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                hue = Math.min(360, 360 * getTouchWidth(hueEl, touch));
+            }}
+            on:touchmove={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                hue = Math.min(360, 360 * getTouchWidth(hueEl, touch));
             }}
         >
             <div
@@ -99,6 +115,22 @@
                     );
                 }
             }}
+            on:touchstart={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                saturation = Math.min(
+                    100,
+                    100 * getTouchWidth(saturationEl, touch),
+                );
+            }}
+            on:touchmove={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                saturation = Math.min(
+                    100,
+                    100 * getTouchWidth(saturationEl, touch),
+                );
+            }}
         >
             <div
                 class="knob"
@@ -141,6 +173,22 @@
                     );
                 }
             }}
+            on:touchstart={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                lightness = Math.min(
+                    100,
+                    100 * getTouchWidth(lightnessEl, touch),
+                );
+            }}
+            on:touchmove={(event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                lightness = Math.min(
+                    100,
+                    100 * getTouchWidth(lightnessEl, touch),
+                );
+            }}
         >
             <div
                 class="knob"
@@ -168,7 +216,7 @@
     .color-box {
         position: relative;
         width: 28rem;
-        height: 2.2rem;
+        height: 2.5rem;
         cursor: crosshair;
         border-radius: 0.5rem;
         margin-left: 4rem;
@@ -200,8 +248,8 @@
     }
 
     .color {
-        width: 8rem;
-        height: 8rem;
+        width: 8.5rem;
+        height: 8.5rem;
         margin-left: 2.8rem;
         border-style: solid;
         border-radius: 0.8rem;

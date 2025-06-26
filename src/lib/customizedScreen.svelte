@@ -102,7 +102,7 @@
     <button
         class="randomize-button"
         type="button"
-        style="top: 10%; left: 48%; "
+        style="top: 12%; left: 48%; "
         onclick={() => {
             userState.charName = randomizeOptions(parameters.randomNames);
         }}
@@ -115,36 +115,36 @@
     <button
         class="std-button"
         type="button"
-        style="left: 3%; bottom: 3%"
+        style="left: 3%; bottom: 2%"
         onclick={() => {
             scene = scene - 1;
         }}
         ><img
             src="/assets/buttons/back-button.png"
-            style="width: 9rem"
+            style="width: 10rem"
             alt="backwards"
         /></button
     >
     <button
         class="std-button"
         type="button"
-        style="right: 3%; bottom: 3%"
+        style="right: 3%; bottom: 2%"
         onclick={() => {
             if (userState.charName !== undefined) {
-                scene = scene + 1;
+                scene++;
             } else {
                 error = "Please enter your character's name";
             }
         }}
         ><img
             src="/assets/buttons/forward-button.png"
-            style="width: 9rem"
+            style="width: 10rem"
             alt="forwards"
         /></button
     >
 </div>
 
-<div id="menu-box" style="top: 18%; left: 14%;">
+<div id="menu-box" style="top: 19%; left: 14%;">
     <Tabs {menuItems} {activeItem} {activeColor}></Tabs>
 </div>
 
@@ -196,7 +196,7 @@
     #char-entry-text {
         position: absolute;
         width: 30rem;
-        top: 10%;
+        top: 12%;
         left: 25%;
         transform: translateX(-50%) translateY(-50%);
         padding: 0.8rem;
@@ -212,8 +212,6 @@
         position: absolute;
         border: 0;
         background: transparent;
-        top: 53rem;
-        left: 8%;
         transform: translateX(-50%) translateY(-50%);
         display: flex;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
