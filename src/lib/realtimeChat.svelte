@@ -276,6 +276,29 @@
     // setting up the OpenAI conversational session
 
     async function startRealtimeSession() {
+        // timeout variables
+        let responseTimeoutId = null;
+        const RESPONSE_TIMEOUT_MS = 20000; // 20 seconds for child to respond
+
+        // Function to reset the timeout
+        function resetResponseTimeout() {
+            if (responseTimeoutId) {
+                clearTimeout(responseTimeoutId);
+            }
+            responseTimeoutId = setTimeout(() => {
+                console.log("No user response detected after 20 seconds");
+                sendTextMessage(""); // send blank message to prompt assistant if they don't respond
+            }, RESPONSE_TIMEOUT_MS);
+        }
+
+        // Function to clear the timeout (when assistant responds)
+        function clearResponseTimeout() {
+            if (responseTimeoutId) {
+                clearTimeout(responseTimeoutId);
+                responseTimeoutId = null;
+            }
+        }
+
         try {
             // setup audio processing first
             await setupAudioProcessing();
@@ -372,6 +395,9 @@
                 switch (event.type) {
                     case "conversation.item.input_audio_transcription.delta":
                     case "response.audio_transcript.delta": {
+                        // clear timeout when we receive assistant response
+                        clearResponseTimeout();
+
                         const item = items.find((item) => item.id === event.item_id)!; // prettier-ignore
                         const part = item.content[event.content_index];
                         const newTranscript =
@@ -381,28 +407,31 @@
                         // check for emotion immediately from assistant response
                         // prettier-ignore
                         if (item.role === "assistant" && !processedEmotions.has(item.id)) {
-                            const detectedEmotion = analyzeEmotion(newTranscript);
-                             // only trigger when have enough content
-                             if (newTranscript.length > 20) {
-                                if (detectedEmotion !== currentEmotion) {
-                                    currentEmotion = detectedEmotion;
-                                    setEmotion(detectedEmotion, userState, avatarComponents);
-                                    processedEmotions.add(item.id); // mark this item as having been evaluated
-                                }
+                        const detectedEmotion = analyzeEmotion(newTranscript);
+                         // only trigger when have enough content
+                         if (newTranscript.length > 20) {
+                            if (detectedEmotion !== currentEmotion) {
+                                currentEmotion = detectedEmotion;
+                                setEmotion(detectedEmotion, userState, avatarComponents);
+                                processedEmotions.add(item.id); // mark this item as having been evaluated
                             }
-                            
                         }
+                        
+                    }
 
                         // check for completion trigger in transcript
                         // prettier-ignore
                         if (newTranscript.toLowerCase().includes(endTrigger)) {
-                            console.log("End trigger found:", endTrigger);
-                            muteMicrophoneToOpenAI();
-                            endTriggerFound = true;
-                        }
+                        console.log("End trigger found:", endTrigger);
+                        muteMicrophoneToOpenAI();
+                        endTriggerFound = true;
+                    }
                         break;
                     }
                     case "response.content_part.added": {
+                        // clear timeout when we receive assistant response
+                        clearResponseTimeout();
+
                         const item = items.find((item) => item.id === event.item_id)!; // prettier-ignore
                         item.content[event.content_index] = event.part;
                         break;
@@ -418,6 +447,11 @@
                         if (item.role === "assistant") {
                             isAssistantSpeaking = true;
                             muteMicrophoneToOpenAI();
+                            // clear timeout when assistant starts speaking
+                            clearResponseTimeout();
+                        } else if (item.role === "user") {
+                            // clear timeout when user responds
+                            clearResponseTimeout();
                         }
                         break;
                     }
@@ -426,16 +460,22 @@
                             // waiting for the audio buffer before ending conversation
                             muteMicrophoneToOpenAI();
                             endConversation();
+                            return; // Don't start timeout if conversation is ending
                         }
 
                         isAssistantSpeaking = false;
                         unmuteMicrophoneToOpenAI(); // re-enable the microphone once agent is done talking
+
+                        // Start timeout when assistant finishes speaking - wait for user response
+                        resetResponseTimeout();
                         break;
                     }
                     case "error":
                         onError(event.error?.message || "Unknown error");
                         isAssistantSpeaking = false;
                         unmuteMicrophoneToOpenAI();
+                        // Clear timeout on error
+                        clearResponseTimeout();
                         break;
                 }
             });
@@ -452,15 +492,22 @@
                 } else {
                     sendTextMessage("The video is done.");
                 }
+
+                // Start the initial timeout after sending the first message
+                resetResponseTimeout();
             });
 
             dc.addEventListener("close", () => {
                 isConnected = false;
                 console.log("Disconnected from OpenAI Realtime API");
+                // Clear timeout when connection closes
+                clearResponseTimeout();
             });
         } catch (error) {
             console.error("Failed to start realtime session:", error);
             onError(`Failed to start conversation: ${error.message}`);
+            // Clear timeout on error
+            clearResponseTimeout();
         }
     }
 
