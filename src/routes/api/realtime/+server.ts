@@ -31,8 +31,7 @@ export const POST: RequestHandler = async ({ request }) => {
                     input_audio_transcription: { model: "whisper-1" },
                     turn_detection: {
                         type: "server_vad",
-                        interrupt_response: false,
-                        silence_duration_ms: 5000,
+                        silence_duration_ms: 2000,
                     },
                 }),
             },

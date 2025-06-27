@@ -3,11 +3,7 @@
     import type { RealtimeItem } from "../types.js";
     import { userState } from "../state.svelte.js";
     import avatarComponents from "./avatarComponents.js";
-    import {
-        setEmotion,
-        analyzeEmotion,
-        cleanText,
-    } from "../helperFunctions.js";
+    import { setEmotion, analyzeEmotion } from "../helperFunctions.js";
 
     const {
         onError = () => {},
@@ -31,7 +27,7 @@
     let endTriggerFound = $state(false);
     let loadingVideo = $state(false);
     let currentEmotion = $state("neutral"); // log what current emotion is
-    let processedEmotions = new Set<string>(); // track which items have already had their emotions processed
+    let processedEmotions = new Set(); // track which items have already had their emotions processed
     let peerConnection: RTCPeerConnection | null = null;
     let dataChannel: RTCDataChannel | null = null;
     let audioElement: HTMLAudioElement | null = null;
@@ -383,41 +379,25 @@
                         part.transcript = newTranscript;
 
                         // check for emotion immediately from assistant response
-                        if (
-                            item.role === "assistant" &&
-                            !processedEmotions.has(item.id)
-                        ) {
-                            const detectedEmotion =
-                                analyzeEmotion(newTranscript);
-                            // only trigger if we found an explicit emotion tag or have enough content
-                            const hasEmotionTag =
-                                /\[(neutral|unsure|thoughtful|happy|greeting|surprised|excited)\]/i.test(
-                                    newTranscript,
-                                );
-
-                            if (hasEmotionTag || newTranscript.length > 50) {
+                        // prettier-ignore
+                        if (item.role === "assistant" && !processedEmotions.has(item.id)) {
+                            const detectedEmotion = analyzeEmotion(newTranscript);
+                             // only trigger when have enough content
+                             if (newTranscript.length > 20) {
                                 if (detectedEmotion !== currentEmotion) {
                                     currentEmotion = detectedEmotion;
-                                    setEmotion(
-                                        detectedEmotion,
-                                        userState,
-                                        avatarComponents,
-                                    );
-                                }
-                                // mark this item as processed to avoid repeated calls
-                                if (hasEmotionTag) {
-                                    processedEmotions.add(item.id);
+                                    setEmotion(detectedEmotion, userState, avatarComponents);
+                                    processedEmotions.add(item.id); // mark this item as having been evaluated
                                 }
                             }
+                            
                         }
 
-                        // clean the transcript for display (remove emotion tags)
-                        part.transcript = cleanText(newTranscript);
-
-                        // check for completion trigger in mode
+                        // check for completion trigger in transcript
                         // prettier-ignore
                         if (newTranscript.toLowerCase().includes(endTrigger)) {
                             console.log("End trigger found:", endTrigger);
+                            muteMicrophoneToOpenAI();
                             endTriggerFound = true;
                         }
                         break;
