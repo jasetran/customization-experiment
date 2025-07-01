@@ -1,5 +1,5 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import adapter from '@sveltejs/adapter-amplify';
+import adapter from 'amplify-adapter';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
