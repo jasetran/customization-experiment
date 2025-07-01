@@ -85,3 +85,8 @@ export const OPTIONS: RequestHandler = async () => {
         },
     });
 };
+
+export function GET() {
+    
+    return json({message: "Hello from Svelte API endpoint"});
+}

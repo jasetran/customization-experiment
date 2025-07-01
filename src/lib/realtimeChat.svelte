@@ -287,7 +287,7 @@
             }
             responseTimeoutId = setTimeout(() => {
                 console.log("No user response detected after 20 seconds");
-                sendTextMessage(""); // send blank message to prompt assistant if they don't respond
+                sendTextMessage("..."); // send blank message to prompt assistant if they don't respond
             }, RESPONSE_TIMEOUT_MS);
         }
 
@@ -650,7 +650,7 @@
 <style>
     .assistant-status {
         display: block;
-        margin-top: 6rem;
+        margin-top: 4rem;
         margin-left: 6rem;
         max-width: 30rem;
         text-align: center;

@@ -216,7 +216,7 @@
     .color-box {
         position: relative;
         width: 28rem;
-        height: 2.5rem;
+        height: 2rem;
         cursor: crosshair;
         border-radius: 0.5rem;
         margin-left: 4rem;
@@ -248,8 +248,8 @@
     }
 
     .color {
-        width: 8.5rem;
-        height: 8.5rem;
+        width: 7rem;
+        height: 7rem;
         margin-left: 2.8rem;
         border-style: solid;
         border-radius: 0.8rem;

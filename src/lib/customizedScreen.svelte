@@ -102,7 +102,7 @@
     <button
         class="randomize-button"
         type="button"
-        style="top: 12%; left: 48%; "
+        style="top: 11%; left: 48%; "
         onclick={() => {
             userState.charName = randomizeOptions(parameters.randomNames);
         }}
@@ -121,7 +121,7 @@
         }}
         ><img
             src="/assets/buttons/back-button.png"
-            style="width: 10rem"
+            style="width: 9.5rem"
             alt="backwards"
         /></button
     >
@@ -138,13 +138,13 @@
         }}
         ><img
             src="/assets/buttons/forward-button.png"
-            style="width: 10rem"
+            style="width: 9.5rem"
             alt="forwards"
         /></button
     >
 </div>
 
-<div id="menu-box" style="top: 19%; left: 14%;">
+<div id="menu-box" style="top: 18%; left: 14%;">
     <Tabs {menuItems} {activeItem} {activeColor}></Tabs>
 </div>
 
@@ -196,7 +196,7 @@
     #char-entry-text {
         position: absolute;
         width: 30rem;
-        top: 12%;
+        top: 11%;
         left: 25%;
         transform: translateX(-50%) translateY(-50%);
         padding: 0.8rem;
