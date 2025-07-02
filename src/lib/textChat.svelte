@@ -49,7 +49,7 @@
 <style>
     .chat-messages {
         position: absolute;
-        top: 6rem;
+        top: 10rem;
         left: 2rem;
         right: 2rem;
         bottom: 1rem;
