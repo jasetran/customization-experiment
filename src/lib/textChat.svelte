@@ -2,6 +2,7 @@
     let { scene = $bindable(), condition = $bindable() } = $props();
     import { systemPrompts } from "../helperFunctions.js";
     import RealtimeChat from "./realtimeChat.svelte";
+    import { userState } from "../state.svelte.js";
     import type { RealtimeItem } from "../types.js";
 
     let items = $state<RealtimeItem[]>([]);
@@ -16,11 +17,116 @@
             : "thank you for talking to me",
     );
 
-    function handleConversationEnd(conversationEnded) {
+    function handleConversationEnd(conversationEnded, recordedChunks) {
+        saveDataToUserState(recordedChunks);
         if (conversationEnded) {
             setTimeout(() => {
                 scene++;
             }, 2000);
+        }
+    }
+
+    // saving the userdata to S3 bucket
+    async function saveDataToUserState(recordedChunks: Blob[]) {
+        if (recordedChunks.length === 0) return;
+
+        const interactionPhase = scene == 4 ? "practice" : "discussion";
+        const blob = new Blob(recordedChunks, { type: "video/webm" });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const videoFilename = `${userState.pid}-${condition}-${interactionPhase}-recording-${timestamp}.webm`;
+
+        // add the transcripts to the appropriate phase array
+        if (interactionPhase === "practice") {
+            userState.interactionSession.practice_log = JSON.parse(
+                JSON.stringify(items),
+            );
+        } else if (interactionPhase === "discussion") {
+            userState.interactionSession.discussion_log = JSON.parse(
+                JSON.stringify(items),
+            );
+        }
+
+        recordedChunks = [];
+
+        try {
+            // upload video file
+            const videoResponse = await fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    fileName: videoFilename,
+                    contentType: "video/webm",
+                    userId: userState.pid,
+                }),
+            });
+
+            const videoUploadData = await videoResponse.json();
+
+            const videoUploadResponse = await fetch(videoUploadData.uploadUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "video/webm",
+                },
+                body: blob,
+            });
+
+            console.log(
+                `${interactionPhase} video upload response:`,
+                videoUploadResponse,
+            );
+
+            // Upload userState if this is the discussion phase
+            if (interactionPhase === "discussion") {
+                await uploadUserState(timestamp);
+            }
+        } catch (error) {
+            console.error(`Error during ${interactionPhase} upload:`, error);
+        }
+    }
+
+    async function uploadUserState(timestamp?: string) {
+        const ts = timestamp || new Date().toISOString().replace(/[:.]/g, "-");
+        const userStateFilename = `${userState.pid}-${condition}-user-transcript-logs-${ts}.json`;
+
+        try {
+            const userStateResponse = await fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    fileName: userStateFilename,
+                    contentType: "application/json",
+                    userId: userState.pid,
+                }),
+            });
+
+            const userStateUploadData = await userStateResponse.json();
+
+            // Convert userState to JSON blob
+            const userStateBlob = new Blob(
+                [JSON.stringify(userState, null, 2)],
+                {
+                    type: "application/json",
+                },
+            );
+
+            const userStateUploadResponse = await fetch(
+                userStateUploadData.uploadUrl,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: userStateBlob,
+                },
+            );
+
+            console.log("UserState upload response:", userStateUploadResponse);
+        } catch (error) {
+            console.error("Error during userState upload:", error);
         }
     }
 </script>

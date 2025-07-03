@@ -12,7 +12,8 @@ const s3Client = new S3Client({
   },
 });
 
-const BUCKET_NAME = S3_BUCKET_NAME;
+const BUCKET_NAME = S3_BUCKET_NAME || 'c2l-dev-customization-exp';
+
 
 export const POST = async ({ request }) => {
   try {
@@ -32,15 +33,8 @@ export const POST = async ({ request }) => {
         { status: 400 }
       );
     }
-
-    // Generate unique file key
-    const timestamp = Date.now();
-    const randomId = Math.random().toString(36).substring(2);
-    const safeFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
     
-    const key = `uploads/${userId}/${timestamp}_${randomId}_${safeFileName}`;
-
-    console.log({BUCKET_NAME});
+    const key = `uploads/${userId}/${fileName}`;
 
     // Create the command for signing
     const putObjectCommand = new PutObjectCommand({

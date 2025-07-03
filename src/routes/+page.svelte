@@ -10,6 +10,7 @@
     import Page1 from "$lib/permissionsPage.svelte";
     import Page2 from "$lib/introductionPage.svelte";
     import Page3 from "$lib/customizedScreen.svelte";
+    import Page4 from "$lib/completionPage.svelte";
     import LearningVideo from "$lib/learningVideo.svelte";
     import AvatarChat from "$lib/avatarChat.svelte";
     import TextChat from "$lib/textChat.svelte";
@@ -44,6 +45,8 @@
                 <AvatarChat bind:scene bind:condition></AvatarChat>
             {:else if scene === 6 && condition === "text"}
                 <TextChat bind:scene bind:condition></TextChat>
+            {:else if scene === 7}
+                <Page4 bind:scene></Page4>
             {/if}
         </div>
     </div>
