@@ -1,5 +1,6 @@
 <script lang="ts">
     let { scene = $bindable(), condition = $bindable() } = $props();
+    import html2canvas from "html2canvas";
     import { userState } from "../state.svelte.js";
     import {
         randomizedDefinedAvatar,
@@ -38,35 +39,169 @@
         }
     }
 
-    function saveDataToUserState(recordedChunks: Blob[]) {
+    // Simple screenshot capture function
+    async function captureScreenshot() {
+        try {
+            const canvas = await html2canvas(document.body, {
+                backgroundColor: "#ffffff",
+                scale: 1,
+                useCORS: true,
+                height: window.innerHeight,
+                width: window.innerWidth,
+            });
+
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, "image/png");
+            });
+        } catch (error) {
+            console.error("Error capturing screenshot:", error);
+            return null;
+        }
+    }
+
+    // saving the userdata to S3 bucket
+    async function saveDataToUserState(recordedChunks: Blob[]) {
         if (recordedChunks.length === 0) return;
 
         const interactionPhase = scene == 4 ? "practice" : "discussion";
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const filename = `${userState.pid}-${interactionPhase}-${timestamp}.webm`;
+        const videoFilename = `${userState.pid}-${condition}-${interactionPhase}-recording-${timestamp}.webm`;
 
-        const recording = {
-            filename: filename,
-            blob: blob,
-            timestamp: timestamp,
-            size: blob.size,
-        };
-
-        // add the recording to the appropriate phase array
+        // add the transcripts to the appropriate phase array
         if (interactionPhase === "practice") {
-            userState.interactionSession.practice_recording.push(recording);
             userState.interactionSession.practice_log = JSON.parse(
                 JSON.stringify(items),
             );
         } else if (interactionPhase === "discussion") {
-            userState.interactionSession.discussion_recording.push(recording);
             userState.interactionSession.discussion_log = JSON.parse(
                 JSON.stringify(items),
             );
         }
+
         recordedChunks = [];
-        console.log("Recording saved");
+
+        try {
+            // Upload video file
+            const videoResponse = await fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    fileName: videoFilename,
+                    contentType: "video/webm",
+                    userId: userState.pid,
+                }),
+            });
+
+            const videoUploadData = await videoResponse.json();
+
+            const videoUploadResponse = await fetch(videoUploadData.uploadUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "video/webm",
+                },
+                body: blob,
+            });
+
+            console.log(
+                `${interactionPhase} video upload response:`,
+                videoUploadResponse,
+            );
+
+            // Capture and upload screenshot during practice phase
+            if (interactionPhase === "practice") {
+                const screenshotBlob = await captureScreenshot();
+                if (screenshotBlob) {
+                    const screenshotFilename = `${userState.pid}-${condition}-ca-${userState.charName}-${timestamp}.png`;
+
+                    const screenshotResponse = await fetch("/api/upload", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            fileName: screenshotFilename,
+                            contentType: "image/png",
+                            userId: userState.pid,
+                        }),
+                    });
+
+                    const screenshotUploadData =
+                        await screenshotResponse.json();
+
+                    const screenshotUploadResponse = await fetch(
+                        screenshotUploadData.uploadUrl,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "image/png",
+                            },
+                            body: screenshotBlob as Blob,
+                        },
+                    );
+
+                    console.log(
+                        "Screenshot upload response:",
+                        screenshotUploadResponse,
+                    );
+                }
+            }
+
+            // Upload userState if this is the discussion phase
+            if (interactionPhase === "discussion") {
+                await uploadUserState(timestamp);
+            }
+        } catch (error) {
+            console.error(`Error during ${interactionPhase} upload:`, error);
+        }
+    }
+
+    async function uploadUserState(timestamp?: string) {
+        const ts = timestamp || new Date().toISOString().replace(/[:.]/g, "-");
+        const userStateFilename = `${userState.pid}-${condition}-userState-transcript-logs-${ts}.json`;
+
+        try {
+            const userStateResponse = await fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    fileName: userStateFilename,
+                    contentType: "application/json",
+                    userId: userState.pid,
+                }),
+            });
+
+            const userStateUploadData = await userStateResponse.json();
+
+            // Convert userState to JSON blob
+            const userStateBlob = new Blob(
+                [JSON.stringify(userState, null, 2)],
+                {
+                    type: "application/json",
+                },
+            );
+
+            const userStateUploadResponse = await fetch(
+                userStateUploadData.uploadUrl,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: userStateBlob,
+                },
+            );
+
+            console.log("UserState upload response:", userStateUploadResponse);
+        } catch (error) {
+            console.error("Error during userState upload:", error);
+        }
     }
 
     if (condition === "random") {
