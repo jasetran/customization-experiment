@@ -38,7 +38,7 @@
         }
     }
 
-    function saveDataToUserState(recordedChunks: Blob[]) {
+    async function saveDataToUserState(recordedChunks: Blob[]) {
         if (recordedChunks.length === 0) return;
 
         const interactionPhase = scene == 4 ? "practice" : "discussion";
@@ -48,7 +48,6 @@
 
         const recording = {
             filename: filename,
-            blob: blob,
             timestamp: timestamp,
             size: blob.size,
         };
@@ -65,7 +64,31 @@
                 JSON.stringify(items),
             );
         }
+
         recordedChunks = [];
+
+        const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                fileName: filename,
+                contentType: "video/webm",
+                userId: userState.pid,
+            }),
+        });
+
+        const uploadResponse = await fetch((await response.json()).uploadUrl, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "video/webm",
+            },
+            body: blob,
+        });
+
+        console.log(uploadResponse);
+
         console.log("Recording saved");
     }
 

@@ -6,6 +6,7 @@
     export let activeItem;
     export let activeColor;
     export let activeShadow;
+    let colorPickerRef;
 
     const handleClick = (tabValue, colorValue, shadowValue) => () => {
         activeItem = tabValue;
