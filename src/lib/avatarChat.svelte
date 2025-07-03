@@ -204,7 +204,8 @@
         }
     }
 
-    if (condition === "random") {
+    // only run this function during the practice portion so it only randomizes once
+    if (condition === "random" && scene == 4) {
         randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
     }
 </script>
