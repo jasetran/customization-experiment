@@ -32,8 +32,8 @@ export let systemPrompts = {
     practice: `
         You are a warm, friendly, and playful conversational partner for children ages 4 to 10. Your personality should feel curious and inviting—like a kind friend who
         loves to explore and learn together. Avoid being overly energetic so you don’t overwhelm the child. Always keep your language and your tone age-appropriate.
-        Begin by introducing yourself to the child. Say that your name is [CHARACTER_NAME] and let them know they will be watching a short video to
-        learn about the different forms of water. Explain that this session is a practice conversation so they can get comfortable speaking with you.
+        Say that your name is [CHARACTER_NAME] and let them know they will be watching a short video to learn about the different forms of water. 
+        Explain that this session is a practice conversation so they can get comfortable speaking with you.
         To help the child warm up, ask about their favorite colors, animals, or foods.
         Keep the conversation focused on appropriate topics like personal interests or science education learning. 
     
@@ -112,23 +112,23 @@ export function setBackground(scene) {
 export const avatarPresets = [
     {
         name: "Sophia",
-        skinTone: "#573719",
+        skinTone: "#45270c",
         head: "head-10",
         hair: "hair-16",
         hairColor: "#b19cd9",
-        eyes: "eyes-13",
-        eyeColor: "#ccccff",
+        eyes: "eyes-7",
+        eyeColor: "#5f5f8a",
         nose: "nose-8",
         clothes: "clothes-20",
         clothesColor: "#464b62",
-        clothesShadow: "#2e3347",
-        accessory: "accessory-14",
+        clothesShadow: "#222740",
+        accessory: "accessory-15",
         accessoriesColor: "#ffffff",
         description: "Dark brown skin, elf ears, long and purple braided hair tied up into a ponytail, periwinkle eyes, grayish-blue cardigan, white dangling earrings"
     },
     {
         name: "Alvin",
-        skinTone: "#b89470",
+        skinTone: "#b57e47",
         head: "head-7",
         hair: "hair-42",
         hairColor: "#512926",
@@ -138,7 +138,7 @@ export const avatarPresets = [
         clothes: "clothes-23",
         clothesColor: "#a52121",
         clothesShadow: "#441010",
-        accessory: "accessory-9",
+        accessory: "accessory-1",
         accessoriesColor: "#000000",
         description: "Tanned skin with bunny ears, short reddish-brown hair, dark brown eyes, plaid shirt (unbuttoned) with white shirt underneath, black earrings"
     },
@@ -149,72 +149,72 @@ export const avatarPresets = [
         hair: "hair-9",
         hairColor: "#1f1f23",
         eyes: "eyes-9",
-        eyeColor: "#4d5147",
+        eyeColor: "#3c4f1f",
         nose: "nose-9",
         clothes: "clothes-12",
         clothesColor: "#ffffff",
         accessory: "accessory-2",
-        accessoriesColor: "#bb9a84",
-        description: "Light skin, short black hair, square face with freckles, dark green eyes, cherry top"
+        accessoriesColor: "#70482d",
+        description: "Light skin, short black hair, square face with brown glasses, dark green eyes, cherry top"
     },
     {
         name: "Rafael",
-        skinTone: "#7d5b40",
+        skinTone: "#6b3e1b",
         head: "head-5",
         hair: "hair-26",
         hairColor: "#25201e",
         eyes: "eyes-6",
-        eyeColor: "#4d5147",
+        eyeColor: "#542901",
         nose: "nose-7",
         clothes: "clothes-2",
         clothesColor: "#7d95bd",
-    clothesShadow: "435067",
-        accessory: "accessory-13",
-        accessoriesColor: "#b1a695",
+        clothesShadow: "435067",
+        accessory: "accessory-14",
+        accessoriesColor: "#242424",
         description: "Brown skin, black hair, round face and dark brown eyes, glasses, blue shirt with pocket"
     },
     {
-        name: "Aaliyah",
-        skinTone: "#997b55",
+        name: "Daniela",
+        skinTone: "#e39d5d",
         head: "head-1",
-        hair: "hair-15",
-        hairColor: "#4e727a",
+        hair: "hair-40",
+        hairColor: "#a67449",
         eyes: "eyes-3",
-        eyeColor: "#2f1f14",
-        nose: "nose-12",
+        eyeColor: "#573b17",
+        nose: "nose-2",
         clothes: "clothes-13",
-        clothesColor: "#ad91bb",
+        clothesColor: "#805d91",
         accessory: "accessory-4",
         accessoriesColor: "#2c251c",
-        description: "Tan skin, blueish-green hijab, dark brown eyes with mole under left eye, light purple top"
+        description: "Tan skin, light brown hair, dark brown eyes with mole under left eye, light purple top"
     },
     {
         name: "Basil",
-        skinTone: "#d2b897",
+        skinTone: "#f5c4b3",
         head: "head-8",
         hair: "hair-13",
-        hairColor: "#c49f9d",
-        eyes: "eyes-12",
+        hairColor: "#c96f6b",
+        eyes: "eyes-11",
         eyeColor: "#3e291b",
         nose: "nose-11",
-        clothes: "clothes-24",
-        clothesColor: "#c3afce",
-        accessory: "accessory-5",
-        accessoriesColor: "#342c25",
+        clothes: "clothes-14",
+        clothesColor: "#ab907d",
+        accessory: "accessory-7",
+        accessoriesColor: "#eda99a",
         description: "Light skin, chubby face with bear ears and right side of cheek, short light pink hair with side part, brown eyes"
     },
     {
         name: "Elijah",
-        skinTone: "#3c2e28",
+        skinTone: "#42291f",
         head: "head-4",
         hair: "hair-33",
         hairColor: "#c49f9d",
         eyes: "eyes-4",
-        eyeColor: "#5d483a",
+        eyeColor: "#a6704c",
         nose: "nose-7",
         clothes: "clothes-16",
         clothesColor: "#352693",
-        accessory: "accessory-8",
+        accessory: "accessory-9",
         accessoriesColor: "#ffffff",
         description: "Dark skin, small square-ish face, dark hair tied up in a bun, light brown eyes, white earrings, purple and white striped sports jersey"
     },
@@ -231,31 +231,31 @@ export const avatarPresets = [
         clothesColor: "#ffe484",
     clothesShadow: "ddc15d",
         accessory: "accessory-7",
-        accessoriesColor: "#67584d",
+        accessoriesColor: "#ff9e9e",
         description: "Light skin, chubby cheeks, short and frizzy orange hair, blue eyes, yellow overalls, brown/bronze circular glasses"
     },
     {
         name: "Vidisha",
         skinTone: "#7a5637",
-        head: "head-9",
-        hair: "hair-4",
+        head: "head-1",
+        hair: "hair-7",
         hairColor: "#221812",
         eyes: "eyes-11",
         eyeColor: "#31271f",
         nose: "nose-12",
         clothes: "clothes-22",
-        clothesColor: "#531c1c",
-    clothesShadow: "391212",
-        accessory: "accessory-12",
-        accessoriesColor: "#9b0d0d",
-        description: "Brown skin, chubby cheeks with fox ears, long dark brown hair with bangs, bindi"
+        clothesColor: "#8a2222",
+        clothesShadow: "#450a0a",
+        accessory: "accessory-13",
+        accessoriesColor: "#ba0d0d",
+        description: "Brown skin, round head with elf ears, long dark brown hair with bangs, bindi"
     },
     {
         name: "Khanh",
-        skinTone: "#a7835f",
+        skinTone: "#d9a16a",
         head: "head-1",
         hair: "hair-34",
-        hairColor: "#444953",
+        hairColor: "#363636",
         eyes: "eyes-11",
         eyeColor: "#23170c",
         nose: "nose-13",
@@ -267,34 +267,34 @@ export const avatarPresets = [
     },
     {
         name: "Madeleine",
-        skinTone: "#ffecdc",
+        skinTone: "#ffdfc4",
         head: "head-4",
         hair: "hair-7",
-        hairColor: "#fbe7a1",
+        hairColor: "#f5c669",
         eyes: "eyes-1",
-        eyeColor: "#8099ae",
+        eyeColor: "#5b8fba",
         nose: "nose-9",
         clothes: "clothes-3",
         clothesColor: "#d52f2f",
-        accessory: "accessory-2",
-        accessoriesColor: "#e9d4c3",
+        accessory: "accessory-3",
+        accessoriesColor: "#ffb77a",
         description: "Pale skin, small square-ish face with freckles, long blonde hair, blue eyes, red and white striped shirt"
     },
     {
         name: "Jay",
-        skinTone: "#b89470",
-        head: "head-1",
-        hair: "hair-5",
-        hairColor: "#1e1d1c",
-        eyes: "eyes-12",
-        eyeColor: "#271b12",
-        nose: "nose-13",
+        skinTone: "#f7c599",
+        head: "head-10",
+        hair: "hair-23",
+        hairColor: "#c76f2c",
+        eyes: "eyes-1",
+        eyeColor: "#14254a",
+        nose: "nose-6",
         clothes: "clothes-23",
-        clothesColor: "#5c6a53",
+        clothesColor: "#243359",
         clothesShadow: "#47533f",
-        accessory: "accessory-17",
-        accessoriesColor: "#ffffff",
-        description: "Brown skin, long black braided hair, dark brown eyes, white earrings"
+        accessory: "accessory-10",
+        accessoriesColor: "#000000",
+        description: "Medium skin, medium wave brown hair, blue eyes, black earrings"
     }
 ];
 
@@ -305,6 +305,8 @@ export function randomizedDefinedAvatar(
 ) {
     // randomly select a predefined character
     const selectedPreset = randomizeOptions(avatarPresets);
+    // const selectedPreset = avatarPresets[11]; for debugging if needed
+    console.log(selectedPreset);
 
     // apply the preset colors and name to the avatar
     userState.charName = selectedPreset.name;
@@ -312,6 +314,7 @@ export function randomizedDefinedAvatar(
     userState.hairColor = selectedPreset.hairColor;
     userState.eyesColor = selectedPreset.eyeColor;
     userState.clothesColor = selectedPreset.clothesColor;
+    userState.clothesShadow = selectedPreset.clothesShadow;
     userState.accessoriesColor = selectedPreset.accessoriesColor;
 
     // assigning the actual character components
