@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     let { scene = $bindable(), condition = $bindable() } = $props();
     import html2canvas from "html2canvas";
     import { userState } from "../state.svelte.js";
@@ -30,6 +29,7 @@
             ? "watch a fun video about water and ice"
             : "thank you for talking to me",
     );
+    const interactionPhase = scene == 4 ? "practice" : "discussion";
 
     function handleConversationEnd(conversationEnded, recordedChunks) {
         saveDataToUserState(recordedChunks);
@@ -40,7 +40,7 @@
         }
     }
 
-    // Your captureScreenshot function here
+    // simple capture screenshot function
     async function captureScreenshot() {
         try {
             const canvas = await html2canvas(document.body, {
@@ -66,7 +66,6 @@
     async function saveDataToUserState(recordedChunks: Blob[]) {
         if (recordedChunks.length === 0) return;
 
-        const interactionPhase = scene == 4 ? "practice" : "discussion";
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const videoFilename = `${userState.pid}-${condition}-${interactionPhase}-recording-${timestamp}.webm`;
@@ -208,11 +207,8 @@
     // only run this function during the practice portion so it only randomizes once
     if (condition === "random" && scene == 4) {
         randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
+        console.log(userState.charName);
     }
-
-    onMount(() => {
-        captureScreenshot();
-    });
 </script>
 
 <div id="char-chat">
