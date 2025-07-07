@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     let { scene = $bindable(), condition = $bindable() } = $props();
     import html2canvas from "html2canvas";
     import { userState } from "../state.svelte.js";
@@ -39,7 +40,7 @@
         }
     }
 
-    // Simple screenshot capture function
+    // Your captureScreenshot function here
     async function captureScreenshot() {
         try {
             const canvas = await html2canvas(document.body, {
@@ -112,7 +113,7 @@
                 videoUploadResponse,
             );
 
-            // Capture and upload screenshot during practice phase
+            // capture and upload screenshot during practice phase
             if (interactionPhase === "practice") {
                 const screenshotBlob = await captureScreenshot();
                 if (screenshotBlob) {
@@ -208,6 +209,10 @@
     if (condition === "random" && scene == 4) {
         randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
     }
+
+    onMount(() => {
+        captureScreenshot();
+    });
 </script>
 
 <div id="char-chat">

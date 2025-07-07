@@ -5,7 +5,7 @@
     let videoStarted = $state(false);
 
     function handleCanPlay() {
-        // Try to autoplay, but if it fails, show the play button
+        // try to autoplay, but if it fails, show the play button
         if (videoElement) {
             videoElement.play().catch(() => {
                 showPlayButton = true;

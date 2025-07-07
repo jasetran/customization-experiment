@@ -76,7 +76,7 @@
         >
             <div
                 class="knob"
-                style={`background-color: hwb(${hue}deg 0% 0%); left: ${(hue / 360) * 100}%`}
+                style={`background-color: hwb(${hue}deg 0% 0%); left: clamp(1rem, ${(hue / 360) * 100}%, calc(100% - 1rem))`}
             ></div>
         </div>
 
@@ -134,7 +134,7 @@
         >
             <div
                 class="knob"
-                style={`background-color: hsl(${hue}deg ${saturation}% 50%); left: ${saturation}%`}
+                style={`background-color: hsl(${hue}deg ${saturation}% 50%); left: clamp(1rem, ${saturation}%, calc(100% - 1rem))`}
             ></div>
         </div>
 
@@ -192,7 +192,7 @@
         >
             <div
                 class="knob"
-                style={`background-color: hsl(${hue}deg ${saturation} ${lightness}%); left: ${lightness}%`}
+                style={`background-color: hsl(${hue}deg ${saturation} ${lightness}%); left: clamp(1rem, ${lightness}%, calc(100% - 1rem))`}
             ></div>
         </div>
     </div>
