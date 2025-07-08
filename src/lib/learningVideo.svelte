@@ -30,7 +30,6 @@
         bind:this={videoElement}
         src="/assets/NASA-PBSKIDS-ice-video.mp4"
         autoplay
-        playsinline
         on:canplay={handleCanPlay}
         on:play={handlePlay}
         on:ended={() => (scene = scene + 1)}

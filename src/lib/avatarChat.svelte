@@ -1,6 +1,7 @@
 <script lang="ts">
     let { scene = $bindable(), condition = $bindable() } = $props();
     import html2canvas from "html2canvas";
+    import { onMount } from "svelte";
     import { userState } from "../state.svelte.js";
     import {
         randomizedDefinedAvatar,
@@ -11,6 +12,7 @@
     import RealtimeChat from "./realtimeChat.svelte";
     import type { RealtimeItem } from "../types.js";
 
+    let screenshotBlob = undefined; // empty screenshot blob
     let items = $state<RealtimeItem[]>([]);
     let systemPrompt = $derived(
         scene == 4
@@ -40,15 +42,16 @@
         }
     }
 
-    // simple capture screenshot function
+    // capturing screenshot of character
     async function captureScreenshot() {
         try {
             const canvas = await html2canvas(document.body, {
                 backgroundColor: "#ffffff",
                 scale: 1,
-                useCORS: true,
-                height: window.innerHeight,
-                width: window.innerWidth,
+                x: window.innerWidth / 2, // Start from middle of screen
+                y: 0, // Start from top
+                width: window.innerWidth / 2, // Half the screen width
+                height: window.innerHeight, // Full height
             });
 
             return new Promise((resolve) => {
@@ -114,7 +117,6 @@
 
             // capture and upload screenshot during practice phase
             if (interactionPhase === "practice") {
-                const screenshotBlob = await captureScreenshot();
                 if (screenshotBlob) {
                     const screenshotFilename = `${userState.pid}-${condition}-ca-${userState.charName}-${timestamp}.png`;
 
@@ -204,10 +206,17 @@
         }
     }
 
+    // capture the screenshot as soon as the component mounts
+    if (interactionPhase === "practice") {
+        onMount(async () => {
+            screenshotBlob = await captureScreenshot();
+            console.log(screenshotBlob);
+        });
+    }
+
     // only run this function during the practice portion so it only randomizes once
     if (condition === "random" && scene == 4) {
         randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
-        console.log(userState.charName);
     }
 </script>
 
