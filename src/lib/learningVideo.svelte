@@ -56,12 +56,17 @@
         position: relative;
         width: 100%;
         height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     video {
-        width: 100%;
-        height: 100%;
+        width: 90%;
+        height: 90%;
         object-fit: cover;
+        border: 0.5rem solid orange;
+        border-radius: 8px;
     }
 
     .play-button {

@@ -33,6 +33,8 @@
     let audioElement: HTMLAudioElement | null = null;
     let microphoneTrack: MediaStreamTrack | null = null;
     let audioSender: RTCRtpSender | null = null;
+    let turnCount = $state(0);
+    let maxTurns = $derived(interactionPhase === "practice" ? 5 : 15); // 4 for practice, 15 for discussion
 
     // Audio context and gain node for controlling audio to OpenAI
     let audioContext: AudioContext | null = null;
@@ -417,7 +419,7 @@
                         if (item.role === "assistant" && !processedEmotions.has(item.id)) {
                         const detectedEmotion = analyzeEmotion(newTranscript);
                          // only trigger when have enough content
-                         if (newTranscript.length > 20) {
+                         if (newTranscript.length > 15) {
                             if (detectedEmotion !== currentEmotion) {
                                 currentEmotion = detectedEmotion;
                                 setEmotion(detectedEmotion, userState, avatarComponents);
@@ -453,28 +455,34 @@
                         items.push(item);
                         // this prevents the user from cutting off the agent
                         if (item.role === "assistant") {
-                            isAssistantSpeaking = true;
-                            muteMicrophoneToOpenAI();
-                            // clear timeout when assistant starts speaking
-                            clearResponseTimeout();
-                        } else if (item.role === "user") {
-                            // clear timeout when user responds
-                            clearResponseTimeout();
+                            if (!endTriggerFound) {
+                                turnCount++; // increasing with each conversation exchange
+                                if (turnCount > maxTurns) {
+                                    endTriggerFound = true; // fallback in case the conversation goes on for too long
+                                }
+                                isAssistantSpeaking = true;
+                                muteMicrophoneToOpenAI();
+                                // clear timeout when assistant starts speaking
+                                clearResponseTimeout();
+                            } else if (item.role === "user") {
+                                // clear timeout when user responds
+                                clearResponseTimeout();
+                            }
+                            break;
                         }
-                        break;
                     }
                     case "output_audio_buffer.stopped": {
                         if (endTriggerFound) {
                             // waiting for the audio buffer before ending conversation
                             muteMicrophoneToOpenAI();
                             endConversation();
-                            return; // Don't start timeout if conversation is ending
+                            return;
                         }
 
                         isAssistantSpeaking = false;
                         unmuteMicrophoneToOpenAI(); // re-enable the microphone once agent is done talking
 
-                        // Start timeout when assistant finishes speaking - wait for user response
+                        // start timeout when assistant finishes speaking - wait for user response
                         resetResponseTimeout();
                         break;
                     }
@@ -549,7 +557,7 @@
         }
     }
 
-    // send a the text message to the model
+    // send a text message to the model
     function sendTextMessage(message: string) {
         const event = {
             type: "conversation.item.create",
@@ -630,6 +638,7 @@
         }
 
         // Reset variables
+        turnCount = 0;
         isConnected = false;
         isAssistantSpeaking = false;
         dataChannel = null;
