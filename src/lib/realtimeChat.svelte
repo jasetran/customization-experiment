@@ -617,8 +617,24 @@
     }
 
     onMount(async () => {
-        // adding a small delay to ensure previous cleanup completed
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // await a bit longer after the video
+        if (interactionPhase == "discussion") {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+
+        // try to resume any suspended audio contexts
+        if (window.AudioContext || window.webkitAudioContext) {
+            try {
+                const testContext = new (window.AudioContext ||
+                    window.webkitAudioContext)();
+                if (testContext.state === "suspended") {
+                    await testContext.resume();
+                }
+                testContext.close();
+            } catch (e) {
+                console.warn("Audio context test failed:", e);
+            }
+        }
 
         await startRealtimeSession();
         startRecording();
