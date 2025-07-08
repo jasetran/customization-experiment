@@ -617,6 +617,9 @@
     }
 
     onMount(async () => {
+        // adding a small delay to ensure previous cleanup completed
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         await startRealtimeSession();
         startRecording();
     });

@@ -47,11 +47,13 @@
         try {
             const canvas = await html2canvas(document.body, {
                 backgroundColor: "#ffffff",
-                scale: 1,
-                x: window.innerWidth / 2, // Start from middle of screen
-                y: 0, // Start from top
-                width: window.innerWidth / 2, // Half the screen width
-                height: window.innerHeight, // Full height
+                scale: window.devicePixelRatio || 1, // accounting for ipad screen sizes
+                x: window.innerWidth / 2,
+                y: 0,
+                width: window.innerWidth / 2,
+                height: window.innerHeight,
+                useCORS: true,
+                allowTaint: true,
             });
 
             return new Promise((resolve) => {
@@ -210,7 +212,6 @@
     if (interactionPhase === "practice") {
         onMount(async () => {
             screenshotBlob = await captureScreenshot();
-            console.log(screenshotBlob);
         });
     }
 
