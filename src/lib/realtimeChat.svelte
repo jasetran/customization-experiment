@@ -121,8 +121,11 @@
                 throw new Error("Media devices not supported on this device");
             }
 
-            // Get video stream (reuse if available)
-            if (!videoStream) {
+            // Check if videoStream is missing or tracks are stopped
+            if (
+                !videoStream ||
+                videoStream.getVideoTracks()[0]?.readyState === "ended"
+            ) {
                 const videoConstraints = {
                     video: {
                         width: { ideal: 320, max: 640 },
@@ -176,7 +179,7 @@
             }
 
             // Get microphone stream (reuse if available)
-            if (!microphoneTrack) {
+            if (!microphoneTrack || microphoneTrack.readyState === "ended") {
                 const audioConstraints = {
                     audio: {
                         echoCancellation: true,
@@ -672,7 +675,7 @@
     });
 
     onDestroy(() => {
-        stopSession();
+        stopSession(true);
     });
 </script>
 
