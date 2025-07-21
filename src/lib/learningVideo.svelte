@@ -1,14 +1,38 @@
 <script>
     let { scene = $bindable() } = $props();
+    let videoElement;
+    let showPlayButton = $state(false);
+    let videoStarted = $state(false);
+
+    function handleCanPlay() {
+        // try to autoplay, but if it fails, show the play button
+        if (videoElement) {
+            videoElement.play().catch(() => {
+                showPlayButton = true;
+            });
+        }
+    }
+
+    function handlePlay() {
+        videoStarted = true;
+        showPlayButton = false;
+    }
+
+    function startVideo() {
+        if (videoElement) {
+            videoElement.play();
+        }
+    }
 </script>
 
-<!-- svelte-ignore event_directive_deprecated -->
 <div class="video-container">
     <video
+        bind:this={videoElement}
         src="/assets/NASA-PBSKIDS-ice-video.mp4"
         autoplay
-        playsinline
-        on:ended={(scene = scene + 1)}
+        on:canplay={handleCanPlay}
+        on:play={handlePlay}
+        on:ended={() => (scene = scene + 1)}
     >
         <track
             kind="captions"
@@ -19,23 +43,48 @@
         />
         Your browser does not support the video tag.
     </video>
+
+    {#if showPlayButton && !videoStarted}
+        <button class="play-button" on:click={startVideo}>
+            ▶ Play Video
+        </button>
+    {/if}
 </div>
 
 <style>
     .video-container {
+        position: relative;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
     video {
-        width: 92rem;
-        height: 52rem;
-        object-fit: contain;
-        border-width: 1rem;
-        border-style: solid;
-        border-color: orange;
+        width: 90%;
+        height: 90%;
+        object-fit: cover;
+        border: 0.5rem solid orange;
+        border-radius: 8px;
+    }
+
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .play-button:hover {
+        background: rgba(0, 0, 0, 0.9);
     }
 </style>

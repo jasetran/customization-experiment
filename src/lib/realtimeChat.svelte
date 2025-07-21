@@ -34,6 +34,8 @@
     let audioElement: HTMLAudioElement | null = null;
     let microphoneTrack: MediaStreamTrack | null = null;
     let audioSender: RTCRtpSender | null = null;
+    let turnCount = $state(0);
+    let maxTurns = $derived(interactionPhase === "practice" ? 5 : 15); // 4 for practice, 15 for discussion
 
     // Audio context and gain node for controlling audio to OpenAI
     let audioContext: AudioContext | null = null;
@@ -127,27 +129,31 @@
                 throw new Error("Media devices not supported on this device");
             }
 
-            // Get video stream from camera with iPad-friendly constraints
-            const videoConstraints = {
-                video: {
-                    width: { ideal: 320, max: 640 },
-                    height: { ideal: 180, max: 480 },
-                    facingMode: "user",
-                },
-                audio: false, // We'll use the mixed audio stream
-            };
+            // Check if videoStream is missing or tracks are stopped
+            if (
+                !videoStream ||
+                videoStream.getVideoTracks()[0]?.readyState === "ended"
+            ) {
+                const videoConstraints = {
+                    video: {
+                        width: { ideal: 320, max: 640 },
+                        height: { ideal: 180, max: 480 },
+                        facingMode: "user",
+                    },
+                    audio: false,
+                };
+                videoStream = await getMediaStream(videoConstraints);
+            }
 
-            videoStream = await getMediaStream(videoConstraints);
-
-            // Create combined stream with video and mixed audio
+            // ALWAYS create a new combined stream for each recording session
             combinedStream = new MediaStream();
 
-            // add video track
+            // Add video track
             videoStream.getVideoTracks().forEach((track) => {
-                combinedStream!.addTrack(track);
+                combinedStream.addTrack(track);
             });
 
-            // add mixed audio track (user + assistant) for recording
+            // Add mixed audio track (this gets recreated in setupAudioProcessing)
             if (mixedAudioStream) {
                 const mixedAudioTrack = mixedAudioStream.getAudioTracks()[0];
                 combinedStream.addTrack(mixedAudioTrack);
@@ -166,39 +172,41 @@
                 throw new Error("Media devices not supported on this device");
             }
 
-            // Create audio context with iPad compatibility
-            const AudioContextClass =
-                window.AudioContext || window.webkitAudioContext;
-            if (!AudioContextClass) {
-                throw new Error("Web Audio API not supported");
+            // Create or reuse audio context
+            if (!audioContext) {
+                const AudioContextClass =
+                    window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) {
+                    throw new Error("Web Audio API not supported");
+                }
+                audioContext = new AudioContextClass();
             }
 
-            audioContext = new AudioContextClass();
-
-            // Resume audio context if it's suspended (required on iOS)
             if (audioContext.state === "suspended") {
                 await audioContext.resume();
             }
 
-            // Get microphone stream with iPad-friendly constraints
-            const audioConstraints = {
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true,
-                    sampleRate: 44100,
-                },
-            };
+            // Get microphone stream (reuse if available)
+            if (!microphoneTrack || microphoneTrack.readyState === "ended") {
+                const audioConstraints = {
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true,
+                        sampleRate: 44100,
+                    },
+                };
+                const micStream = await getMediaStream(audioConstraints);
+                microphoneTrack = micStream.getTracks()[0];
+            }
 
-            const micStream = await getMediaStream(audioConstraints);
-            microphoneTrack = micStream.getTracks()[0];
-
-            // Create audio source from microphone
+            // ALWAYS recreate audio nodes for each session
+            const micStream = new MediaStream([microphoneTrack]);
             microphoneSource = audioContext.createMediaStreamSource(micStream);
 
             // Create gain node to control volume to OpenAI
             gainNode = audioContext.createGain();
-            gainNode.gain.value = 1; // Start with full volume
+            gainNode.gain.value = 1;
 
             // Connect microphone to gain node
             microphoneSource.connect(gainNode);
@@ -209,10 +217,10 @@
             gainNode.connect(openAIDestination);
             processedAudioStream = openAIDestination.stream;
 
-            // Create mixer destination for recording (user + assistant)
+            // ALWAYS create new mixer destination for recording
             mixerDestination = audioContext.createMediaStreamDestination();
 
-            // Connect microphone directly to mixer (always full volume for recording)
+            // Connect microphone directly to mixer
             microphoneSource.connect(mixerDestination);
 
             // Get the mixed audio stream for recording
@@ -226,13 +234,23 @@
     }
 
     function startRecording() {
-        if (!combinedStream) return;
+        if (!combinedStream) {
+            console.error("No combined stream available for recording");
+            return;
+        }
+
+        // Make sure we have a clean MediaRecorder
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+        }
+
+        // Reset recorded chunks for new session
+        recordedChunks = [];
 
         try {
             // Use iPad-compatible MIME types
             let mimeType = "video/mp4;codecs=vp9,opus";
 
-            // Fallback MIME types for better iPad compatibility
             if (!MediaRecorder.isTypeSupported(mimeType)) {
                 const fallbackTypes = [
                     "video/mp4;codecs=h264,aac",
@@ -246,11 +264,6 @@
                     fallbackTypes.find((type) =>
                         MediaRecorder.isTypeSupported(type),
                     ) || "";
-
-                if (!mimeType) {
-                    console.warn("No supported MIME type found, using default");
-                    mimeType = "";
-                }
             }
 
             const options = mimeType ? { mimeType } : {};
@@ -417,7 +430,7 @@
                         if (item.role === "assistant" && !processedEmotions.has(item.id)) {
                         const detectedEmotion = analyzeEmotion(newTranscript);
                          // only trigger when have enough content
-                         if (newTranscript.length > 20) {
+                         if (newTranscript.length > 15) {
                             if (detectedEmotion !== currentEmotion) {
                                 currentEmotion = detectedEmotion;
                                 setEmotion(detectedEmotion, userState, avatarComponents);
@@ -453,28 +466,34 @@
                         items.push(item);
                         // this prevents the user from cutting off the agent
                         if (item.role === "assistant") {
-                            isAssistantSpeaking = true;
-                            muteMicrophoneToOpenAI();
-                            // clear timeout when assistant starts speaking
-                            clearResponseTimeout();
-                        } else if (item.role === "user") {
-                            // clear timeout when user responds
-                            clearResponseTimeout();
+                            if (!endTriggerFound) {
+                                turnCount++; // increasing with each conversation exchange
+                                if (turnCount > maxTurns) {
+                                    endTriggerFound = true; // fallback in case the conversation goes on for too long
+                                }
+                                isAssistantSpeaking = true;
+                                muteMicrophoneToOpenAI();
+                                // clear timeout when assistant starts speaking
+                                clearResponseTimeout();
+                            } else if (item.role === "user") {
+                                // clear timeout when user responds
+                                clearResponseTimeout();
+                            }
+                            break;
                         }
-                        break;
                     }
                     case "output_audio_buffer.stopped": {
                         if (endTriggerFound) {
                             // waiting for the audio buffer before ending conversation
                             muteMicrophoneToOpenAI();
                             endConversation();
-                            return; // Don't start timeout if conversation is ending
+                            return;
                         }
 
                         isAssistantSpeaking = false;
                         unmuteMicrophoneToOpenAI(); // re-enable the microphone once agent is done talking
 
-                        // Start timeout when assistant finishes speaking - wait for user response
+                        // start timeout when assistant finishes speaking - wait for user response
                         resetResponseTimeout();
                         break;
                     }
@@ -549,7 +568,7 @@
         }
     }
 
-    // send a the text message to the model
+    // send a text message to the model
     function sendTextMessage(message: string) {
         const event = {
             type: "conversation.item.create",
@@ -570,17 +589,52 @@
     }
 
     // stop the current session, clean up peer connection and data channel
-    function stopSession() {
-        if (microphoneTrack) {
+    function stopSession(preserveBaseStreams = false) {
+        // Always stop recording-specific streams
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+        }
+
+        // Always clean up combined stream for recording
+        if (combinedStream) {
+            combinedStream.getTracks().forEach((track) => track.stop());
+            combinedStream = null;
+        }
+
+        // Always clean up processed audio stream (gets recreated anyway)
+        if (processedAudioStream) {
+            processedAudioStream.getTracks().forEach((track) => track.stop());
+            processedAudioStream = null;
+        }
+
+        // Always clean up mixed audio stream (gets recreated anyway)
+        if (mixedAudioStream) {
+            mixedAudioStream.getTracks().forEach((track) => track.stop());
+            mixedAudioStream = null;
+        }
+
+        // Only preserve the BASE microphone and video tracks
+        if (microphoneTrack && !preserveBaseStreams) {
             microphoneTrack.stop();
             microphoneTrack = null;
         }
 
-        if (audioContext && audioContext.state !== "closed") {
+        if (videoStream && !preserveBaseStreams) {
+            videoStream.getTracks().forEach((track) => track.stop());
+            videoStream = null;
+        }
+
+        // Audio context can be preserved
+        if (
+            audioContext &&
+            audioContext.state !== "closed" &&
+            !preserveBaseStreams
+        ) {
             audioContext.close();
             audioContext = null;
         }
 
+        // Clean up WebRTC connections
         if (dataChannel) {
             dataChannel.close();
         }
@@ -594,30 +648,23 @@
             peerConnection.close();
         }
 
-        if (videoStream) {
-            videoStream.getTracks().forEach((track) => track.stop());
-            videoStream = null;
-        }
-
-        if (processedAudioStream) {
-            processedAudioStream.getTracks().forEach((track) => track.stop());
-            processedAudioStream = null;
-        }
-
-        if (mixedAudioStream) {
-            mixedAudioStream.getTracks().forEach((track) => track.stop());
-            mixedAudioStream = null;
-        }
-
+        // Reset variables
+        turnCount = 0;
         isConnected = false;
         isAssistantSpeaking = false;
         dataChannel = null;
         peerConnection = null;
         audioSender = null;
-        gainNode = null;
-        microphoneSource = null;
-        assistantAudioSource = null;
-        mixerDestination = null;
+        mediaRecorder = null;
+        recordedChunks = []; // Reset for new recording
+
+        // Only reset audio nodes if not preserving
+        if (!preserveBaseStreams) {
+            gainNode = null;
+            microphoneSource = null;
+            assistantAudioSource = null;
+            mixerDestination = null;
+        }
 
         if (audioElement) {
             audioElement.srcObject = null;
@@ -629,7 +676,7 @@
     });
 
     onDestroy(() => {
-        stopSession();
+        stopSession(true);
     });
 </script>
 
