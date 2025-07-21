@@ -1,4 +1,5 @@
 <script>
+    import { tick } from "svelte";
     import Fullscreen from "svelte-fullscreen";
     import { userState } from "../state.svelte";
     let {
@@ -10,11 +11,16 @@
     // updating the user participant id from url param
     if (pid !== undefined) {
         userState.pid = pid;
-        console.log(userState.pid);
     }
 
     // updating the userstate condition
     userState.condition = condition;
+
+    async function handleFullscreen(onRequest) {
+        await tick(); // Ensure DOM is updated
+        onRequest();
+        scene = 1;
+    }
 </script>
 
 <div id="fullscreen-page">
@@ -25,12 +31,7 @@
 
     <Fullscreen let:onRequest>
         <!-- svelte-ignore event_directive_deprecated -->
-        <button
-            on:click={() => {
-                onRequest();
-                scene = 1;
-            }}
-        >
+        <button on:click={() => handleFullscreen(onRequest)}>
             Enter Fullscreen
         </button>
     </Fullscreen>

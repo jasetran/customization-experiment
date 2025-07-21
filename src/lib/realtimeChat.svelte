@@ -670,7 +670,7 @@
             audioElement.srcObject = null;
         }
     }
-  
+
     onMount(() => {
         // Remove the automatic start - now controlled by button
     });
