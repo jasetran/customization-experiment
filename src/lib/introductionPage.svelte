@@ -12,7 +12,11 @@
 
     onMount(() => {
         if (pid !== undefined) {
-            scene++;
+            if (condition !== "customize") {
+                scene = 4;
+            } else {
+                scene++;
+            }
         }
     });
 </script>
