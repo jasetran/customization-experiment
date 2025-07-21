@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { scene = $bindable(), condition = $bindable() } = $props();
+    let { scene = $bindable() } = $props();
     import html2canvas from "html2canvas";
     import { onMount } from "svelte";
     import { userState } from "../state.svelte.js";
@@ -73,7 +73,7 @@
 
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const videoFilename = `${userState.pid}-${condition}-${interactionPhase}-recording-${timestamp}.webm`;
+        const videoFilename = `${userState.pid}-${userState.condition}-${interactionPhase}-recording-${timestamp}.webm`;
 
         // add the transcripts to the appropriate phase array
         if (interactionPhase === "practice") {
@@ -120,7 +120,7 @@
             // capture and upload screenshot during practice phase
             if (interactionPhase === "practice") {
                 if (screenshotBlob) {
-                    const screenshotFilename = `${userState.pid}-${condition}-ca-${userState.charName}-${timestamp}.png`;
+                    const screenshotFilename = `${userState.pid}-${userState.condition}-ca-${userState.charName}-${timestamp}.png`;
 
                     const screenshotResponse = await fetch("/api/upload", {
                         method: "POST",
@@ -166,7 +166,7 @@
 
     async function uploadUserState(timestamp?: string) {
         const ts = timestamp || new Date().toISOString().replace(/[:.]/g, "-");
-        const userStateFilename = `${userState.pid}-${condition}-userState-transcript-logs-${ts}.json`;
+        const userStateFilename = `${userState.pid}-${userState.condition}-userState-transcript-logs-${ts}.json`;
 
         try {
             const userStateResponse = await fetch("/api/upload", {
@@ -216,7 +216,7 @@
     }
 
     // only run this function during the practice portion so it only randomizes once
-    if (condition === "random" && scene == 4) {
+    if (userState.condition === "random" && scene == 4) {
         randomizedDefinedAvatar(userState, avatarComponents, avatarPresets);
     }
 </script>

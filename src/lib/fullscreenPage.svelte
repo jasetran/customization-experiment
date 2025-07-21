@@ -1,6 +1,19 @@
 <script>
     import Fullscreen from "svelte-fullscreen";
-    let { scene = $bindable() } = $props();
+    import { userState } from "../state.svelte";
+    let {
+        scene = $bindable(),
+        pid = $bindable(),
+        condition = $bindable(),
+    } = $props();
+
+    // updating the user participant id from url param
+    if (pid !== undefined) {
+        userState.pid = pid;
+    }
+
+    // updating the userstate condition
+    userState.condition = condition;
 </script>
 
 <div id="fullscreen-page">
