@@ -10,6 +10,7 @@
     // updating the user participant id from url param
     if (pid !== undefined) {
         userState.pid = pid;
+        console.log(userState.pid);
     }
 
     // updating the userstate condition

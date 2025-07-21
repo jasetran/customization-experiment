@@ -71,6 +71,14 @@
     async function saveDataToUserState(recordedChunks: Blob[]) {
         if (recordedChunks.length === 0) return;
 
+        // Still no pid? Log error and return
+        if (!userState.pid) {
+            console.error("CRITICAL: userState.pid is still null/undefined");
+            console.error("Current URL:", window.location.href);
+            console.error("Cannot proceed with upload");
+            return;
+        }
+
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const videoFilename = `${userState.pid}-${userState.condition}-${interactionPhase}-recording-${timestamp}.webm`;
