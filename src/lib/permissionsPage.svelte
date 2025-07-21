@@ -1,7 +1,7 @@
 <script>
     import { onMount, onDestroy } from "svelte";
 
-    let { scene = $bindable() } = $props();
+    let { scene = $bindable(), condition = $bindable() } = $props();
 
     let permissionStatus = $state("pending"); // 'pending', 'requesting', 'granted', 'denied'
     let errorMessage = $state("");
@@ -235,7 +235,10 @@
             <!-- svelte-ignore event_directive_deprecated -->
             <button
                 on:click={() => {
-                    scene++;
+                    if (condition === "customize") {
+                        scene++;
+                    }
+                    scene = 4;
                 }}>Continue</button
             >
         {/if}

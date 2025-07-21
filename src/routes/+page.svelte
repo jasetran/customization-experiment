@@ -30,9 +30,9 @@
             {#if scene === 0}
                 <Page0 bind:scene></Page0>
             {:else if scene === 1}
-                <Page1 bind:scene></Page1>
+                <Page1 bind:scene bind:condition></Page1>
             {:else if scene === 2}
-                <Page2 bind:scene bind:pid bind:condition></Page2>
+                <Page2 bind:scene bind:pid></Page2>
             {:else if scene === 3 && condition === "customize"}
                 <Page3 bind:scene></Page3>
             {:else if scene === 4 && condition !== "text"}

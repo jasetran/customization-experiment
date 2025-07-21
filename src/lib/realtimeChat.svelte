@@ -21,6 +21,7 @@
     );
 
     // conversational agent related variables
+    let conversationStarted = $state(false); // new state to track if conversation has started
     let conversationEnded = $state(false);
     let isConnected = $state(false);
     let isAssistantSpeaking = $state(false); // variables related to the conversational flow
@@ -64,6 +65,13 @@
             onConversationEnd(conversationEnded, [...recordedChunks]);
             stopSession();
         }
+    }
+
+    // New function to start the conversation
+    async function startConversation() {
+        conversationStarted = true;
+        await startRealtimeSession();
+        startRecording();
     }
 
     // Helper function to check if getUserMedia is available
@@ -616,9 +624,8 @@
         }
     }
 
-    onMount(async () => {
-        await startRealtimeSession();
-        startRecording();
+    onMount(() => {
+        // Remove the automatic start - now controlled by button
     });
 
     onDestroy(() => {
@@ -628,26 +635,76 @@
 
 {#if children}
     {@render children({ isConnected, items })}
+
+    {#if !conversationStarted}
+        <div class="start-button-container">
+            <button class="start-conversation-btn" onclick={startConversation}>
+                ▶️ Start Conversation
+            </button>
+        </div>
+    {/if}
+
     <div
         class="assistant-status"
-        class:checking={!isConnected && !loadingVideo}
+        class:checking={!isConnected && !loadingVideo && conversationStarted}
         class:loading={loadingVideo}
         class:speaking={isAssistantSpeaking && !loadingVideo && isConnected}
         class:listening={!isAssistantSpeaking && isConnected && !loadingVideo}
+        class:hidden={!conversationStarted}
+        class:text-condition={userState.condition === "text"}
     >
-        {#if !isConnected && !loadingVideo}
+        {#if !isConnected && !loadingVideo && conversationStarted}
             <span> 🎤 📷 Checking microphone & camera </span>
         {:else if isAssistantSpeaking}
             <span class="pulse"> 🗣️ Speaking... </span>
         {:else if loadingVideo}
             <span class="pulse"> 🎥 Loading video </span>
-        {:else}
+        {:else if isConnected}
             <span class="pulse"> 👂 Listening... </span>
         {/if}
     </div>
 {/if}
 
 <style>
+    .start-button-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .start-conversation-btn {
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        color: white;
+        border: none;
+        padding: 3rem 6rem;
+        font-size: 3.5rem;
+        font-weight: bold;
+        border-radius: 3rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
+        min-width: 400px;
+        min-height: 120px;
+    }
+
+    .start-conversation-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(34, 197, 94, 0.5);
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+
+    .start-conversation-btn:active {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+
     .assistant-status {
         display: block;
         margin-top: 4rem;
@@ -659,6 +716,10 @@
         padding: 0.8rem 6rem;
         border-radius: 2rem;
         transition: background 0.3s ease;
+    }
+
+    .assistant-status.hidden {
+        display: none;
     }
 
     .assistant-status.checking {
@@ -686,8 +747,21 @@
         margin-left: 6rem;
     }
 
-    .pulse {
-        animation: pulse 1.5s infinite;
+    .assistant-status.text-condition {
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        max-width: none;
+        font-size: 2.5rem;
+        padding: 1.2rem 4rem;
+        z-index: 100;
+    }
+
+    .assistant-status.text-condition.checking {
+        font-size: 2rem;
+        padding: 1.5rem 4rem;
     }
 
     @keyframes pulse {
