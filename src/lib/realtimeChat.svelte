@@ -7,7 +7,8 @@
 
     const {
         onError = () => {},
-        onConversationEnd = () => {}, // new callback for when conversation ends
+        onConversationEnd = () => {},
+        onConversationStart = () => {}, // Add this new callback
         endTrigger = "",
         systemPrompt = "",
         items = $bindable<RealtimeItem[]>([]),
@@ -54,6 +55,17 @@
     let videoStream: MediaStream | null = null;
     let combinedStream: MediaStream | null = null;
 
+    // start conversation upon button click
+    async function startConversation() {
+        conversationStarted = true;
+
+        // call the screenshot callback before starting the session
+        await onConversationStart();
+
+        await startRealtimeSession();
+        startRecording();
+    }
+
     // Exposed methods for parent components
     export async function endConversation() {
         if (!conversationEnded) {
@@ -67,13 +79,6 @@
             onConversationEnd(conversationEnded, [...recordedChunks]);
             stopSession();
         }
-    }
-
-    // New function to start the conversation
-    async function startConversation() {
-        conversationStarted = true;
-        await startRealtimeSession();
-        startRecording();
     }
 
     // Helper function to check if getUserMedia is available

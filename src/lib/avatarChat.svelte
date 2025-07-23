@@ -33,6 +33,34 @@
     );
     const interactionPhase = scene == 4 ? "practice" : "discussion";
 
+    // Function to handle screenshot capture when start button is clicked
+    async function handleConversationStart() {
+        if (
+            (userState.condition === "random" ||
+                userState.condition === "customize") &&
+            interactionPhase === "practice"
+        ) {
+            try {
+                // Wait for the DOM to update and button to be removed
+                // Use requestAnimationFrame to ensure the next paint cycle completes
+                await new Promise<void>((resolve) => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            resolve();
+                        });
+                    });
+                });
+                // additional small delay to ensure button is fully gone
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                screenshotBlob = await captureScreenshot();
+                console.log("Screenshot captured successfully");
+            } catch (error) {
+                console.error("Failed to capture screenshot:", error);
+            }
+        }
+    }
+
     function handleConversationEnd(conversationEnded, recordedChunks) {
         saveDataToUserState(recordedChunks);
         if (conversationEnded) {
@@ -208,12 +236,8 @@
         }
     }
 
-    // capture the screenshot as soon as the component mounts
-    if (interactionPhase === "practice") {
-        onMount(async () => {
-            screenshotBlob = await captureScreenshot();
-        });
-    }
+    // Remove the old onMount screenshot capture
+    // No longer needed since we're capturing on button click
 
     // only run this function during the practice portion so it only randomizes once
     if (userState.condition === "random" && scene == 4) {
@@ -256,6 +280,7 @@
 
 <RealtimeChat
     bind:items
+    onConversationStart={handleConversationStart}
     onConversationEnd={handleConversationEnd}
     {systemPrompt}
     {endTrigger}
