@@ -4,6 +4,7 @@
     import { userState } from "../state.svelte.js";
     import avatarComponents from "./avatarComponents.js";
     import { setEmotion, analyzeEmotion } from "../helperFunctions.js";
+    import UploadPage from "./dataUploadPage.svelte";
 
     const {
         onError = () => {},
@@ -53,6 +54,7 @@
     let recordedChunks: Blob[] = [];
     let videoStream: MediaStream | null = null;
     let combinedStream: MediaStream | null = null;
+    let showUploadScreen = $state(false);
 
     // Exposed methods for parent components
     export async function endConversation() {
@@ -63,10 +65,23 @@
             stopRecording();
             await new Promise((resolve) => (mediaRecorder.onstop = resolve));
 
+            if (interactionPhase === "discussion") {
+                showUploadScreen = true;
+                loadingVideo = false;
+            }
+
             console.log("endConversation", recordedChunks);
-            onConversationEnd(conversationEnded, [...recordedChunks]);
+            onConversationEnd(
+                conversationEnded,
+                [...recordedChunks],
+                handleUploadComplete,
+            );
             stopSession();
         }
+    }
+
+    function handleUploadComplete() {
+        showUploadScreen = false;
     }
 
     // New function to start the conversation
@@ -470,6 +485,9 @@
                                 turnCount++; // increasing with each conversation exchange
                                 if (turnCount > maxTurns) {
                                     endTriggerFound = true; // fallback in case the conversation goes on for too long
+                                    console.log(
+                                        "Exceeded max turns - ending conversation",
+                                    );
                                 }
                                 isAssistantSpeaking = true;
                                 muteMicrophoneToOpenAI();
@@ -671,10 +689,6 @@
         }
     }
 
-    onMount(() => {
-        // Remove the automatic start - now controlled by button
-    });
-
     onDestroy(() => {
         stopSession(true);
     });
@@ -711,6 +725,11 @@
         {/if}
     </div>
 {/if}
+
+<UploadPage
+    isVisible={showUploadScreen}
+    onUploadComplete={handleUploadComplete}
+/>
 
 <style>
     .start-button-container {
