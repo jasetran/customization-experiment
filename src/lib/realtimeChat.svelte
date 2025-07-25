@@ -68,17 +68,6 @@
         startRecording();
     }
 
-    // start conversation upon button click
-    async function startConversation() {
-        conversationStarted = true;
-
-        // call the screenshot callback before starting the session
-        await onConversationStart();
-
-        await startRealtimeSession();
-        startRecording();
-    }
-
     export async function endConversation() {
         if (!conversationEnded) {
             conversationEnded = true;
@@ -104,13 +93,6 @@
 
     function handleUploadComplete() {
         showUploadScreen = false;
-    }
-
-    // start the conversation
-    async function startConversation() {
-        conversationStarted = true;
-        await startRealtimeSession();
-        startRecording();
     }
 
     // Helper function to check if getUserMedia is available
@@ -336,7 +318,7 @@
     async function startRealtimeSession() {
         // timeout variables
         let responseTimeoutId = null;
-        const RESPONSE_TIMEOUT_MS = 20000; // 20 seconds for child to respond
+        const RESPONSE_TIMEOUT_MS = 15000; // 15 seconds for child to respond
 
         // Function to reset the timeout
         function resetResponseTimeout() {

@@ -49,7 +49,9 @@
         } else if (interactionPhase === "discussion") {
             // for discussion phase: save data and show upload screen
             saveDataToUserState(recordedChunks, onUploadComplete);
-          
+        }
+    }
+
     // Function to handle screenshot capture when start button is clicked
     async function handleConversationStart() {
         if (
@@ -265,9 +267,6 @@
             console.error("Error during userState upload:", error);
         }
     }
-
-    // Remove the old onMount screenshot capture
-    // No longer needed since we're capturing on button click
 
     // only run this function during the practice portion so it only randomizes once
     if (userState.condition === "random" && scene == 4) {

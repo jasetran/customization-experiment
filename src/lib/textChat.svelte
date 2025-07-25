@@ -18,7 +18,6 @@
     );
     const interactionPhase = scene == 4 ? "practice" : "discussion";
 
-<<<<<<< HEAD
     function handleConversationEnd(
         conversationEnded,
         recordedChunks,
@@ -35,26 +34,12 @@
         } else if (interactionPhase === "discussion") {
             // for discussion phase: save data and show upload screen
             saveDataToUserState(recordedChunks, onUploadComplete);
-=======
-    function handleConversationStart() {
-        // no screenshot needed for text condition
-        console.log("Text chat conversation starting - no screenshot needed");
-    }
-
-    function handleConversationStart() {
-        // no screenshot needed for text condition
-        console.log("Text chat conversation starting - no screenshot needed");
-    }
-
-    function handleConversationEnd(conversationEnded, recordedChunks) {
-        saveDataToUserState(recordedChunks);
-        if (conversationEnded) {
-            setTimeout(() => {
-                scene++;
-            }, 2000);
->>>>>>> b2443bd90f41404a895a03ec6f8b318d97d9988f
         }
-        console.log("Data uploading...");
+    }
+
+    function handleConversationStart() {
+        // no screenshot needed for text condition
+        console.log("Text chat conversation starting - no screenshot needed");
     }
 
     // saving the userdata to S3 bucket
