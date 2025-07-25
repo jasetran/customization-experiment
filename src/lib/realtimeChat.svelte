@@ -68,7 +68,17 @@
         startRecording();
     }
 
-    // Exposed methods for parent components
+    // start conversation upon button click
+    async function startConversation() {
+        conversationStarted = true;
+
+        // call the screenshot callback before starting the session
+        await onConversationStart();
+
+        await startRealtimeSession();
+        startRecording();
+    }
+
     export async function endConversation() {
         if (!conversationEnded) {
             conversationEnded = true;
@@ -92,20 +102,17 @@
         }
     }
 
-<<<<<<< HEAD
     function handleUploadComplete() {
         showUploadScreen = false;
     }
 
-    // New function to start the conversation
+    // start the conversation
     async function startConversation() {
         conversationStarted = true;
         await startRealtimeSession();
         startRecording();
     }
 
-=======
->>>>>>> b2443bd90f41404a895a03ec6f8b318d97d9988f
     // Helper function to check if getUserMedia is available
     function checkMediaDevicesSupport() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {

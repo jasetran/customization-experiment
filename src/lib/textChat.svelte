@@ -41,6 +41,11 @@
         console.log("Text chat conversation starting - no screenshot needed");
     }
 
+    function handleConversationStart() {
+        // no screenshot needed for text condition
+        console.log("Text chat conversation starting - no screenshot needed");
+    }
+
     function handleConversationEnd(conversationEnded, recordedChunks) {
         saveDataToUserState(recordedChunks);
         if (conversationEnded) {

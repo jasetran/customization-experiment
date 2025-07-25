@@ -33,7 +33,6 @@
     );
     const interactionPhase = scene == 4 ? "practice" : "discussion";
 
-<<<<<<< HEAD
     function handleConversationEnd(
         conversationEnded,
         recordedChunks,
@@ -50,7 +49,7 @@
         } else if (interactionPhase === "discussion") {
             // for discussion phase: save data and show upload screen
             saveDataToUserState(recordedChunks, onUploadComplete);
-=======
+          
     // Function to handle screenshot capture when start button is clicked
     async function handleConversationStart() {
         if (
@@ -77,17 +76,6 @@
                 console.error("Failed to capture screenshot:", error);
             }
         }
-    }
-
-    function handleConversationEnd(conversationEnded, recordedChunks) {
-        saveDataToUserState(recordedChunks);
-        if (conversationEnded) {
-            setTimeout(() => {
-                scene++;
-            }, 2000);
->>>>>>> b2443bd90f41404a895a03ec6f8b318d97d9988f
-        }
-        console.log("Data uploading...");
     }
 
     // capturing screenshot of character
