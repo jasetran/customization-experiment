@@ -33,6 +33,23 @@
     );
     const interactionPhase = scene == 4 ? "practice" : "discussion";
 
+    function handleConversationEnd(
+        conversationEnded,
+        recordedChunks,
+        onUploadComplete,
+    ) {
+        if (interactionPhase === "practice") {
+            // for practice phase: save data but don't show upload screen
+            saveDataToUserState(recordedChunks, null);
+            if (conversationEnded) {
+                setTimeout(() => {
+                    scene++;
+                }, 2000);
+            }
+        } else if (interactionPhase === "discussion") {
+            // for discussion phase: save data and show upload screen
+            saveDataToUserState(recordedChunks, onUploadComplete);
+          
     // Function to handle screenshot capture when start button is clicked
     async function handleConversationStart() {
         if (
@@ -58,15 +75,6 @@
             } catch (error) {
                 console.error("Failed to capture screenshot:", error);
             }
-        }
-    }
-
-    function handleConversationEnd(conversationEnded, recordedChunks) {
-        saveDataToUserState(recordedChunks);
-        if (conversationEnded) {
-            setTimeout(() => {
-                scene++;
-            }, 2000);
         }
     }
 
@@ -96,8 +104,15 @@
     }
 
     // saving the userdata to S3 bucket
-    async function saveDataToUserState(recordedChunks: Blob[]) {
-        if (recordedChunks.length === 0) return;
+    async function saveDataToUserState(
+        recordedChunks: Blob[],
+        onUploadComplete?: () => void,
+    ) {
+        if (recordedChunks.length === 0) {
+            // If no chunks but callback exists, still call it
+            if (onUploadComplete) onUploadComplete();
+            return;
+        }
 
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -142,7 +157,7 @@
 
             console.log(
                 `${interactionPhase} video upload response:`,
-                videoUploadResponse,
+                videoUploadResponse.status,
             );
 
             // capture and upload screenshot during practice phase
@@ -178,17 +193,29 @@
 
                     console.log(
                         "Screenshot upload response:",
-                        screenshotUploadResponse,
+                        screenshotUploadResponse.status,
                     );
                 }
             }
 
-            // Upload userState if this is the discussion phase
+            // upload userState if this is the discussion phase
             if (interactionPhase === "discussion") {
                 await uploadUserState(timestamp);
             }
+
+            // Call the upload complete callback after all uploads succeed
+            if (onUploadComplete) {
+                onUploadComplete();
+                // Now increment the scene after callback
+                setTimeout(() => {
+                    scene++;
+                }, 300); // Short delay to let upload screen hide gracefully
+            }
         } catch (error) {
             console.error(`Error during ${interactionPhase} upload:`, error);
+            if (onUploadComplete) {
+                onUploadComplete(); // show error instead
+            }
         }
     }
 
@@ -230,7 +257,10 @@
                 },
             );
 
-            console.log("UserState upload response:", userStateUploadResponse);
+            console.log(
+                "UserState upload response:",
+                userStateUploadResponse.status,
+            );
         } catch (error) {
             console.error("Error during userState upload:", error);
         }

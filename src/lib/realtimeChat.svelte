@@ -4,6 +4,7 @@
     import { userState } from "../state.svelte.js";
     import avatarComponents from "./avatarComponents.js";
     import { setEmotion, analyzeEmotion } from "../helperFunctions.js";
+    import UploadPage from "./dataUploadPage.svelte";
 
     const {
         onError = () => {},
@@ -54,6 +55,7 @@
     let recordedChunks: Blob[] = [];
     let videoStream: MediaStream | null = null;
     let combinedStream: MediaStream | null = null;
+    let showUploadScreen = $state(false);
 
     // start conversation upon button click
     async function startConversation() {
@@ -66,7 +68,17 @@
         startRecording();
     }
 
-    // Exposed methods for parent components
+    // start conversation upon button click
+    async function startConversation() {
+        conversationStarted = true;
+
+        // call the screenshot callback before starting the session
+        await onConversationStart();
+
+        await startRealtimeSession();
+        startRecording();
+    }
+
     export async function endConversation() {
         if (!conversationEnded) {
             conversationEnded = true;
@@ -75,10 +87,30 @@
             stopRecording();
             await new Promise((resolve) => (mediaRecorder.onstop = resolve));
 
+            if (interactionPhase === "discussion") {
+                showUploadScreen = true;
+                loadingVideo = false;
+            }
+
             console.log("endConversation", recordedChunks);
-            onConversationEnd(conversationEnded, [...recordedChunks]);
+            onConversationEnd(
+                conversationEnded,
+                [...recordedChunks],
+                handleUploadComplete,
+            );
             stopSession();
         }
+    }
+
+    function handleUploadComplete() {
+        showUploadScreen = false;
+    }
+
+    // start the conversation
+    async function startConversation() {
+        conversationStarted = true;
+        await startRealtimeSession();
+        startRecording();
     }
 
     // Helper function to check if getUserMedia is available
@@ -475,6 +507,9 @@
                                 turnCount++; // increasing with each conversation exchange
                                 if (turnCount > maxTurns) {
                                     endTriggerFound = true; // fallback in case the conversation goes on for too long
+                                    console.log(
+                                        "Exceeded max turns - ending conversation",
+                                    );
                                 }
                                 isAssistantSpeaking = true;
                                 muteMicrophoneToOpenAI();
@@ -676,10 +711,6 @@
         }
     }
 
-    onMount(() => {
-        // Remove the automatic start - now controlled by button
-    });
-
     onDestroy(() => {
         stopSession(true);
     });
@@ -716,6 +747,11 @@
         {/if}
     </div>
 {/if}
+
+<UploadPage
+    isVisible={showUploadScreen}
+    onUploadComplete={handleUploadComplete}
+/>
 
 <style>
     .start-button-container {

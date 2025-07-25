@@ -16,6 +16,30 @@
             ? "watch a fun video about water and ice"
             : "thank you for talking to me",
     );
+    const interactionPhase = scene == 4 ? "practice" : "discussion";
+
+<<<<<<< HEAD
+    function handleConversationEnd(
+        conversationEnded,
+        recordedChunks,
+        onUploadComplete,
+    ) {
+        if (interactionPhase === "practice") {
+            // for practice phase: save data but don't show upload screen
+            saveDataToUserState(recordedChunks, null);
+            if (conversationEnded) {
+                setTimeout(() => {
+                    scene++;
+                }, 2000);
+            }
+        } else if (interactionPhase === "discussion") {
+            // for discussion phase: save data and show upload screen
+            saveDataToUserState(recordedChunks, onUploadComplete);
+=======
+    function handleConversationStart() {
+        // no screenshot needed for text condition
+        console.log("Text chat conversation starting - no screenshot needed");
+    }
 
     function handleConversationStart() {
         // no screenshot needed for text condition
@@ -28,14 +52,22 @@
             setTimeout(() => {
                 scene++;
             }, 2000);
+>>>>>>> b2443bd90f41404a895a03ec6f8b318d97d9988f
         }
+        console.log("Data uploading...");
     }
 
     // saving the userdata to S3 bucket
-    async function saveDataToUserState(recordedChunks: Blob[]) {
-        if (recordedChunks.length === 0) return;
+    async function saveDataToUserState(
+        recordedChunks: Blob[],
+        onUploadComplete?: () => void,
+    ) {
+        if (recordedChunks.length === 0) {
+            // If no chunks but callback exists, still call it
+            if (onUploadComplete) onUploadComplete();
+            return;
+        }
 
-        const interactionPhase = scene == 4 ? "practice" : "discussion";
         const blob = new Blob(recordedChunks, { type: "video/webm" });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const videoFilename = `${userState.pid}-${condition}-${interactionPhase}-recording-${timestamp}.webm`;
@@ -79,15 +111,27 @@
 
             console.log(
                 `${interactionPhase} video upload response:`,
-                videoUploadResponse,
+                videoUploadResponse.status,
             );
 
-            // Upload userState if this is the discussion phase
+            // upload userState if this is the discussion phase
             if (interactionPhase === "discussion") {
                 await uploadUserState(timestamp);
             }
+
+            // call the upload complete callback after all uploads succeed
+            if (onUploadComplete) {
+                onUploadComplete();
+                // now increment the scene after callback
+                setTimeout(() => {
+                    scene++;
+                }, 300); // short delay to let upload screen hide gracefully
+            }
         } catch (error) {
             console.error(`Error during ${interactionPhase} upload:`, error);
+            if (onUploadComplete) {
+                onUploadComplete(); // show error instead
+            }
         }
     }
 
@@ -129,7 +173,10 @@
                 },
             );
 
-            console.log("UserState upload response:", userStateUploadResponse);
+            console.log(
+                "Upload response status:",
+                userStateUploadResponse.status,
+            );
         } catch (error) {
             console.error("Error during userState upload:", error);
         }
