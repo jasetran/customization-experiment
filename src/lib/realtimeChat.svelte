@@ -8,7 +8,8 @@
 
     const {
         onError = () => {},
-        onConversationEnd = () => {}, // new callback for when conversation ends
+        onConversationEnd = () => {},
+        onConversationStart = () => {}, // Add this new callback
         endTrigger = "",
         systemPrompt = "",
         items = $bindable<RealtimeItem[]>([]),
@@ -56,6 +57,17 @@
     let combinedStream: MediaStream | null = null;
     let showUploadScreen = $state(false);
 
+    // start conversation upon button click
+    async function startConversation() {
+        conversationStarted = true;
+
+        // call the screenshot callback before starting the session
+        await onConversationStart();
+
+        await startRealtimeSession();
+        startRecording();
+    }
+
     // Exposed methods for parent components
     export async function endConversation() {
         if (!conversationEnded) {
@@ -80,6 +92,7 @@
         }
     }
 
+<<<<<<< HEAD
     function handleUploadComplete() {
         showUploadScreen = false;
     }
@@ -91,6 +104,8 @@
         startRecording();
     }
 
+=======
+>>>>>>> b2443bd90f41404a895a03ec6f8b318d97d9988f
     // Helper function to check if getUserMedia is available
     function checkMediaDevicesSupport() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
